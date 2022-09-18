@@ -1,4 +1,4 @@
-package com.example.btl_java;
+package com.example.btl_java.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

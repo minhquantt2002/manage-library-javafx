@@ -5,4 +5,6 @@ module com.example.btl_java {
 
     opens com.example.btl_java to javafx.fxml;
     exports com.example.btl_java;
+    exports com.example.btl_java.controllers;
+    opens com.example.btl_java.controllers to javafx.fxml;
 }
