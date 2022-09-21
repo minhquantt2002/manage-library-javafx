@@ -3,7 +3,6 @@ module btl_java.manage_library {
     requires javafx.fxml;
     requires java.desktop;
     requires org.kordamp.bootstrapfx.core;
-
     opens images;
     opens fxml to javafx.fxml;
     opens btl_java.manage_library.controllers to javafx.fxml;

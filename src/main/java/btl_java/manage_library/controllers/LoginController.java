@@ -1,15 +1,16 @@
 package btl_java.manage_library.controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
+import btl_java.manage_library.MainApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class LoginController {
     private Stage stage;
@@ -17,20 +18,14 @@ public class LoginController {
     private Parent parent;
     @FXML
     private Button submitLogin;
-
-    // TODO Chưa gọi đuợc đến file login-app.fxml
-    public LoginController() throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("fxml/login-app.fxml"));
-         this.scene = new Scene(fxmlLoader.load(), 500, 500);
-    }
-
-    public void launchLogin(Stage stage) {
-        this.stage = stage;
+    public void launchLogin(Stage stage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("login-app.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
         stage.setTitle("Login");
         stage.getIcons().add(new Image("images/library_icon.jpg"));
-        stage.setScene(this.scene);
-        stage.setResizable(true);
+        stage.setScene(scene);
         stage.show();
+        // TODO: đã fix đc :))
     }
 
     public void authenticateUser() {
