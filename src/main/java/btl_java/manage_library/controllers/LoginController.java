@@ -4,7 +4,6 @@ package btl_java.manage_library.controllers;
 import btl_java.manage_library.MainApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -13,9 +12,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoginController {
-    private Stage stage;
-    private Scene scene;
-    private Parent parent;
     @FXML
     private Button submitLogin;
     public void launchLogin(Stage stage) throws IOException {
