@@ -15,7 +15,7 @@ public class LoginController {
     @FXML
     private Button submitLogin;
     public void launchLogin(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("login-app.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/login-app.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 500, 500);
         stage.setTitle("Login");
         stage.getIcons().add(new Image("images/library_icon.jpg"));
