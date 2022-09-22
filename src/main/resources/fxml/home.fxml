@@ -9,7 +9,7 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Label text="Succesfully" textAlignment="CENTER" textFill="#474d9e" translateY="-60.0">
+    <Label text="Đăng nhập" textAlignment="CENTER" textFill="#474d9e" translateY="-60.0">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
         </padding>
@@ -17,4 +17,31 @@
             <Font size="30.0" />
         </font>
     </Label>
+    <GridPane prefHeight="90.0" prefWidth="646.0" translateY="-40.0">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="335.99998474121094" minWidth="10.0" prefWidth="192.60001525878906" />
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="482.59998474121096" minWidth="10.0" prefWidth="470.59998474121096" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+        <children>
+            <Label text="Tài khoản: " />
+            <Label text="Mật khẩu: " GridPane.rowIndex="1" />
+            <TextField GridPane.columnIndex="1">
+                <GridPane.margin>
+                    <Insets left="30.0" right="100.0" />
+                </GridPane.margin>
+            </TextField>
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <GridPane.margin>
+                    <Insets left="30.0" right="100.0" />
+                </GridPane.margin>
+            </TextField>
+        </children>
+    </GridPane>
+    <StackPane prefHeight="46.0" prefWidth="100.0" translateY="-20.0">
+        <Button mnemonicParsing="false" onAction="#btn_submit" text="Button" />
+    </StackPane>
 </VBox>

@@ -13,12 +13,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoginController {
-    private Stage stage;
-
+    public Stage stage;
 
     public void launchLogin(Stage primaryStage) throws IOException {
-        this.stage = MainApplication.primaryStage;
+        System.out.println(primaryStage);
         System.out.println(this.stage);
+        this.stage = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/login-app.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 500, 500);
         this.stage.setTitle("Login");
@@ -27,14 +27,8 @@ public class LoginController {
         this.stage.show();
     }
 
-    public void btn_submit(ActionEvent actionEvent) throws IOException {
-
-        displayHome(MainApplication.primaryStage);
-    }
-    public void displayHome(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/home.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
-        stage.setScene(scene);
-        stage.show();
+    public void btn_submit() throws IOException {
+        System.out.println(this.stage);
+        new HomeController().displayHome(this.stage);
     }
 }
