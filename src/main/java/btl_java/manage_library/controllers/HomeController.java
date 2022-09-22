@@ -1,20 +1,20 @@
 package btl_java.manage_library.controllers;
+
+import btl_java.manage_library.MainApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+
 public class HomeController {
-    private Stage stage;
-    private Scene scene;
 
-
-    public HomeController (){
-        // TODO: Load fxml cho giao diện của home
-    }
-
-    public void displayHome(Stage stage){
-        this.stage = stage;
+    public void displayHome(Stage stage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/home.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
         stage.setScene(scene);
         stage.show();
     }

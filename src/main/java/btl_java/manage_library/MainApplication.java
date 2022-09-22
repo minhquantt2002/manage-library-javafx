@@ -8,8 +8,7 @@ import javafx.stage.Stage;
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception{
-        LoginController k = new LoginController();
-        k.launchLogin(stage);
+        new LoginController().launchLogin(stage);
     }
     public static void main(String[] args) {
         launch();
