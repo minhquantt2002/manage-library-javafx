@@ -2,10 +2,7 @@ package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.MainApplication;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
 import javafx.stage.Stage;
 
 import java.io.IOException;
