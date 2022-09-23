@@ -21,7 +21,7 @@ public class LoginController {
     public void launchLogin(Stage stage) throws IOException {
         this.stage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/login-app.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
+        Scene scene = new Scene(fxmlLoader.load(),  700, 500);
         this.stage.setTitle("Login");
         this.stage.getIcons().add(new Image("images/library_icon.jpg"));
         this.stage.setScene(scene);

@@ -35,6 +35,6 @@
       <TextField fx:id="PassWord" GridPane.columnIndex="1" GridPane.rowIndex="1" />
     </GridPane>
     <StackPane prefHeight="46.0" prefWidth="100.0" translateY="-20.0">
-        <Button mnemonicParsing="false" onAction="#btn_submit" text="Button" />
+        <Button mnemonicParsing="false" onAction="#btn_submit" text="Đăng nhập" />
     </StackPane>
 </VBox>
