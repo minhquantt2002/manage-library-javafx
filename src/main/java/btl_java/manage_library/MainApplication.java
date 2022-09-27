@@ -11,7 +11,6 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception{
         primaryStage = stage;
-
         new LoginController().launchLogin(stage);
     }
     public static void main(String[] args) {
