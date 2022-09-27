@@ -2,6 +2,7 @@ package btl_java.manage_library.controllers;
 
 
 import btl_java.manage_library.MainApplication;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,7 +16,7 @@ import java.io.IOException;
 public class LoginController {
     public Stage stage;
     @FXML
-    TextField PassWord;
+    TextField PassWord ,Username;
     @FXML
     Label lblResult;
     public void launchLogin(Stage stage) throws IOException {
@@ -34,7 +35,12 @@ public class LoginController {
         }
         else{
             lblResult.setTextFill(Color.RED);
-            lblResult.setText("mật khẩu sai vui lòng nhập lại");
+            lblResult.setText("Sai Username hoặc Pasword");
         }
+    }
+
+    public void btn_reset(ActionEvent actionEvent) {
+        Username.setText("");
+        PassWord.setText("");
     }
 }
