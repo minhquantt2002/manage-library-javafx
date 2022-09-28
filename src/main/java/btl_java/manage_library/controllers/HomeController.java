@@ -13,6 +13,7 @@ public class HomeController {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/home.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
+//        stage.setMaximized(true);
         stage.show();
     }
 }

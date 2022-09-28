@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import javax.swing.text.html.Option;
@@ -16,7 +17,7 @@ import java.util.Optional;
 public class LoginController {
     public Stage stage;
     @FXML
-    private TextField password;
+    private PasswordField password;
     @FXML
     private Label lblResult;
     @FXML
@@ -41,13 +42,18 @@ public class LoginController {
         Optional<String> result = log.showAndWait();
         System.out.println(result);
         if (result.isPresent() && result.get().equals("123")) {
-
             new HomeController().displayHome(MainApplication.primaryStage);
+        }
+        else{
+            lblResult.setTextFill(Color.RED);
+            lblResult.setText("Wrong username or password");
         }
     }
 
     public void btnReset() throws IOException {
         userName.setText("");
         password.setText("");
+        lblResult.setTextFill(Color.BLUEVIOLET);
+        lblResult.setText("Try again");
     }
 }
