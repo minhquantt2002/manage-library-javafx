@@ -35,15 +35,7 @@ public class LoginController {
     }
 
     public void btnLogin() throws IOException {
-//        TextInputDialog log = new TextInputDialog();
-//        log.setTitle("Nhập mã sinh viên");
-//        log.setHeaderText("Nhập mã sinh viên");
-//        log.setContentText("MSV");
-//        Optional<String> result = log.showAndWait();
-//        System.out.println(result);
-//        if (result.isPresent() && result.get().equals("123")) {
-//            new HomeController().displayHome(MainApplication.primaryStage);
-//        }
+
 
         if(PW.equals(password.getText())){
             new HomeController().displayHome(MainApplication.primaryStage);
