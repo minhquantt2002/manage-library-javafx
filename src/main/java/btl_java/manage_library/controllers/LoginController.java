@@ -36,14 +36,14 @@ public class LoginController {
 
     public void btnLogin() throws IOException {
 
-
-        if(PW.equals(password.getText())){
-            new HomeController().displayHome(MainApplication.primaryStage);
-        }
-        else{
-            lblResult.setTextFill(Color.RED);
-            lblResult.setText("Wrong username or password");
-        }
+        new HomeController().displayHome(MainApplication.primaryStage);
+//        if(PW.equals(password.getText())){
+//            new HomeController().displayHome(MainApplication.primaryStage);
+//        }
+//        else{
+//            lblResult.setTextFill(Color.RED);
+//            lblResult.setText("Wrong username or password");
+//        }
 
     }
 
