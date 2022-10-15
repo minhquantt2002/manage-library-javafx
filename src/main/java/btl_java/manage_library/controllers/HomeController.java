@@ -10,12 +10,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,6 +23,13 @@ import java.util.ResourceBundle;
 
 
 public class HomeController implements Initializable {
+    
+//    phần qlsv
+    public Button insertBtn;
+    public TextField nameStfield;
+    public TextField idStfield;
+    public TextField classStfield;
+    public TextField sdtStfield;
     @FXML
     private TableView<LibraryModel> tableView;
 //    @FXML
@@ -35,8 +40,8 @@ public class HomeController implements Initializable {
     private TableColumn<LibraryModel, String> nameStudent;
     @FXML
     private TableColumn<LibraryModel, String> codeStudent;
-    @FXML
-    private TableColumn<LibraryModel, String> bookTook;
+     @FXML
+     private TableColumn<LibraryModel, String> bookTook;
     public Button btnChangePassword;
 
     @FXML
@@ -97,4 +102,41 @@ public class HomeController implements Initializable {
         LibraryModel test2 = new LibraryModel("B20dccn553", "Quan3", "Nhat ki trong tu3");
         return FXCollections.observableArrayList(test, test1, test2);
     }
+
+
+//    Phần insert student (test thử)
+
+    public void insertStudent() {
+        // Kiểm tra dữ liệu trước khi thêm sinh viên
+        boolean valid = checkInput();
+        if (!valid) {
+            Alert warn = this.createAlert(AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
+            warn.show();
+            return;
+        }
+
+    }
+    private boolean checkInput() {
+        boolean isValid = true;
+        if(idStfield.getText().isEmpty() || nameStfield.getText().isEmpty() || classStfield.getText().isEmpty()||sdtStfield.getText().isEmpty() )
+        {
+            isValid=false;
+        }
+        return isValid;
+    }
+
+//    tao alert
+    private Alert createAlert(AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
+        Alert alert = this.createAlert(type, content, header, title);
+        alert.getButtonTypes().addAll(buttonTypes);
+        return alert;
+    }
+
+    private Alert createAlert(AlertType type, String content, String header, String title) {
+        Alert alert = new Alert(type, content);
+        alert.setHeaderText(header);
+        alert.setTitle(title);
+        return alert;
+    }
+
 }
