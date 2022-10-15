@@ -36,11 +36,11 @@
                 <Button mnemonicParsing="false" onAction="#btnDialog" text="Button"/>
                 <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                     <columns>
-                        <TableColumn fx:id="timeIn" prefWidth="155.1999877691269" text="In"/>
-                        <TableColumn fx:id="codeStudent" minWidth="0.0" prefWidth="124.7999267578125" text="MSV"/>
-                        <TableColumn fx:id="nameStudent" minWidth="0.0" prefWidth="153.5999755859375" text="Name"/>
-                        <TableColumn fx:id="bookTook" minWidth="0.0" prefWidth="159.19998168945312" text="Book"/>
-                        <TableColumn fx:id="timeOut" minWidth="0.0" prefWidth="187.20001220703125" text="Out"/>
+<!--                        <TableColumn fx:id="timeIn" prefWidth="75.0" text="timeIn"/>-->
+                        <TableColumn fx:id="nameStudent" prefWidth="103.19998931884766" text="nameStudent"/>
+                        <TableColumn fx:id="codeStudent" minWidth="0.0" prefWidth="123.20001220703125" text="codeStudent"/>
+                        <TableColumn fx:id="bookTook" minWidth="0.0" prefWidth="117.5999755859375" text="bookTook"/>
+<!--                        <TableColumn fx:id="timeOut" prefWidth="200.80001831054688" text="timeOut"/>-->
                     </columns>
                 </TableView>
             </GridPane>

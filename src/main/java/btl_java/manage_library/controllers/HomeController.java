@@ -2,6 +2,7 @@ package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.MainApplication;
 import btl_java.manage_library.models.LibraryModel;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,10 +27,10 @@ import java.util.ResourceBundle;
 public class HomeController implements Initializable {
     @FXML
     private TableView<LibraryModel> tableView;
-    @FXML
-    private TableColumn<LibraryModel, Date> timeIn;
-    @FXML
-    private TableColumn<LibraryModel, Date> timeOut;
+//    @FXML
+//    private TableColumn<LibraryModel, Date> timeIn;
+//    @FXML
+//    private TableColumn<LibraryModel, Date> timeOut;
     @FXML
     private TableColumn<LibraryModel, String> nameStudent;
     @FXML
@@ -38,15 +39,23 @@ public class HomeController implements Initializable {
     private TableColumn<LibraryModel, String> bookTook;
     public Button btnChangePassword;
 
-    @Override
+    @FXML
     public void initialize(URL url, ResourceBundle rb) {
-//        timeIn.setCellValueFactory(new PropertyValueFactory<>("timeIn"));
-//        timeOut.setCellValueFactory(new PropertyValueFactory<>("timeOut"));
-//        nameStudent.setCellValueFactory(new PropertyValueFactory<>("nameStudent"));
-//        codeStudent.setCellValueFactory(new PropertyValueFactory<>("codeStudent"));
-//        bookTook.setCellValueFactory(new PropertyValueFactory<>("bookTook"));
+        // set theo getter ấy
+        codeStudent.setCellValueFactory(cellData -> cellData.getValue().getCodeStudent());
+        nameStudent.setCellValueFactory(cellData -> cellData.getValue().getNameStudent());
+        bookTook.setCellValueFactory(cellData -> cellData.getValue().getBookTook());
+        //
         ObservableList<LibraryModel> list = getDataList();
         tableView.setItems(list);
+//        timeIn.setCellValueFactory(cell -> (ObservableValue<Date>) cell.getValue().getTimeIn());
+//        codeStudent.setCellValueFactory(cell -> (ObservableValue<String>) cell.getValue().getCodeStudent());
+//        nameStudent.setCellValueFactory(cell -> (ObservableValue<String>) cell.getValue().getTimeOut());
+//        bookTook.setCellValueFactory(cell -> cell.getValue().getBookTook());
+//        timeOut.setCellValueFactory(cell -> (ObservableValue<Date>) cell.getValue().getTimeOut());
+
+//        timeOut.setCellValueFactory(new PropertyValueFactory<>("timeOut"));
+
         for (LibraryModel a : list) {
             System.out.println(a);
         }
@@ -55,7 +64,6 @@ public class HomeController implements Initializable {
     public void displayHome(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/main.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 702, 596);
-        System.out.println(1);
         stage.setScene(scene);
         stage.setTitle("Quản lí thư viện");
         stage.show();
@@ -81,9 +89,12 @@ public class HomeController implements Initializable {
     }
 
     private ObservableList<LibraryModel> getDataList() {
-        LibraryModel row1 = new LibraryModel(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), "B20dccn553", "Quan", "Nhat ki trong tu");
-        LibraryModel row2 = new LibraryModel(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), "B20dccn553", "Quan", "Nhat ki trong tu");
-        LibraryModel row3 = new LibraryModel(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), "B20dccn553", "Quan", "Nhat ki trong tu");
-        return FXCollections.observableArrayList(row1, row2, row3);
+//        LibraryModel row1 = new LibraryModel(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), "B20dccn553", "Quan", "Nhat ki trong tu");
+//        LibraryModel row2 = new LibraryModel(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), "B20dccn553", "Quan", "Nhat ki trong tu");
+//        LibraryModel row3 = new LibraryModel(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), "B20dccn553", "Quan", "Nhat ki trong tu");
+        LibraryModel test = new LibraryModel("B20dccn553", "Quan1", "Nhat ki trong tu1");
+        LibraryModel test1 = new LibraryModel("B20dccn553", "Quan2", "Nhat ki trong tu2");
+        LibraryModel test2 = new LibraryModel("B20dccn553", "Quan3", "Nhat ki trong tu3");
+        return FXCollections.observableArrayList(test, test1, test2);
     }
 }
