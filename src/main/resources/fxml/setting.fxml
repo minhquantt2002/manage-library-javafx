@@ -8,7 +8,14 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="btl_java.manage_library.controllers.HomeController"
+            fx:controller="btl_java.manage_library.controllers.SettingController"
             prefHeight="400.0" prefWidth="600.0">
+    <Button layoutX="64.0" layoutY="43.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="135.0"
+            text="Đăng xuất"/>
+    <Button layoutX="64.0" layoutY="107.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="135.0"
+            text="Đổi mật khẩu "/>
+    <!--            fx:id="btnChangePassword" -->
+
+    <!--            onAction="#ChangePassword"-->
 
 </AnchorPane>
