@@ -1,5 +1,6 @@
 package btl_java.manage_library.controllers;
 
+import btl_java.manage_library.utils.ConnectionUtils;
 import btl_java.manage_library.models.LibraryModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,8 +9,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
-import java.time.temporal.ValueRange;
-import java.util.Date;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class LibraryManagerController implements Initializable {
@@ -45,25 +48,33 @@ public class LibraryManagerController implements Initializable {
         phoneNumber.setCellValueFactory(cellData -> cellData.getValue().getPhoneNumber());
         timeIn.setCellValueFactory(cellData -> cellData.getValue().getTimeIn());
         timeOut.setCellValueFactory(cellData -> cellData.getValue().getTimeOut());
-
-        ObservableList<LibraryModel> list = getDataList();
-        tableView.setItems(list);
+        setDataTableView();
     }
 
-    private ObservableList<LibraryModel> getDataList() {
-        LibraryModel test = new LibraryModel(1, "B20dccn553", "Quan1", "0333935933", "D20DCQCN01-B");
-        LibraryModel test1 = new LibraryModel(2, "B20dccn553", "Quan2", "0333935933", "D20DCQCN01-B");
-        LibraryModel test2 = new LibraryModel(3, "B20dccn553", "Quan3", "0333935933", "D20DCQCN01-B");
-        LibraryModel test3 = new LibraryModel(4, "B20dccn553", "Quan4", "0333935933", "D20DCQCN01-B");
-        LibraryModel test4 = new LibraryModel(5, "B20dccn553", "Quan5", "0333935933", "D20DCQCN01-B");
-        LibraryModel test5 = new LibraryModel(6, "B20dccn553", "Quan6", "0333935933", "D20DCQCN01-B");
-        LibraryModel test6 = new LibraryModel(7, "B20dccn553", "Quan7", "0333935933", "D20DCQCN01-B");
-        LibraryModel test7 = new LibraryModel(8, "B20dccn553", "Quan8", "0333935933", "D20DCQCN01-B");
-        LibraryModel test8 = new LibraryModel(9, "B20dccn553", "Quan9", "0333935933", "D20DCQCN01-B");
-        LibraryModel test9 = new LibraryModel(10, "B20dccn553", "Quan10", "0333935933", "D20DCQCN01-B");
-        LibraryModel test10 = new LibraryModel(11, "B20dccn553", "Quan11", "0333935933", "D20DCQCN01-B");
-        LibraryModel test11 = new LibraryModel(12, "B20dccn553", "Quan12", "0333935933", "D20DCQCN01-B");
-        return FXCollections.observableArrayList(test, test1, test2, test3, test4, test6, test7, test8, test9, test10, test11);
+    public void setDataTableView() {
+        Connection connection = new ConnectionUtils().connectDB();
+        String statement = "SELECT * FROM library_manager";
+        ObservableList<LibraryModel> list = FXCollections.observableArrayList();
+        ResultSet resultSet;
+        try {
+            resultSet = connection.createStatement().executeQuery(statement);
+            while (resultSet.next()) {
+                LibraryModel row = new LibraryModel(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
+                        resultSet.getString(7)
+                );
+                list.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+//        ObservableList<LibraryModel> list = FXCollections.observableArrayList(test, test1, test2, test3, test4, test6, test7, test8, test9, test10, test11);
+        tableView.setItems(list);
     }
 
 

@@ -9,10 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import javax.swing.text.html.Option;
 import java.io.IOException;
-import java.util.Optional;
 
 public class LoginController {
     public Stage stage;

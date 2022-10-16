@@ -5,16 +5,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionUtils {
-    public Connection connection;
 
-    public void connectDB() {
+    public Connection connectDB() {
+        Connection connection = null;
         try {
             System.out.println("Connecting database ...");
             Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection("jdbc:mysql://localhost/library", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/library", "root", "");
         } catch (ClassNotFoundException | SQLException ex) {
             System.err.println("Connection : " + ex.getMessage());
-            this.connection = null;
         }
+        return connection;
     }
 }

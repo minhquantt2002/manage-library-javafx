@@ -3,6 +3,7 @@ package btl_java.manage_library.models;
 import com.mysql.cj.conf.StringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,18 +18,20 @@ public class LibraryModel {
     private final SimpleStringProperty timeIn = new SimpleStringProperty();
     private final SimpleStringProperty timeOut = new SimpleStringProperty();
 
-    public LibraryModel(int stt, String codeStudent, String nameStudent, String phoneNumber, String classStudent) {
-        this.stt.set(Integer.toString(stt));
+    public LibraryModel(String stt, String codeStudent, String nameStudent, String phoneNumber, String classStudent, String timeIn, String timeOut) {
+        this.stt.set(stt);
         this.codeStudent.set(codeStudent);
         this.nameStudent.set(nameStudent);
-        this.timeIn.set(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()));
-        this.phoneNumber.set(phoneNumber);
         this.classStudent.set(classStudent);
-        this.timeOut.set("");
+        this.phoneNumber.set(phoneNumber);
+        this.timeIn.set(timeIn);
+        this.timeOut.set(timeOut);
     }
+
     public SimpleStringProperty getStt() {
         return stt;
     }
+
     public SimpleStringProperty getCodeStudent() {
         return codeStudent;
     }
@@ -53,8 +56,12 @@ public class LibraryModel {
         return timeOut;
     }
 
-    public void setTimeOut() {
+    public void setTimeIn(String timeIn) {
+        this.timeIn.set(timeIn);
+    }
 
+    public void setTimeOut(String timeOut) {
+        this.timeOut.set(timeOut);
     }
 
     @Override
