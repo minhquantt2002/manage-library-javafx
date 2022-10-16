@@ -29,7 +29,7 @@ public class LoginController {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/login-app.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         this.stage.setTitle("Login");
-        this.stage.getIcons().add(new Image("images/library_icon.jpg"));
+        this.stage.getIcons().add(new Image("images/yelan.png"));
         this.stage.setScene(scene);
         this.stage.show();
     }
