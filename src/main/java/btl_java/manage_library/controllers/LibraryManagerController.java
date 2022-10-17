@@ -10,16 +10,24 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class LibraryManagerController implements Initializable {
+    @FXML
     public Button insertBtn;
+    @FXML
     public TextField nameStfield;
+    @FXML
     public TextField idStfield;
+    @FXML
     public TextField classStfield;
+    @FXML
     public TextField sdtStfield;
     @FXML
     private TableView<LibraryModel> tableView;
@@ -53,11 +61,11 @@ public class LibraryManagerController implements Initializable {
 
     public void setDataTableView() {
         Connection connection = new ConnectionUtils().connectDB();
-        String statement = "SELECT * FROM library_manager";
+        String stmt = "SELECT * FROM library_manager";
         ObservableList<LibraryModel> list = FXCollections.observableArrayList();
         ResultSet resultSet;
         try {
-            resultSet = connection.createStatement().executeQuery(statement);
+            resultSet = connection.createStatement().executeQuery(stmt);
             while (resultSet.next()) {
                 LibraryModel row = new LibraryModel(
                         resultSet.getString(1),
@@ -73,7 +81,6 @@ public class LibraryManagerController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        ObservableList<LibraryModel> list = FXCollections.observableArrayList(test, test1, test2, test3, test4, test6, test7, test8, test9, test10, test11);
         tableView.setItems(list);
     }
 
@@ -84,7 +91,7 @@ public class LibraryManagerController implements Initializable {
      **/
 
 
-    //  TODO: Tâm
+    //  TODO: Tâm + Quân
     public void insertStudent() {
         // Kiểm tra dữ liệu trước khi thêm sinh viên
         boolean valid = checkInput();
@@ -92,6 +99,22 @@ public class LibraryManagerController implements Initializable {
             Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
             warn.show();
         }
+        String stmt = "INSERT INTO library_manager (student_code, full_name, class_name, phone_number, time_in, time_out) VALUES (?, ?, ?, ?, ?, ?)";
+        Connection connection = new ConnectionUtils().connectDB();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
+            preparedStatement.setString(1, idStfield.getText());
+            preparedStatement.setString(2, nameStfield.getText());
+            preparedStatement.setString(3, classStfield.getText());
+            preparedStatement.setString(4, sdtStfield.getText());
+            preparedStatement.setString(5, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()));
+            preparedStatement.setString(6, "");
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        setDataTableView();
+
         // TODO: Tâm -> cần validate dữ liệu đầu vào. m nên làm ở hàm checkInput ở dưới
     }
 
