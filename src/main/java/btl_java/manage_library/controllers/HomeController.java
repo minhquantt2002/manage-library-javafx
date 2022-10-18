@@ -12,7 +12,7 @@ import java.io.IOException;
 public class HomeController {
     public void displayHome(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 702, 596);
+        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
         stage.setScene(scene);
         stage.setTitle("Quản lí thư viện");
         stage.show();

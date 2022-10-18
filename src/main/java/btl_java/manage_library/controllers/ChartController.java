@@ -29,6 +29,9 @@ public class ChartController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         choice_S.getItems().addAll(choices);
         choice_Sv.getItems().addAll(choices);
+        choice_Sv.setValue("Tuần");
+        choice_S.setValue("Tuần");
+
         W_chartS();
         W_chart_Sv();
         choice_Sv.setOnAction(this::get_choiceSv);
