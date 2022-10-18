@@ -66,13 +66,7 @@ public class LibraryModel {
 
     @Override
     public String toString() {
-        return "LibraryModel{" +
-                "codeStudent=" + codeStudent +
-                ", nameStudent=" + nameStudent +
-                ", timeIn=" + timeIn +
-                ", timeOut=" + timeOut +
-                ", phoneNumber=" + phoneNumber +
-                ", classStudent=" + classStudent +
-                '}';
+        return "LibraryModel{" + "codeStudent=" + codeStudent.getValue() + ", " + "nameStudent=" + nameStudent.getValue() + ", classStudent=" + classStudent.getValue() +
+                ", phoneNumber=" + phoneNumber.getValue() + ", timeIn=" + timeIn.getValue() + ", timeOut=" + timeOut.getValue() + '}';
     }
 }

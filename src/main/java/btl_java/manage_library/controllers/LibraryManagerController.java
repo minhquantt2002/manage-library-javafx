@@ -102,14 +102,17 @@ public class LibraryManagerController implements Initializable {
         String stmt = "INSERT INTO library_manager (student_code, full_name, class_name, phone_number, time_in, time_out) VALUES (?, ?, ?, ?, ?, ?)";
         Connection connection = new ConnectionUtils().connectDB();
         try {
+            String timeInToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
             PreparedStatement preparedStatement = connection.prepareStatement(stmt);
             preparedStatement.setString(1, idStfield.getText());
             preparedStatement.setString(2, nameStfield.getText());
             preparedStatement.setString(3, classStfield.getText());
             preparedStatement.setString(4, sdtStfield.getText());
-            preparedStatement.setString(5, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()));
+            preparedStatement.setString(5, timeInToString);
             preparedStatement.setString(6, "");
             preparedStatement.executeUpdate();
+            System.out.println("Create done a record: " + new LibraryModel(idStfield.getText(), nameStfield.getText(),
+                    classStfield.getText(), classStfield.getText(), sdtStfield.getText(), timeInToString, ""));
             this.clear();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -135,13 +138,13 @@ public class LibraryManagerController implements Initializable {
         alert.setTitle(title);
         return alert;
     }
-    //    phan clear thoong tin sinh vien khoi textfield
 
+    //    phan clear thoong tin sinh vien khoi textfield
     public void clear_if_St() {
         this.clear();
     }
-    public void clear()
-    {
+
+    public void clear() {
         idStfield.setText("");
         nameStfield.setText("");
         classStfield.setText("");
@@ -153,29 +156,27 @@ public class LibraryManagerController implements Initializable {
     @FXML
     private void deleteStudent() {
         LibraryModel selected = tableView.getSelectionModel().getSelectedItem();
-        if(selected !=null)
-        {
+        if (selected != null) {
             Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn xóa thông tin về sinh viên này ? ", "", "Xoá thông tin sinh viên ", ButtonType.CLOSE);
-            Optional<ButtonType> option =warn.showAndWait();
-            try{
-                if(ButtonType.OK == option.get())
-                {
+            Optional<ButtonType> option = warn.showAndWait();
+            try {
+                if (ButtonType.OK == option.get()) {
                     this.delete(selected);
                     setDataTableView();
                 }
             } catch (Exception e) {
-                System.out.println("error "+e.getMessage());
+                System.out.println("error " + e.getMessage());
             }
         }
     }
-    public void delete(LibraryModel st)
-    {
-        String query="DELETE  FROM library_manager Where  student_code='"+st.getCodeStudent().getValue()+"'";
-        try{
-            Connection conn= new ConnectionUtils().connectDB();
+
+    public void delete(LibraryModel st) {
+        String query = "DELETE  FROM library_manager WHERE student_code='" + st.getCodeStudent().getValue() + "'";
+        try {
+            Connection conn = new ConnectionUtils().connectDB();
             PreparedStatement pstm = conn.prepareStatement(query);
-            System.out.println("delete thanh cong ");
             pstm.executeUpdate();
+            System.out.println("Delete done a record: " + st);
         } catch (SQLException err) {
             System.err.println("Delete : " + err.getMessage());
         }
