@@ -110,6 +110,7 @@ public class LibraryManagerController implements Initializable {
             preparedStatement.setString(5, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()));
             preparedStatement.setString(6, "");
             preparedStatement.executeUpdate();
+            this.clear();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -133,5 +134,50 @@ public class LibraryManagerController implements Initializable {
         alert.setHeaderText(header);
         alert.setTitle(title);
         return alert;
+    }
+    //    phan clear thoong tin sinh vien khoi textfield
+
+    public void clear_if_St() {
+        this.clear();
+    }
+    public void clear()
+    {
+        idStfield.setText("");
+        nameStfield.setText("");
+        classStfield.setText("");
+        sdtStfield.setText("");
+    }
+
+//    Phan delete thoong tin sinh vien
+
+    @FXML
+    private void deleteStudent() {
+        LibraryModel selected = tableView.getSelectionModel().getSelectedItem();
+        if(selected !=null)
+        {
+            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn xóa thông tin về sinh viên này ? ", "", "Xoá thông tin sinh viên ", ButtonType.CLOSE);
+            Optional<ButtonType> option =warn.showAndWait();
+            try{
+                if(ButtonType.OK == option.get())
+                {
+                    this.delete(selected);
+                    setDataTableView();
+                }
+            } catch (Exception e) {
+                System.out.println("error "+e.getMessage());
+            }
+        }
+    }
+    public void delete(LibraryModel st)
+    {
+        String query="DELETE  FROM library_manager Where  student_code='"+st.getCodeStudent().getValue()+"'";
+        try{
+            Connection conn= new ConnectionUtils().connectDB();
+            PreparedStatement pstm = conn.prepareStatement(query);
+            System.out.println("delete thanh cong ");
+            pstm.executeUpdate();
+        } catch (SQLException err) {
+            System.err.println("Delete : " + err.getMessage());
+        }
     }
 }
