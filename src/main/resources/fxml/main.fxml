@@ -13,13 +13,13 @@
         <fx:include source="library-manager.fxml"/>
     </Tab>
     <Tab text="Sinh viên mượn sách ">
-        <fx:include source="book-manager.fxml"/>
+        <fx:include source="borrowing-book.fxml"/>
     </Tab>
     <Tab text="Thống kê">
         <fx:include source="chart.fxml"/>
     </Tab>
     <Tab text="Quản lí sách">
-        <fx:include source="book-library.fxml"/>
+        <fx:include source="book.fxml"/>
     </Tab>
     <Tab text="Cài đặt">
         <fx:include source="setting.fxml"/>

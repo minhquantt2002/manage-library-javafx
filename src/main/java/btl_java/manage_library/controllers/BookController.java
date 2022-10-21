@@ -1,4 +1,4 @@
 package btl_java.manage_library.controllers;
 
-public class BookLibraryController {
+public class BookController {
 }
