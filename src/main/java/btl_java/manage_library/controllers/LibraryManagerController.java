@@ -65,10 +65,11 @@ public class LibraryManagerController implements Initializable {
         ObservableList<LibraryModel> list = FXCollections.observableArrayList();
         ResultSet resultSet;
         try {
+            int i = 1;
             resultSet = connection.createStatement().executeQuery(stmt);
             while (resultSet.next()) {
                 LibraryModel row = new LibraryModel(
-                        resultSet.getString(1),
+                        Integer.toString(i),
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getString(4),
@@ -76,6 +77,7 @@ public class LibraryManagerController implements Initializable {
                         resultSet.getString(6),
                         resultSet.getString(7)
                 );
+                i++;
                 list.add(row);
             }
         } catch (SQLException e) {
@@ -98,6 +100,8 @@ public class LibraryManagerController implements Initializable {
         if (!valid) {
             Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
             warn.show();
+            clear();
+            return;
         }
         String stmt = "INSERT INTO library_manager (student_code, full_name, class_name, phone_number, time_in, time_out) VALUES (?, ?, ?, ?, ?, ?)";
         Connection connection = new ConnectionUtils().connectDB();
@@ -171,7 +175,7 @@ public class LibraryManagerController implements Initializable {
     }
 
     public void delete(LibraryModel st) {
-        String query = "DELETE  FROM library_manager WHERE student_code='" + st.getCodeStudent().getValue() + "'";
+        String query = "DELETE FROM library_manager WHERE student_code ='" + st.getCodeStudent().getValue() + "'";
         try {
             Connection conn = new ConnectionUtils().connectDB();
             PreparedStatement pstm = conn.prepareStatement(query);
