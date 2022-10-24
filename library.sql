@@ -21,3 +21,15 @@ CREATE TABLE `library_manager` (
 	`time_out` varchar(128) DEFAULT NULL,
 	PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `borrowing_book` (
+	`id` int(11) auto_increment,
+    `book_name` varchar(128) not null,
+    `student_id` int(11),
+    foreign key (`student_id`)  references book_manager(`id`) ,
+    primary key(`id`)
+);
+    
+    
+    
+	
