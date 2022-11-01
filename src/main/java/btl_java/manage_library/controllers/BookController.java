@@ -15,15 +15,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import static com.sun.beans.introspect.ClassInfo.clear;
 
 public class BookController implements Initializable {
     @FXML
-    public TextField categoryBfield;
+    public TextField categoryBookField;
     @FXML
-    public TextField nameBfield;
+    public TextField nameBookField;
     @FXML
-    public TextField authorBfield;
+    public TextField authorBookField;
     @FXML
     private TableView<BookModel> tableView;
     @FXML
@@ -51,7 +50,7 @@ public class BookController implements Initializable {
     }
     public void setDataTableView() {
         Connection connection = new ConnectionUtils().connectDB();
-        String stmt = "SELECT * FROM book_manager";
+        String stmt = "SELECT * FROM book";
         ObservableList<BookModel> list = FXCollections.observableArrayList();
         ResultSet resultSet;
         try {
@@ -80,24 +79,26 @@ public class BookController implements Initializable {
         if(!valid){
             Alert warn = this.createAlert(Alert.AlertType.WARNING,"chưa điền đủ thông tin!","","Điền thông tin",ButtonType.CLOSE);
             warn.show();
-            clear();
             return;
         }
-        String stmt = "INSERT INTO book (category, name, author,remain) VALUES (?, ?, ?,?,?)";
-        Connection connection = new ConnectionUtils().connectDB();
-        try{
-            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-            preparedStatement.setString(1,categoryBfield.getText());
-            preparedStatement.setString(2,nameBfield.getText());
-            preparedStatement.setString(3,authorBfield.getText());
-            preparedStatement.setString(4,remainingBook.getText());
+        else {
+            String stmt = "INSERT INTO book (category, name, author,total,remain) VALUES (?, ?, ?, ?,?)";
+            Connection connection = new ConnectionUtils().connectDB();
+            try{
+                PreparedStatement preparedStatement = connection.prepareStatement(stmt);
+                preparedStatement.setString(1,categoryBookField.getText());
+                preparedStatement.setString(2,nameBookField.getText());
+                preparedStatement.setString(3,authorBookField.getText());
+                preparedStatement.setString(4,totalBook.getText());
+                preparedStatement.setString(5,remainingBook.getText());
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     public boolean checkInput() {
-        return !categoryBfield.getText().isEmpty() && !nameBfield.getText().isEmpty() && !authorBfield.getText().isEmpty();
+        return !categoryBookField.getText().isEmpty() && !nameBookField.getText().isEmpty() && !authorBookField.getText().isEmpty();
     }
     public Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
         Alert alert = this.createAlert(type, content, header, title);
@@ -110,6 +111,7 @@ public class BookController implements Initializable {
         alert.setTitle(title);
         return alert;
     }
+
     //============================EDITBOOK==================================
     public void editBook() {
     }

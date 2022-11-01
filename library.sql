@@ -16,6 +16,7 @@ CREATE TABLE `book` (
     `category` varchar(128) NOT NULL,
     `name` varchar(128) NOT NULL,
     `author` varchar(128) NOT NULL,
+    `total` int(11) NOT NULL,
     `remain` int(11) NOT NULL,
     PRIMARY KEY (`id`)
 );

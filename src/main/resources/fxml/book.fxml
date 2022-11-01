@@ -51,8 +51,8 @@
                     <Font size="14.0" />
                 </font>
             </Label>
-            <TextField fx:id="categoryBfield" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="nameBfield" alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <TextField fx:id="categoryBookField" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="nameBookField" alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="2">
                 <GridPane.margin>
                     <Insets right="20.0" />
                 </GridPane.margin>
@@ -65,7 +65,7 @@
                     <Insets />
                 </GridPane.margin>
             </Label>
-         <TextField fx:id="authorBfield" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <TextField fx:id="authorBookField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          <Button mnemonicParsing="false" onAction="#insertBook" text="INSERT" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
          <Button mnemonicParsing="false" onAction="#editBook" text="EDIT" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
          <Button mnemonicParsing="false" onAction="#searchBook" text="SEARCH" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
