@@ -18,53 +18,31 @@ public class BookModel {
         this.remainingBook.set(remainingBook);
     }
 
-    public String getStt() {
-        return stt.get();
-    }
-
-    public SimpleStringProperty sttProperty() {
+    public SimpleStringProperty getStt() {
         return stt;
     }
 
-    public String getCategoryBook() {
-        return categoryBook.get();
-    }
-
-    public SimpleStringProperty categoryBookProperty() {
+    public SimpleStringProperty getCategoryBook() {
         return categoryBook;
     }
 
-    public String getNameBook() {
-        return nameBook.get();
-    }
 
-    public SimpleStringProperty nameBookProperty() {
+    public SimpleStringProperty getNameBook() {
         return nameBook;
     }
 
-    public String getAuthorBook() {
-        return authorBook.get();
-    }
-
-    public SimpleStringProperty authorBookProperty() {
+    public SimpleStringProperty getAuthorBook() {
         return authorBook;
     }
 
-    public String getTotalBook() {
-        return totalBook.get();
-    }
-
-    public SimpleStringProperty totalBookProperty() {
+    public SimpleStringProperty getTotalBook() {
         return totalBook;
     }
 
-    public String getRemainingBook() {
-        return remainingBook.get();
-    }
-
-    public SimpleStringProperty remainingBookProperty() {
+    public SimpleStringProperty getRemainingBook() {
         return remainingBook;
     }
+
 
     @Override
     public String toString() {

@@ -13,10 +13,10 @@ CREATE TABLE `book_borrower` (
 
 CREATE TABLE `book` (
 	`id` int(11) AUTO_INCREMENT,
-    `name` varchar(128) NOT NULL,
     `category` varchar(128) NOT NULL,
+    `name` varchar(128) NOT NULL,
     `author` varchar(128) NOT NULL,
-    `available` int(11) NOT NULL,
+    `remain` int(11) NOT NULL,
     PRIMARY KEY (`id`)
 );
 

@@ -65,19 +65,19 @@
                     <Insets />
                 </GridPane.margin>
             </Label>
-         <TextField fx:id="authorB field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-         <Button mnemonicParsing="false" text="INSERT" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
-         <Button mnemonicParsing="false" text="EDIT" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-         <Button mnemonicParsing="false" text="SEARCH" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+         <TextField fx:id="authorBfield" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <Button mnemonicParsing="false" onAction="#insertBook" text="INSERT" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+         <Button mnemonicParsing="false" onAction="#editBook" text="EDIT" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+         <Button mnemonicParsing="false" onAction="#searchBook" text="SEARCH" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
         </GridPane>
-        <TableView prefHeight="170.0" prefWidth="634.0">
+        <TableView fx:id="tableView" prefHeight="170.0" prefWidth="634.0">
             <columns>
-                <TableColumn prefWidth="63.20001220703125" text="STT" />
-                <TableColumn prefWidth="121.5999755859375" text="Thể loại" />
-                <TableColumn prefWidth="164.79998779296875" text="Tên sách" />
-                <TableColumn prefWidth="124.79998779296875" text="Tác giả" />
-                <TableColumn prefWidth="61.5999755859375" text="Tổng " />
-                <TableColumn prefWidth="60.0" text="Còn lại" />
+                <TableColumn fx:id="stt" prefWidth="63.20001220703125" text="STT" />
+                <TableColumn fx:id="categoryBook" prefWidth="121.5999755859375" text="Thể loại" />
+                <TableColumn fx:id="nameBook" prefWidth="164.79998779296875" text="Tên sách" />
+                <TableColumn fx:id="authorBook" prefWidth="124.79998779296875" text="Tác giả" />
+                <TableColumn fx:id="totalBook" prefWidth="61.5999755859375" text="Tổng " />
+                <TableColumn fx:id="remainingBook" prefWidth="60.0" text="Còn lại" />
             </columns>
         </TableView>
     </VBox>
