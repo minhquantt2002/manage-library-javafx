@@ -12,21 +12,21 @@ CREATE TABLE `book_borrower` (
 );
 
 CREATE TABLE `book` (
-	`id` int(11) AUTO_INCREMENT,
+    `code` varchar(12),
     `category` varchar(128) NOT NULL,
     `name` varchar(128) NOT NULL,
     `author` varchar(128) NOT NULL,
     `total` int(11) NOT NULL,
     `remain` int(11) NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`code`)
 );
 
 CREATE TABLE `borrowed_book_detail` (
 	`id` int(11) AUTO_INCREMENT,
-    `book_id` int(11),
+    `book_code` varchar(12),
     `book_borrower_id` int(11), 
     `quantity` int(11) NOT NULL,
-    FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+    FOREIGN KEY (`book_code`) REFERENCES `book` (`code`),
     FOREIGN KEY (`book_borrower_id`) REFERENCES `book_borrower` (`id`),
     PRIMARY KEY (`id`)
 );

@@ -20,17 +20,15 @@ import java.util.ResourceBundle;
 
 public class LibraryManagerController implements Initializable {
     @FXML
-    public Button insertBtn;
+    private TextField idStudentField;
     @FXML
-    public TextField nameStfield;
+    private TextField nameStudentField;
     @FXML
-    public TextField idStfield;
+    private TextField classStudentField;
     @FXML
-    public TextField classStfield;
+    private TextField phoneNumberStudentField;
     @FXML
-    public TextField sdtStfield;
-    @FXML
-    private TableView<LibraryModel> tableView;
+    private TableView<LibraryModel> tableViewLbm;
     @FXML
     private TableColumn<LibraryModel, String> timeIn;
     @FXML
@@ -46,7 +44,6 @@ public class LibraryManagerController implements Initializable {
     @FXML
     private TableColumn<LibraryModel, String> stt;
 
-    @FXML
     // TODO: Quân
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
@@ -83,18 +80,11 @@ public class LibraryManagerController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        tableView.setItems(list);
+        tableViewLbm.setItems(list);
     }
 
-
-    /**
-     * Tâm làm phần dưới
-     * Những cái t để TODO ấy check thử xem
-     **/
-
-
-    //  TODO: Tâm + Quân
-    public void insertStudent() {
+    @FXML
+    private void insertStudent() {
         // Kiểm tra dữ liệu trước khi thêm sinh viên
         boolean valid = checkInput();
         if (!valid) {
@@ -108,26 +98,54 @@ public class LibraryManagerController implements Initializable {
         try {
             String timeInToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
             PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-            preparedStatement.setString(1, idStfield.getText());
-            preparedStatement.setString(2, nameStfield.getText());
-            preparedStatement.setString(3, classStfield.getText());
-            preparedStatement.setString(4, sdtStfield.getText());
+            preparedStatement.setString(1, idStudentField.getText());
+            preparedStatement.setString(2, nameStudentField.getText());
+            preparedStatement.setString(3, classStudentField.getText());
+            preparedStatement.setString(4, phoneNumberStudentField.getText());
             preparedStatement.setString(5, timeInToString);
             preparedStatement.setString(6, "");
             preparedStatement.executeUpdate();
-            System.out.println("Create done a record: " + new LibraryModel(idStfield.getText(), nameStfield.getText(),
-                    classStfield.getText(), classStfield.getText(), sdtStfield.getText(), timeInToString, ""));
+            System.out.println("Create done a record: " + new LibraryModel(idStudentField.getText(), nameStudentField.getText(),
+                    classStudentField.getText(), phoneNumberStudentField.getText(), timeInToString, timeInToString, ""));
             this.clear();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         setDataTableView();
+    }
 
-        // TODO: Tâm -> cần validate dữ liệu đầu vào. m nên làm ở hàm checkInput ở dưới
+    @FXML
+    private void searchStudent() {
+
+    }
+
+    @FXML
+    private void deleteStudent() {
+        LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn xóa thông tin về sinh viên này ? ", "", "Xoá thông tin sinh viên ", ButtonType.CLOSE);
+            Optional<ButtonType> option = warn.showAndWait();
+            try {
+                if (ButtonType.OK == option.get()) {
+                    String query = "DELETE FROM library_manager WHERE student_code ='" + selected.getCodeStudent().getValue() + "'";
+                    try {
+                        Connection conn = new ConnectionUtils().connectDB();
+                        PreparedStatement pstm = conn.prepareStatement(query);
+                        pstm.executeUpdate();
+                        System.out.println("Delete done a record: " + selected);
+                    } catch (SQLException err) {
+                        System.err.println("Delete : " + err.getMessage());
+                    }
+                    setDataTableView();
+                }
+            } catch (Exception e) {
+                System.out.println("error " + e.getMessage());
+            }
+        }
     }
 
     public boolean checkInput() {
-        return !idStfield.getText().isEmpty() && !nameStfield.getText().isEmpty() && !classStfield.getText().isEmpty() && !sdtStfield.getText().isEmpty();
+        return !idStudentField.getText().isEmpty() && !nameStudentField.getText().isEmpty() && !classStudentField.getText().isEmpty() && !phoneNumberStudentField.getText().isEmpty();
     }
 
     public Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
@@ -143,46 +161,14 @@ public class LibraryManagerController implements Initializable {
         return alert;
     }
 
-    //    phan clear thoong tin sinh vien khoi textfield
     public void clear_if_St() {
-        this.clear();
+        clear();
     }
 
     public void clear() {
-        idStfield.setText("");
-        nameStfield.setText("");
-        classStfield.setText("");
-        sdtStfield.setText("");
-    }
-
-//    Phan delete thoong tin sinh vien
-
-    @FXML
-    private void deleteStudent() {
-        LibraryModel selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn xóa thông tin về sinh viên này ? ", "", "Xoá thông tin sinh viên ", ButtonType.CLOSE);
-            Optional<ButtonType> option = warn.showAndWait();
-            try {
-                if (ButtonType.OK == option.get()) {
-                    this.delete(selected);
-                    setDataTableView();
-                }
-            } catch (Exception e) {
-                System.out.println("error " + e.getMessage());
-            }
-        }
-    }
-
-    public void delete(LibraryModel st) {
-        String query = "DELETE FROM library_manager WHERE student_code ='" + st.getCodeStudent().getValue() + "'";
-        try {
-            Connection conn = new ConnectionUtils().connectDB();
-            PreparedStatement pstm = conn.prepareStatement(query);
-            pstm.executeUpdate();
-            System.out.println("Delete done a record: " + st);
-        } catch (SQLException err) {
-            System.err.println("Delete : " + err.getMessage());
-        }
+        idStudentField.setText("");
+        nameStudentField.setText("");
+        classStudentField.setText("");
+        phoneNumberStudentField.setText("");
     }
 }

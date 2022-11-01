@@ -2,31 +2,37 @@ package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.models.BookModel;
 import btl_java.manage_library.utils.ConnectionUtils;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
+import javafx.beans.Observable;
+import javafx.collections.*;
+import javafx.fxml.*;
 import javafx.scene.control.*;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
 
 
 public class BookController implements Initializable {
     @FXML
-    public TextField categoryBookField;
+    private TextField codeBookField;
     @FXML
-    public TextField nameBookField;
+    private TextField categoryBookField;
     @FXML
-    public TextField authorBookField;
+    private TextField nameBookField;
     @FXML
-    private TableView<BookModel> tableView;
+    private TextField authorBookField;
+    @FXML
+    private TextField totalBookField;
+    @FXML
+    private TableView<BookModel> tableViewBook;
     @FXML
     private TableColumn<BookModel, String> stt;
+    @FXML
+    private TableColumn<BookModel, String> code;
     @FXML
     private TableColumn<BookModel, String> categoryBook;
     @FXML
@@ -36,19 +42,22 @@ public class BookController implements Initializable {
     @FXML
     private TableColumn<BookModel, String> totalBook;
     @FXML
-    private TableColumn<BookModel, String> remainingBook;
+    private TableColumn<BookModel, String> remainBook;
 
-    @FXML
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
+        code.setCellValueFactory(cellData -> cellData.getValue().getCode());
         categoryBook.setCellValueFactory(cellData -> cellData.getValue().getCategoryBook());
         nameBook.setCellValueFactory(cellData -> cellData.getValue().getNameBook());
         authorBook.setCellValueFactory(cellData -> cellData.getValue().getAuthorBook());
         totalBook.setCellValueFactory(cellData -> cellData.getValue().getTotalBook());
-        remainingBook.setCellValueFactory(cellData -> cellData.getValue().getRemainingBook());
-        setDataTableView();
+        remainBook.setCellValueFactory(cellData -> cellData.getValue().getRemainingBook());
+        tableViewBook.setItems(setDataTableViewBook());
     }
-    public void setDataTableView() {
+
+    // Hàm set dữ liệu cho bảng (Sách)
+    private ObservableList<BookModel> setDataTableViewBook() {
         Connection connection = new ConnectionUtils().connectDB();
         String stmt = "SELECT * FROM book";
         ObservableList<BookModel> list = FXCollections.observableArrayList();
@@ -58,53 +67,80 @@ public class BookController implements Initializable {
             resultSet = connection.createStatement().executeQuery(stmt);
             while (resultSet.next()) {
                 BookModel row = new BookModel(
-                        Integer.toString(i),
+                        resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getString(4),
-                        resultSet.getString(5),
-                        resultSet.getString(6)
+                        resultSet.getString(5)
                 );
+                row.setStt(Integer.toString(i));
+                row.setRemainBook(resultSet.getString(6));
                 i++;
                 list.add(row);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        tableView.setItems(list);
+        return list;
     }
-    //============================INSERTBOOK==================================
-    public void insertBook() {
+
+    // Hàm tạo một bản ghi mới trong database (thêm 1 sách mới)
+    @FXML
+    private void insertBook() {
         boolean valid = checkInput();
-        if(!valid){
-            Alert warn = this.createAlert(Alert.AlertType.WARNING,"chưa điền đủ thông tin!","","Điền thông tin",ButtonType.CLOSE);
+        if (!valid) {
+            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin!", "", "Điền thông tin", ButtonType.CLOSE);
             warn.show();
             return;
         }
-        else {
-            String stmt = "INSERT INTO book (category, name, author,total,remain) VALUES (?, ?, ?, ?,?)";
-            Connection connection = new ConnectionUtils().connectDB();
-            try{
-                PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-                preparedStatement.setString(1,categoryBookField.getText());
-                preparedStatement.setString(2,nameBookField.getText());
-                preparedStatement.setString(3,authorBookField.getText());
-                preparedStatement.setString(4,totalBook.getText());
-                preparedStatement.setString(5,remainingBook.getText());
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        String stmt = "INSERT INTO book (code, category, name, author, total, remain) VALUES (?, ?, ?, ?, ?, ?)";
+        Connection connection = new ConnectionUtils().connectDB();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
+            preparedStatement.setString(1, codeBookField.getText());
+            preparedStatement.setString(2, categoryBookField.getText());
+            preparedStatement.setString(3, nameBookField.getText());
+            preparedStatement.setString(4, authorBookField.getText());
+            preparedStatement.setString(5, String.valueOf(Integer.parseInt(totalBookField.getText())));
+            preparedStatement.setString(6, String.valueOf(Integer.parseInt(totalBookField.getText())));
+            preparedStatement.executeUpdate();
+            System.out.println("Create done a record: " + new BookModel(codeBookField.getText(), categoryBookField.getText(),
+                    nameBookField.getText(), authorBookField.getText(), totalBookField.getText()));
+            ObservableList<BookModel> list = setDataTableViewBook();
+            tableViewBook.setItems(list);
+            new BookBorrowerController().refreshTableViewBook(list);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
-    public boolean checkInput() {
-        return !categoryBookField.getText().isEmpty() && !nameBookField.getText().isEmpty() && !authorBookField.getText().isEmpty();
+
+    // Hàm sửa thông tin một quyền sách
+    @FXML
+    private void editBook() {
+        ObservableList<BookModel> list = setDataTableViewBook();
+        tableViewBook.setItems(list);
+        new BookBorrowerController().refreshTableViewBook(list);
     }
-    public Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
+
+    // Hàm tìm tím quyển sách
+    @FXML
+    private void searchBook() {
+        ObservableList<BookModel> list = setDataTableViewBook();
+        tableViewBook.setItems(list);
+        new BookBorrowerController().refreshTableViewBook(list);
+    }
+
+    private boolean checkInput() {
+        return !categoryBookField.getText().isEmpty() && !nameBookField.getText().isEmpty() && !authorBookField.getText().isEmpty()
+                && !totalBookField.getText().isEmpty() && !codeBookField.getText().isEmpty();
+    }
+
+    private Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
         Alert alert = this.createAlert(type, content, header, title);
         alert.getButtonTypes().addAll(buttonTypes);
         return alert;
     }
+
     private Alert createAlert(Alert.AlertType type, String content, String header, String title) {
         Alert alert = new Alert(type, content);
         alert.setHeaderText(header);
@@ -112,11 +148,8 @@ public class BookController implements Initializable {
         return alert;
     }
 
-    //============================EDITBOOK==================================
-    public void editBook() {
-    }
-    //============================SEARCHBOOK==================================
-    public void searchBook() {
+    ObservableList<BookModel> getFunctionSetTableViewBook() {
+        return setDataTableViewBook();
     }
 }
 

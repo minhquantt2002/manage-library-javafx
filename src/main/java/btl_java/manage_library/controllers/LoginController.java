@@ -44,7 +44,6 @@ public class LoginController {
 
     }
 
-    String PW = "1234";
     public void btnReset() throws IOException {
         userName.setText("");
         password.setText("");

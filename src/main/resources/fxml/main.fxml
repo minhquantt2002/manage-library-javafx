@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0"
          prefWidth="778.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17.0.2-ea"
@@ -12,8 +8,8 @@
     <Tab text="Quản lí sinh viên">
         <fx:include source="library-manager.fxml"/>
     </Tab>
-    <Tab text="Sinh viên mượn sách ">
-        <fx:include source="borrowing-book.fxml"/>
+    <Tab text="Sinh viên mượn sách">
+        <fx:include source="book-borrower.fxml"/>
     </Tab>
     <Tab text="Thống kê">
         <fx:include source="chart.fxml"/>

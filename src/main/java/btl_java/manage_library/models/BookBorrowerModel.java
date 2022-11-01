@@ -2,21 +2,20 @@ package btl_java.manage_library.models;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class BorrowingBookModel {
+public class BookBorrowerModel {
     private final SimpleStringProperty stt = new SimpleStringProperty();
     private final SimpleStringProperty codeStudent = new SimpleStringProperty();
     private final SimpleStringProperty nameStudent = new SimpleStringProperty();
-    private final SimpleStringProperty nameBook = new SimpleStringProperty();
+    private final SimpleStringProperty classStudent = new SimpleStringProperty();
     private final SimpleStringProperty phoneNumber = new SimpleStringProperty();
     private final SimpleStringProperty borrowDate = new SimpleStringProperty();
     private final SimpleStringProperty returnDate = new SimpleStringProperty();
 
-    public BorrowingBookModel(String stt, String codeStudent, String nameStudent, String phoneNumber, String nameBook, String borrowDate, String returnDate) {
-        this.stt.set(stt);
+    public BookBorrowerModel(String codeStudent, String nameStudent, String classStudent, String phoneNumber, String borrowDate, String returnDate) {
         this.codeStudent.set(codeStudent);
         this.nameStudent.set(nameStudent);
+        this.classStudent.set(classStudent);
         this.phoneNumber.set(phoneNumber);
-        this.nameBook.set(nameBook);
         this.borrowDate.set(borrowDate);
         this.returnDate.set(returnDate);
     }
@@ -33,8 +32,8 @@ public class BorrowingBookModel {
         return nameStudent;
     }
 
-    public SimpleStringProperty getNameBook() {
-        return nameBook;
+    public SimpleStringProperty getClassStudent() {
+        return classStudent;
     }
 
     public SimpleStringProperty getPhoneNumber() {
@@ -49,18 +48,19 @@ public class BorrowingBookModel {
         return returnDate;
     }
 
-    public void setBorrowDate(String borrowDate) {
-        this.borrowDate.set(borrowDate);
-    }
 
     public void setReturnDate(String returnDate) {
         this.returnDate.set(returnDate);
     }
 
+    public void setStt(String stt) {
+        this.stt.set(stt);
+    }
+
     @Override
     public String toString() {
-        return "BorrowingBookModel{" + "stt=" + stt + ", codeStudent=" + codeStudent +
-                ", nameStudent=" + nameStudent + ", nameBook=" + nameBook + ", phoneNumber=" + phoneNumber +
+        return "BookBorrowerModel{" + "stt=" + stt + ", codeStudent=" + codeStudent +
+                ", nameStudent=" + nameStudent + ", classStudent=" + classStudent + ", phoneNumber=" + phoneNumber +
                 ", borrowDate=" + borrowDate + ", returnDate=" + returnDate + '}';
     }
 }
