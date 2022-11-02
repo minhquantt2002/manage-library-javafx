@@ -114,10 +114,7 @@ public class LibraryManagerController implements Initializable {
         setDataTableView();
     }
 
-    @FXML
-    private void searchStudent() {
 
-    }
 
     @FXML
     private void deleteStudent() {
@@ -170,5 +167,31 @@ public class LibraryManagerController implements Initializable {
         nameStudentField.setText("");
         classStudentField.setText("");
         phoneNumberStudentField.setText("");
+    }
+//========================================STUDENTOUT===========================================
+    @FXML
+    private void searchStudent() {
+        LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Thêm thông tin cho sinh viên này ? ", "", "Thêm thông tin sinh viên ", ButtonType.CLOSE);
+            Optional<ButtonType> option = warn.showAndWait();
+            try {
+                if (ButtonType.OK == option.get()) {
+                    String timeOutToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
+                    String stmt = "UPDATE library_manager SET time_out='"+timeOutToString+"' WHERE student_code='"+selected.getCodeStudent().getValue()+"'";
+                    try {
+                        Connection conn = new ConnectionUtils().connectDB();
+                        PreparedStatement pstm = conn.prepareStatement(stmt);
+                        pstm.executeUpdate();
+                        System.out.println("Insert done a record: " + selected+timeOutToString);
+                    } catch (SQLException err) {
+                        System.err.println("Insert : " + err.getMessage());
+                    }
+                    setDataTableView();
+                }
+            } catch (Exception e) {
+                System.out.println("error " + e.getMessage());
+            }
+        }
     }
 }

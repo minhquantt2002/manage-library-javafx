@@ -18,7 +18,7 @@ public class LibraryModel {
     private final SimpleStringProperty timeIn = new SimpleStringProperty();
     private final SimpleStringProperty timeOut = new SimpleStringProperty();
 
-    public LibraryModel(String stt, String codeStudent, String nameStudent, String phoneNumber, String classStudent, String timeIn, String timeOut) {
+    public LibraryModel(String stt, String codeStudent, String nameStudent, String classStudent,String phoneNumber,  String timeIn, String timeOut) {
         this.stt.set(stt);
         this.codeStudent.set(codeStudent);
         this.nameStudent.set(nameStudent);
