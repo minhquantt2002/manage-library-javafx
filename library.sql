@@ -42,12 +42,10 @@ CREATE TABLE `library_manager` (
 	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `borrowing_book` (
-	`id` int(11) auto_increment,
-    `book_name` varchar(128) not null,
-    `student_id` int(11),
-    foreign key (`student_id`)  references book_manager(`id`) ,
-    primary key(`id`)
+CREATE TABLE `accounts` (
+	`username` varchar(28),
+    `password` varchar(28) not null,
+    primary key(`username`)
 );
     
     
