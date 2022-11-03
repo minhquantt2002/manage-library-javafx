@@ -4,7 +4,6 @@ import btl_java.manage_library.utils.ConnectionUtils;
 import btl_java.manage_library.models.LibraryModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -18,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import btl_java.manage_library.utils.chuanhoa;
 
 public class LibraryManagerController implements Initializable {
     @FXML
@@ -98,9 +98,9 @@ public class LibraryManagerController implements Initializable {
             try {
                 String timeInToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
                 PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-                preparedStatement.setString(1, idStudentField.getText());
-                preparedStatement.setString(2, nameStudentField.getText());
-                preparedStatement.setString(3, classStudentField.getText());
+                preparedStatement.setString(1, new chuanhoa().chuanhoaAll(idStudentField.getText()));
+                preparedStatement.setString(2, new chuanhoa().chuanhoaFirst(nameStudentField.getText()));
+                preparedStatement.setString(3, new chuanhoa().chuanhoaAll(classStudentField.getText()));
                 preparedStatement.setString(4, phoneNumberStudentField.getText());
                 preparedStatement.setString(5, timeInToString);
                 preparedStatement.setString(6, "");
@@ -116,7 +116,7 @@ public class LibraryManagerController implements Initializable {
 
     }
 
-
+//==========================================DELETESTUDENT======================================
     @FXML
     private void deleteStudent() {
         LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
@@ -170,22 +170,37 @@ public class LibraryManagerController implements Initializable {
         phoneNumberStudentField.setText("");
     }
 
-    //========================================STUDENTOUT===========================================
+    //========================================SEARCHSTUDENT===========================================
     @FXML
     private void searchStudent() {
+            String find="";
+            String temp="";
+            if(idStudentField.getText().equals("")&&nameStudentField.getText().equals("")&&!classStudentField.getText().equals("")){
+                find=new chuanhoa().chuanhoaAll(classStudentField.getText());
+                temp = "SELECT * FROM library_manager WHERE class_name ='"+find+"'";
+            }
+            else if(idStudentField.getText().equals("")&&!nameStudentField.getText().equals("")&&classStudentField.getText().equals("")){
+                find = new chuanhoa().chuanhoaFirst(nameStudentField.getText());
+                temp = "SELECT * FROM library_manager WHERE full_name ='"+find+"'";
+            }
+            else if(!idStudentField.getText().equals("")&&nameStudentField.getText().equals("")&&classStudentField.getText().equals("")){
+                find = new chuanhoa().chuanhoaAll(idStudentField.getText());
+                temp = "SELECT * FROM library_manager WHERE student_code ='"+find+"'";
 
-        String findID = idStudentField.getText();
-        if(findID.equals("")){
+            }
+            else find="";
+//        String findID = new chuanhoa().chuanhoaAll(idStudentField.getText());
+        if(find.equals("")){
             setDataTableView();
         }
         else{
-            String stmt = "SELECT * FROM library_manager WHERE student_code='"+findID+"'";
+            //            String stmt = "SELECT * FROM library_manager WHERE '"+temp+"'='"+find+"'";
             Connection connection = new ConnectionUtils().connectDB();
             ObservableList<LibraryModel> list = FXCollections.observableArrayList();
             ResultSet resultSet;
             try {
                 int i = 1;
-                resultSet = connection.createStatement().executeQuery(stmt);
+                resultSet = connection.createStatement().executeQuery(temp);
                 while (resultSet.next()) {
                     LibraryModel row = new LibraryModel(
                             Integer.toString(i),
@@ -207,9 +222,9 @@ public class LibraryManagerController implements Initializable {
 
 
     }
-
+//===============================================UPDATESTUDENT=========================================================
     public void updateStudent() {
-        String findID = idStudentField.getText();
+        String findID = new chuanhoa().chuanhoaAll(idStudentField.getText());
         if (nameStudentField.getText().equals("") && classStudentField.getText().equals("") && phoneNumberStudentField.getText().equals("") && !findID.equals("")) {
             Alert warn = this.createAlert(Alert.AlertType.WARNING, "Thêm thông tin cho sinh viên này ? ", "", "Thêm thông tin sinh viên ", ButtonType.CLOSE);
             Optional<ButtonType> option = warn.showAndWait();

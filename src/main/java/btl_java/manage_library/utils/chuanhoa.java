@@ -1,7 +1,7 @@
 package btl_java.manage_library.utils;
 
 public class chuanhoa {
-    public String chuanhoaBook(String s){
+    public String chuanhoaFirst(String s){
         s= s.trim().toLowerCase();
         s= s.replaceAll("\\s+"," ");
         String[] temp = s.split(" ");
@@ -11,6 +11,11 @@ public class chuanhoa {
             if(i< temp.length-1) sBuilder.append(" ");
         }
         s = sBuilder.toString();
+        return s;
+    }
+    public String chuanhoaAll(String s){
+        s = s.trim().toUpperCase();
+        s= s.replaceAll("\\s+"," ");
         return s;
     }
 }
