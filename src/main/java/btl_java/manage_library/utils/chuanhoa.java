@@ -5,12 +5,12 @@ public class chuanhoa {
         s= s.trim().toLowerCase();
         s= s.replaceAll("\\s+"," ");
         String[] temp = s.split(" ");
-        s="";
+        StringBuilder sBuilder = new StringBuilder();
         for (int i = 0; i < temp.length; i++) {
-            s+=String.valueOf(temp[i].charAt(0)).toUpperCase()+
-                    temp[i].substring(1);
-            if(i< temp.length-1) s+=" ";
+            sBuilder.append(String.valueOf(temp[i].charAt(0)).toUpperCase()).append(temp[i].substring(1));
+            if(i< temp.length-1) sBuilder.append(" ");
         }
+        s = sBuilder.toString();
         return s;
     }
 }

@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl_java.manage_library.controllers.SettingController">
-    <Button layoutX="64.0" layoutY="43.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="135.0" text="Đăng xuất" />
+    <Button layoutX="64.0" layoutY="43.0" mnemonicParsing="false" onAction="#btnLogout" prefHeight="43.0" prefWidth="135.0" text="Đăng xuất" />
     <Button layoutX="64.0" layoutY="107.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="135.0" text="Đổi mật khẩu " />
     <!--            fx:id="btnChangePassword" -->
 

@@ -124,7 +124,7 @@ public class LibraryManagerController implements Initializable {
             Optional<ButtonType> option = warn.showAndWait();
             try {
                 if (ButtonType.OK == option.get()) {
-                    String query = "DELETE FROM library_manager WHERE student_code ='" + selected.getCodeStudent().getValue() + "'";
+                    String query = "DELETE FROM library_manager WHERE time_in ='" + selected.getTimeIn().getValue() + "'";
                     try {
                         Connection conn = new ConnectionUtils().connectDB();
                         PreparedStatement pstm = conn.prepareStatement(query);
@@ -171,27 +171,40 @@ public class LibraryManagerController implements Initializable {
 //========================================STUDENTOUT===========================================
     @FXML
     private void searchStudent() {
-        LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Thêm thông tin cho sinh viên này ? ", "", "Thêm thông tin sinh viên ", ButtonType.CLOSE);
-            Optional<ButtonType> option = warn.showAndWait();
+        String findID = idStudentField.getText();
+        if(nameStudentField.getText().equals("")&&classStudentField.getText().equals("")&&phoneNumberStudentField.getText().equals("")&& !findID.equals("")){
+            String timeOutToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
+            String stmt = "UPDATE library_manager SET time_out='"+timeOutToString+"' WHERE student_code='"+findID+"'AND time_out =''";
+            Connection conn = new ConnectionUtils().connectDB();
             try {
-                if (ButtonType.OK == option.get()) {
-                    String timeOutToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
-                    String stmt = "UPDATE library_manager SET time_out='"+timeOutToString+"' WHERE student_code='"+selected.getCodeStudent().getValue()+"'";
-                    try {
-                        Connection conn = new ConnectionUtils().connectDB();
-                        PreparedStatement pstm = conn.prepareStatement(stmt);
-                        pstm.executeUpdate();
-                        System.out.println("Insert done a record: " + selected+timeOutToString);
-                    } catch (SQLException err) {
-                        System.err.println("Insert : " + err.getMessage());
-                    }
-                    setDataTableView();
-                }
-            } catch (Exception e) {
-                System.out.println("error " + e.getMessage());
+                PreparedStatement preparedStatement = conn.prepareStatement(stmt);
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
+            setDataTableView();
         }
+//        LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
+//        if (selected != null) {
+//            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Thêm thông tin cho sinh viên này ? ", "", "Thêm thông tin sinh viên ", ButtonType.CLOSE);
+//            Optional<ButtonType> option = warn.showAndWait();
+//            try {
+//                if (ButtonType.OK == option.get()) {
+//                    String timeOutToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
+//                    String stmt = "UPDATE library_manager SET time_out='"+timeOutToString+"' WHERE student_code='"+selected.getCodeStudent().getValue()+"'";
+//                    try {
+//                        Connection conn = new ConnectionUtils().connectDB();
+//                        PreparedStatement pstm = conn.prepareStatement(stmt);
+//                        pstm.executeUpdate();
+//                        System.out.println("Insert done a record: " + selected+timeOutToString);
+//                    } catch (SQLException err) {
+//                        System.err.println("Insert : " + err.getMessage());
+//                    }
+//                    setDataTableView();
+//                }
+//            } catch (Exception e) {
+//                System.out.println("error " + e.getMessage());
+//            }
+//        }
     }
 }
