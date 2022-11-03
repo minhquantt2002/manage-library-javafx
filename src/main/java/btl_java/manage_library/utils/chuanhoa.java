@@ -18,4 +18,10 @@ public class chuanhoa {
         s= s.replaceAll("\\s+"," ");
         return s;
     }
+    public  String chuanhoa1(String s)
+    {
+        s =s.trim().toLowerCase().replaceAll("\\s+"," ");
+        s=String.valueOf(s.charAt(0)).toUpperCase()+s.substring(1);
+        return  s;
+    }
 }

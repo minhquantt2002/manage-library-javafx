@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import btl_java.manage_library.utils.chuanhoa;
 
-public class LibraryManagerController implements Initializable {
+public class  LibraryManagerController implements Initializable {
     @FXML
     private TextField idStudentField;
     @FXML

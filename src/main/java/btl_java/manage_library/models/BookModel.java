@@ -11,7 +11,8 @@ public class BookModel {
     private final SimpleStringProperty totalBook = new SimpleStringProperty();
     private final SimpleStringProperty remainBook = new SimpleStringProperty();
 
-    public BookModel(String code, String categoryBook, String nameBook, String authorBook, String totalBook) {
+    public BookModel(String stt,String code, String categoryBook, String nameBook, String authorBook, String totalBook) {
+        this.stt.set(stt);
         this.code.set(code);
         this.categoryBook.set(categoryBook);
         this.nameBook.set(nameBook);

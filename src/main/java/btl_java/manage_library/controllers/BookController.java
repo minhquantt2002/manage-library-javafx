@@ -1,10 +1,12 @@
 package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.models.BookModel;
+import btl_java.manage_library.models.LibraryModel;
 import btl_java.manage_library.utils.ConnectionUtils;
 import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import javafx.beans.Observable;
 import javafx.collections.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
+import btl_java.manage_library.utils.chuanhoa;
 
 
 public class BookController implements Initializable {
@@ -67,6 +70,7 @@ public class BookController implements Initializable {
             resultSet = connection.createStatement().executeQuery(stmt);
             while (resultSet.next()) {
                 BookModel row = new BookModel(
+                        Integer.toString(i),
                         resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -78,6 +82,7 @@ public class BookController implements Initializable {
                 i++;
                 list.add(row);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -97,14 +102,14 @@ public class BookController implements Initializable {
         Connection connection = new ConnectionUtils().connectDB();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-            preparedStatement.setString(1, codeBookField.getText());
-            preparedStatement.setString(2, categoryBookField.getText());
-            preparedStatement.setString(3, nameBookField.getText());
-            preparedStatement.setString(4, authorBookField.getText());
+            preparedStatement.setString(1, new chuanhoa().chuanhoaAll(codeBookField.getText()));
+            preparedStatement.setString(2, new  chuanhoa().chuanhoa1(categoryBookField.getText()));
+            preparedStatement.setString(3, new  chuanhoa().chuanhoa1(nameBookField.getText()));
+            preparedStatement.setString(4, new chuanhoa().chuanhoaFirst(authorBookField.getText()));
             preparedStatement.setString(5, String.valueOf(Integer.parseInt(totalBookField.getText())));
             preparedStatement.setString(6, String.valueOf(Integer.parseInt(totalBookField.getText())));
             preparedStatement.executeUpdate();
-            System.out.println("Create done a record: " + new BookModel(codeBookField.getText(), categoryBookField.getText(),
+            System.out.println("Create done a record: " + new BookModel("",codeBookField.getText(), categoryBookField.getText(),
                     nameBookField.getText(), authorBookField.getText(), totalBookField.getText()));
             ObservableList<BookModel> list = setDataTableViewBook();
             tableViewBook.setItems(list);
@@ -125,9 +130,57 @@ public class BookController implements Initializable {
     // Hàm tìm tím quyển sách
     @FXML
     private void searchBook() {
-        ObservableList<BookModel> list = setDataTableViewBook();
-        tableViewBook.setItems(list);
-        new BookBorrowerController().refreshTableViewBook(list);
+//        ObservableList<BookModel> list = setDataTableViewBook();
+//        tableViewBook.setItems(list);
+//        new BookBorrowerController().refreshTableViewBook(list);
+        String find="";
+        String temp="";
+        if(!codeBookField.getText().equals("")&&nameBookField.getText().equals("")&&categoryBookField.getText().equals("")&&authorBookField.getText().equals("")){
+            find=new chuanhoa().chuanhoaAll(codeBookField.getText());
+            temp = "SELECT * FROM book WHERE code ='"+find+"'";
+        }
+        else  if(codeBookField.getText().equals("")&&!nameBookField.getText().equals("")&&categoryBookField.getText().equals("")&&authorBookField.getText().equals("")){
+            find = new chuanhoa().chuanhoa1(nameBookField.getText());
+            temp = "SELECT * FROM book WHERE name ='"+find+"'";
+        }
+        else  if(codeBookField.getText().equals("")&&nameBookField.getText().equals("")&&!categoryBookField.getText().equals("")&&authorBookField.getText().equals("")){
+            find = new chuanhoa().chuanhoa1(categoryBookField.getText());
+            temp = "SELECT * FROM book WHERE category ='"+find+"'";
+        }else if(codeBookField.getText().equals("")&&nameBookField.getText().equals("")&&categoryBookField.getText().equals("")&&!authorBookField.getText().equals(""))
+        {
+            find = new chuanhoa().chuanhoaFirst(authorBookField.getText());
+            temp = "SELECT * FROM book WHERE author ='"+find+"'";
+        }
+//        System.out.println(find);
+        if(find.equals("")){
+//            System.out.println("rong");
+            tableViewBook.setItems(setDataTableViewBook());
+        }
+        else{
+            Connection connection = new ConnectionUtils().connectDB();
+            ObservableList<BookModel> list = FXCollections.observableArrayList();
+            ResultSet resultSet;
+            try {
+                int i = 1;
+                resultSet = connection.createStatement().executeQuery(temp);
+                while (resultSet.next()) {
+                    BookModel row = new BookModel(
+                            Integer.toString(i),
+                            resultSet.getString(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getString(5),
+                            resultSet.getString(6)
+                    );
+                    i++;
+                    list.add(row);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            tableViewBook.setItems(list);
+        }
+        clear();
     }
 
     private boolean checkInput() {
@@ -150,6 +203,17 @@ public class BookController implements Initializable {
 
     ObservableList<BookModel> getFunctionSetTableViewBook() {
         return setDataTableViewBook();
+    }
+
+    public void btnclearbook(ActionEvent actionEvent) {
+        this.clear();
+    }
+    public void clear() {
+       codeBookField.setText("");
+        nameBookField.setText("");
+        authorBookField.setText("");
+        categoryBookField.setText("");
+        totalBookField.setText("");
     }
 }
 
