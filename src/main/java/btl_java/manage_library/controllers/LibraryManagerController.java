@@ -158,9 +158,7 @@ public class  LibraryManagerController implements Initializable {
         return alert;
     }
 
-    public void clear_if_St() {
-        clear();
-    }
+
 
     public void clear() {
         idStudentField.setText("");
@@ -216,5 +214,6 @@ public class  LibraryManagerController implements Initializable {
                 System.out.println("error " + e.getMessage());
             }
         }
+        clear();
     }
 }

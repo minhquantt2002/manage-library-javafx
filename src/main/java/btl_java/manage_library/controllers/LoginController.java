@@ -40,34 +40,34 @@ public class LoginController {
     }
 //===========================LOGIN============================
     public void btnLogin() throws IOException {
-        new HomeController().displayHome(MainApplication.primaryStage);
+//        new HomeController().displayHome(MainApplication.primaryStage);
 
-//        String Username = userName.getText();
-//        String Password = passWord.getText();
-//        System.out.println(Password);
-//        if (Username.equals("") || Password.equals("")) {
-//            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
-//            warn.show();
-//            clear();
-//            return;
-//        }
-//        try {
-//            Connection connection = new ConnectionUtils().connectDB();
-//            String stmt = "SELECT * FROM accounts WHERE username=? AND password=?";
-//            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-//            preparedStatement.setString(1, Username);
-//            preparedStatement.setString(2, Password);
-//
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//            if (resultSet.next()) {
-//                new HomeController().displayHome(MainApplication.primaryStage);
-//            } else {
-//                lblResult.setTextFill(Color.RED);
-//                lblResult.setText("Wrong username or password");
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+        String Username = userName.getText();
+        String Password = passWord.getText();
+        System.out.println(Password);
+        if (Username.equals("") || Password.equals("")) {
+            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
+            warn.show();
+            clear();
+            return;
+        }
+        try {
+            Connection connection = new ConnectionUtils().connectDB();
+            String stmt = "SELECT * FROM accounts WHERE username=? AND password=?";
+            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
+            preparedStatement.setString(1, Username);
+            preparedStatement.setString(2, Password);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                new HomeController().displayHome(MainApplication.primaryStage);
+            } else {
+                lblResult.setTextFill(Color.RED);
+                lblResult.setText("Wrong username or password");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }

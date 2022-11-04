@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl_java.manage_library.controllers.LibraryManagerController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl_java.manage_library.controllers.LibraryManagerController">
       <GridPane hgap="10.0" prefHeight="215.0" prefWidth="778.0" vgap="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
           <columnConstraints>
               <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="118.0" />
@@ -80,26 +71,18 @@
               </GridPane.margin>
           </TextField>
       </GridPane>
-      <TableView fx:id="tableViewLbm" layoutX="3.0" layoutY="291.0" prefHeight="302.0" prefWidth="773.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="298.0">
+      <TableView fx:id="tableViewLbm" layoutX="3.0" layoutY="291.0" prefHeight="302.0" prefWidth="773.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="298.0">
           <columns>
               <TableColumn fx:id="stt" prefWidth="37.0" text="STT" />
-              <TableColumn fx:id="codeStudent" prefWidth="86.0" text="MSV" />
-              <TableColumn fx:id="nameStudent" prefWidth="121.0" text="Họ và tên" />
-              <TableColumn fx:id="classStudent" prefWidth="118.0" text="Lớp" />
-              <TableColumn fx:id="phoneNumber" prefWidth="132.0" text="Số điện thoại" />
-              <TableColumn fx:id="timeIn" prefWidth="136.0" text="Thời gian vào" />
-              <TableColumn fx:id="timeOut" prefWidth="131.0" text="Thời gian ra" />
+              <TableColumn fx:id="codeStudent" prefWidth="95.39999771118164" text="MSV" />
+              <TableColumn fx:id="nameStudent" prefWidth="163.7999725341797" text="Họ và tên" />
+              <TableColumn fx:id="classStudent" prefWidth="100.19998168945312" text="Lớp" />
+              <TableColumn fx:id="phoneNumber" prefWidth="137.0" text="Số điện thoại" />
+              <TableColumn fx:id="timeIn" prefWidth="127.20001220703125" text="Thời gian vào" />
+              <TableColumn fx:id="timeOut" prefWidth="135.4000244140625" text="Thời gian ra" />
           </columns>
       </TableView>
       <HBox alignment="CENTER" layoutX="1.0" layoutY="222.0" prefHeight="50.0" prefWidth="766.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="222.0">
-          <Button mnemonicParsing="false" onAction="#clear_if_St" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Clear">
-              <font>
-                  <Font size="14.0" />
-              </font>
-              <HBox.margin>
-                  <Insets left="20.0" right="20.0" />
-              </HBox.margin>
-          </Button>
           <Button mnemonicParsing="false" onAction="#insertStudent" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Insert">
               <font>
                   <Font size="14.0" />
