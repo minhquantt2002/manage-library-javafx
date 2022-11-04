@@ -76,11 +76,6 @@
      </TableView>
    <HBox alignment="CENTER" layoutY="254.0" prefHeight="56.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <children>
-         <Button mnemonicParsing="false" onAction="#btnclearbook" prefHeight="30.0" prefWidth="80.0" text="CLEAR">
-            <HBox.margin>
-               <Insets right="40.0" />
-            </HBox.margin>
-         </Button>
             <Button mnemonicParsing="false" onAction="#insertBook" prefHeight="30.0" prefWidth="80.0" text="INSERT">
             <HBox.margin>
                <Insets right="40.0" />

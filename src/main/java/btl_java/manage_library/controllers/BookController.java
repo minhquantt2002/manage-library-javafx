@@ -46,7 +46,7 @@ public class BookController implements Initializable {
     private TableColumn<BookModel, String> totalBook;
     @FXML
     private TableColumn<BookModel, String> remainBook;
-
+    private String stmtQuery="SELECT * FROM book";
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
@@ -56,18 +56,18 @@ public class BookController implements Initializable {
         authorBook.setCellValueFactory(cellData -> cellData.getValue().getAuthorBook());
         totalBook.setCellValueFactory(cellData -> cellData.getValue().getTotalBook());
         remainBook.setCellValueFactory(cellData -> cellData.getValue().getRemainingBook());
-        tableViewBook.setItems(setDataTableViewBook());
+        tableViewBook.setItems(setDataTableViewBook(stmtQuery));
     }
 
     // Hàm set dữ liệu cho bảng (Sách)
-    private ObservableList<BookModel> setDataTableViewBook() {
+    private ObservableList<BookModel> setDataTableViewBook(String stmtQuery) {
         Connection connection = new ConnectionUtils().connectDB();
-        String stmt = "SELECT * FROM book";
+//        String stmt = "SELECT * FROM book";
         ObservableList<BookModel> list = FXCollections.observableArrayList();
         ResultSet resultSet;
         try {
             int i = 1;
-            resultSet = connection.createStatement().executeQuery(stmt);
+            resultSet = connection.createStatement().executeQuery(stmtQuery);
             while (resultSet.next()) {
                 BookModel row = new BookModel(
                         Integer.toString(i),
@@ -77,7 +77,7 @@ public class BookController implements Initializable {
                         resultSet.getString(4),
                         resultSet.getString(5)
                 );
-                row.setStt(Integer.toString(i));
+//                row.setStt(Integer.toString(i));
                 row.setRemainBook(resultSet.getString(6));
                 i++;
                 list.add(row);
@@ -111,28 +111,27 @@ public class BookController implements Initializable {
             preparedStatement.executeUpdate();
             System.out.println("Create done a record: " + new BookModel("",codeBookField.getText(), categoryBookField.getText(),
                     nameBookField.getText(), authorBookField.getText(), totalBookField.getText()));
-            ObservableList<BookModel> list = setDataTableViewBook();
+            ObservableList<BookModel> list = setDataTableViewBook(stmtQuery);
             tableViewBook.setItems(list);
-            new BookBorrowerController().refreshTableViewBook(list);
+//            new BookBorrowerController().refreshTableViewBook(list);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        clear();
     }
 
     // Hàm sửa thông tin một quyền sách
     @FXML
     private void editBook() {
-        ObservableList<BookModel> list = setDataTableViewBook();
-        tableViewBook.setItems(list);
-        new BookBorrowerController().refreshTableViewBook(list);
-    }
-
-    // Hàm tìm tím quyển sách
-    @FXML
-    private void searchBook() {
 //        ObservableList<BookModel> list = setDataTableViewBook();
 //        tableViewBook.setItems(list);
 //        new BookBorrowerController().refreshTableViewBook(list);
+    }
+
+//    ===============================SEARCHBOOOK===========================================
+    // Hàm tìm tím quyển sách
+    @FXML
+    private void searchBook() {
         String find="";
         String temp="";
         if(!codeBookField.getText().equals("")&&nameBookField.getText().equals("")&&categoryBookField.getText().equals("")&&authorBookField.getText().equals("")){
@@ -151,34 +150,11 @@ public class BookController implements Initializable {
             find = new chuanhoa().chuanhoaFirst(authorBookField.getText());
             temp = "SELECT * FROM book WHERE author ='"+find+"'";
         }
-//        System.out.println(find);
         if(find.equals("")){
-//            System.out.println("rong");
-            tableViewBook.setItems(setDataTableViewBook());
+            tableViewBook.setItems(setDataTableViewBook(stmtQuery));
         }
         else{
-            Connection connection = new ConnectionUtils().connectDB();
-            ObservableList<BookModel> list = FXCollections.observableArrayList();
-            ResultSet resultSet;
-            try {
-                int i = 1;
-                resultSet = connection.createStatement().executeQuery(temp);
-                while (resultSet.next()) {
-                    BookModel row = new BookModel(
-                            Integer.toString(i),
-                            resultSet.getString(2),
-                            resultSet.getString(3),
-                            resultSet.getString(4),
-                            resultSet.getString(5),
-                            resultSet.getString(6)
-                    );
-                    i++;
-                    list.add(row);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            tableViewBook.setItems(list);
+            tableViewBook.setItems( setDataTableViewBook(temp));
         }
         clear();
     }
@@ -202,12 +178,9 @@ public class BookController implements Initializable {
     }
 
     ObservableList<BookModel> getFunctionSetTableViewBook() {
-        return setDataTableViewBook();
+        return setDataTableViewBook(stmtQuery);
     }
 
-    public void btnclearbook(ActionEvent actionEvent) {
-        this.clear();
-    }
     public void clear() {
        codeBookField.setText("");
         nameBookField.setText("");

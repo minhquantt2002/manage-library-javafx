@@ -219,8 +219,7 @@ public class  LibraryManagerController implements Initializable {
             }
             tableViewLbm.setItems(list);
         }
-
-
+        clear();
     }
 //===============================================UPDATESTUDENT=========================================================
     public void updateStudent() {
