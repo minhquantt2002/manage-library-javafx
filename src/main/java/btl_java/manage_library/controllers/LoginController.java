@@ -34,7 +34,7 @@ public class LoginController {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/login-app.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setTitle("Login");
-        primaryStage.getIcons().add(new Image("images/library_icon.png"));
+        primaryStage.getIcons().add(new Image("images/library_icon.jpg"));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
