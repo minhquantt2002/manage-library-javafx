@@ -46,7 +46,7 @@ public class BookController implements Initializable {
     private TableColumn<BookModel, String> totalBook;
     @FXML
     private TableColumn<BookModel, String> remainBook;
-    private String stmtQuery="SELECT * FROM book";
+    private final String stmtQuery="SELECT * FROM book";
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
@@ -119,15 +119,44 @@ public class BookController implements Initializable {
         }
         clear();
     }
-
+//======================================EDITBOOK==========================================
     // Hàm sửa thông tin một quyền sách
     @FXML
     private void editBook() {
 //        ObservableList<BookModel> list = setDataTableViewBook();
 //        tableViewBook.setItems(list);
 //        new BookBorrowerController().refreshTableViewBook(list);
-    }
+        BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
+        if(selected != null){
+            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn chỉnh sửa thông tin về quyển sách này ? ", "", "sửa thông tin sách ", ButtonType.CLOSE);
+            Optional<ButtonType> option = warn.showAndWait();
+            try{
+                if (ButtonType.OK == option.get()) {
+                    setTextField(selected);
+                    String pop = "DELETE FROM book WHERE code ='" + selected.getCode().getValue() + "'";
+                    try {
+                        Connection connection = new ConnectionUtils().connectDB();
+                        PreparedStatement preparedStatement = connection.prepareStatement(pop);
+                        preparedStatement.executeUpdate();
+                        System.out.println("Delete done a record: " + selected);
+                    } catch (SQLException err) {
+                        System.err.println("Delete : " + err.getMessage());
+                    }
+                    setDataTableViewBook(stmtQuery);
+                }
+            }catch (Exception e){
+                System.out.println("error " + e.getMessage());
+            }
+        }
 
+    }
+    private void setTextField(BookModel k ){
+        codeBookField.setText(k.getCode().getValue());
+        categoryBookField.setText(k.getCategoryBook().getValue());
+        nameBookField.setText(k.getNameBook().getValue());
+        authorBookField.setText(k.getAuthorBook().getValue());
+        totalBookField.setText(k.getTotalBook().getValue());
+    }
 //    ===============================SEARCHBOOOK===========================================
     // Hàm tìm tím quyển sách
     @FXML
