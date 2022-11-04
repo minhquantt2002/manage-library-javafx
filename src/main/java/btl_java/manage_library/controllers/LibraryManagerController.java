@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import btl_java.manage_library.utils.chuanhoa;
 
 public class  LibraryManagerController implements Initializable {
@@ -44,8 +45,8 @@ public class  LibraryManagerController implements Initializable {
     private TableColumn<LibraryModel, String> phoneNumber;
     @FXML
     private TableColumn<LibraryModel, String> stt;
+    private String stmtQueryAll = "SELECT * FROM library_manager";
 
-    // TODO: Quân
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
         codeStudent.setCellValueFactory(cellData -> cellData.getValue().getCodeStudent());
@@ -54,12 +55,11 @@ public class  LibraryManagerController implements Initializable {
         phoneNumber.setCellValueFactory(cellData -> cellData.getValue().getPhoneNumber());
         timeIn.setCellValueFactory(cellData -> cellData.getValue().getTimeIn());
         timeOut.setCellValueFactory(cellData -> cellData.getValue().getTimeOut());
-        setDataTableView();
+        setDataTableView(stmtQueryAll);
     }
 
-    public void setDataTableView() {
+    public void setDataTableView(String stmt) {
         Connection connection = new ConnectionUtils().connectDB();
-        String stmt = "SELECT * FROM library_manager";
         ObservableList<LibraryModel> list = FXCollections.observableArrayList();
         ResultSet resultSet;
         try {
@@ -83,16 +83,15 @@ public class  LibraryManagerController implements Initializable {
         }
         tableViewLbm.setItems(list);
     }
-//==========================================INSERTSTUDENT=============================================
+
+    //==========================================INSERTSTUDENT=============================================
     @FXML
     private void insertStudent() {
-        // Kiểm tra dữ liệu trước khi thêm sinh viên
         boolean valid = checkInput();
         if (!valid) {
             Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
             warn.show();
-        }
-        else{
+        } else {
             String stmt = "INSERT INTO library_manager (student_code, full_name, class_name, phone_number, time_in, time_out) VALUES (?, ?, ?, ?, ?, ?)";
             Connection connection = new ConnectionUtils().connectDB();
             try {
@@ -111,12 +110,12 @@ public class  LibraryManagerController implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            setDataTableView();
+            setDataTableView(stmtQueryAll);
         }
 
     }
 
-//==========================================DELETESTUDENT======================================
+    //==========================================DELETESTUDENT======================================
     @FXML
     private void deleteStudent() {
         LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
@@ -134,7 +133,7 @@ public class  LibraryManagerController implements Initializable {
                     } catch (SQLException err) {
                         System.err.println("Delete : " + err.getMessage());
                     }
-                    setDataTableView();
+                    setDataTableView(stmtQueryAll);
                 }
             } catch (Exception e) {
                 System.out.println("error " + e.getMessage());
@@ -173,55 +172,28 @@ public class  LibraryManagerController implements Initializable {
     //========================================SEARCHSTUDENT===========================================
     @FXML
     private void searchStudent() {
-            String find="";
-            String temp="";
-            if(idStudentField.getText().equals("")&&nameStudentField.getText().equals("")&&!classStudentField.getText().equals("")){
-                find=new chuanhoa().chuanhoaAll(classStudentField.getText());
-                temp = "SELECT * FROM library_manager WHERE class_name ='"+find+"'";
-            }
-            else if(idStudentField.getText().equals("")&&!nameStudentField.getText().equals("")&&classStudentField.getText().equals("")){
-                find = new chuanhoa().chuanhoaFirst(nameStudentField.getText());
-                temp = "SELECT * FROM library_manager WHERE full_name ='"+find+"'";
-            }
-            else if(!idStudentField.getText().equals("")&&nameStudentField.getText().equals("")&&classStudentField.getText().equals("")){
-                find = new chuanhoa().chuanhoaAll(idStudentField.getText());
-                temp = "SELECT * FROM library_manager WHERE student_code ='"+find+"'";
+        String find = "";
+        String temp = "";
+        if (idStudentField.getText().equals("") && nameStudentField.getText().equals("") && !classStudentField.getText().equals("")) {
+            find = new chuanhoa().chuanhoaAll(classStudentField.getText());
+            temp = "SELECT * FROM library_manager WHERE class_name LIKE '%" + find + "%'";
+        } else if (idStudentField.getText().equals("") && !nameStudentField.getText().equals("") && classStudentField.getText().equals("")) {
+            find = new chuanhoa().chuanhoaFirst(nameStudentField.getText());
+            temp = "SELECT * FROM library_manager WHERE full_name LIKE '%" + find + "%'";
+        } else if (!idStudentField.getText().equals("") && nameStudentField.getText().equals("") && classStudentField.getText().equals("")) {
+            find = new chuanhoa().chuanhoaAll(idStudentField.getText());
+            temp = "SELECT * FROM library_manager WHERE student_code LIKE '%" + find + "%'";
 
-            }
-            else find="";
-//        String findID = new chuanhoa().chuanhoaAll(idStudentField.getText());
-        if(find.equals("")){
-            setDataTableView();
         }
-        else{
-            //            String stmt = "SELECT * FROM library_manager WHERE '"+temp+"'='"+find+"'";
-            Connection connection = new ConnectionUtils().connectDB();
-            ObservableList<LibraryModel> list = FXCollections.observableArrayList();
-            ResultSet resultSet;
-            try {
-                int i = 1;
-                resultSet = connection.createStatement().executeQuery(temp);
-                while (resultSet.next()) {
-                    LibraryModel row = new LibraryModel(
-                            Integer.toString(i),
-                            resultSet.getString(2),
-                            resultSet.getString(3),
-                            resultSet.getString(4),
-                            resultSet.getString(5),
-                            resultSet.getString(6),
-                            resultSet.getString(7)
-                    );
-                    i++;
-                    list.add(row);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            tableViewLbm.setItems(list);
+        if (find.equals("")) {
+            setDataTableView(stmtQueryAll);
+        } else {
+            setDataTableView(temp);
         }
         clear();
     }
-//===============================================UPDATESTUDENT=========================================================
+
+    //===============================================UPDATESTUDENT=========================================================
     public void updateStudent() {
         String findID = new chuanhoa().chuanhoaAll(idStudentField.getText());
         if (nameStudentField.getText().equals("") && classStudentField.getText().equals("") && phoneNumberStudentField.getText().equals("") && !findID.equals("")) {
@@ -238,7 +210,7 @@ public class  LibraryManagerController implements Initializable {
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
-                    setDataTableView();
+                    setDataTableView(stmtQueryAll);
                 }
             } catch (Exception e) {
                 System.out.println("error " + e.getMessage());
