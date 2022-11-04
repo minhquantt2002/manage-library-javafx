@@ -1,7 +1,5 @@
-CREATE
-DATABASE `library`;
-USE
-`library`;
+CREATE DATABASE `library`;
+USE `library`;
 CREATE TABLE `book_borrower`
 (
     `id`           int(11) AUTO_INCREMENT,
@@ -53,7 +51,9 @@ CREATE TABLE `accounts`
     `username` varchar(28),
     `password` varchar(28) not null,
     primary key (`username`)
-) VALUES ('admin', 'admin');
+);
+INSERT INTO `accounts` (`username`, `password`)
+VALUES ('admin', 'admin');
     
     
     
