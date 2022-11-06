@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class SettingController {
     public TextField userfield;
@@ -30,17 +31,18 @@ public class SettingController {
         new LoginController().launchLogin(MainApplication.primaryStage);
     }
 
-    public void huongdan(ActionEvent actionEvent) throws IOException {
+    public void huongdan() throws IOException {
         Parent fxml = FXMLLoader.load(getClass().getResource("/fxml/guide.fxml"));
         contentArea.getChildren().removeAll();
         contentArea.getChildren().setAll(fxml);
     }
 
-    public void changePassword(ActionEvent actionEvent) throws IOException {
-        Parent fxml = FXMLLoader.load(getClass().getResource("/fxml/changePassword.fxml"));
+    public void changePassword() throws IOException {
+        Parent fxml = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/changePassword.fxml")));
         contentArea.getChildren().removeAll();
         contentArea.getChildren().setAll(fxml);
     }
+//    ===============================CHANGE PASSWORD==================================
 
     public void updatePassword(ActionEvent actionEvent) {
         String Username = userfield.getText();
@@ -51,35 +53,37 @@ public class SettingController {
         if (Username.equals("") || Password.equals("")|| newPassword.equals("")|| confirmPassword.equals("")) {
             Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
             warn.show();
-            clear();
         }
-        try {
-            Connection connection = new ConnectionUtils().connectDB();
-            String stmt = "SELECT * FROM accounts WHERE username=? AND password=?";
-            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-            preparedStatement.setString(1, Username);
-            preparedStatement.setString(2, Password);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next() ) {
-//                System.out.println("Cập nhập thông tin ");
-                if(newPassword.equals(confirmPassword))
-                {
-                    String stmt1="UPDATE accounts SET  password='" + newPassword + "' WHERE username='" + Username + "' AND password='" + Password + "'";
-                    PreparedStatement preparedStatement1 = connection.prepareStatement(stmt1);
-                    preparedStatement1.executeUpdate();
-                    System.out.println(newPassword);
-                }else {
-                    Alert warn = this.createAlert(Alert.AlertType.WARNING, "sai mật khẩu , nhập lại !  ", "", "Error", ButtonType.CLOSE);
+        else {
+            try {
+                Connection connection = new ConnectionUtils().connectDB();
+                String stmt = "SELECT * FROM accounts WHERE username=? AND password=?";
+                PreparedStatement preparedStatement = connection.prepareStatement(stmt);
+                preparedStatement.setString(1, Username);
+                preparedStatement.setString(2, Password);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next() ) {
+                    if(newPassword.equals(confirmPassword))
+                    {
+                        String stmt1="UPDATE accounts SET  password='" + newPassword + "' WHERE username='" + Username + "' AND password='" + Password + "'";
+                        PreparedStatement preparedStatement1 = connection.prepareStatement(stmt1);
+                        preparedStatement1.executeUpdate();
+//                    System.out.println(newPassword);
+                        Alert warn = this.createAlert(Alert.AlertType.INFORMATION, "Thay đổi mật khẩu thành công  ! ", "", "Đổi mật khẩu ");
+                        warn.show();
+                    }else {
+                        Alert warn = this.createAlert(Alert.AlertType.WARNING, "Sai mật khẩu , nhập lại !  ", "", "Error", ButtonType.CLOSE);
+                        warn.show();
+                        clear1();
+                    }
+                } else {
+                    Alert warn = this.createAlert(Alert.AlertType.WARNING, "Tài khoản không tồn tại , nhập lại ! ", "", "Error", ButtonType.CLOSE);
                     warn.show();
-                    clear1();
+                    clear();
                 }
-            } else {
-                Alert warn = this.createAlert(Alert.AlertType.WARNING, "Sai thông tin ", "", "Error", ButtonType.CLOSE);
-                warn.show();
-                clear();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
 
     }

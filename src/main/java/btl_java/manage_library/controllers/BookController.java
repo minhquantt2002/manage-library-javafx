@@ -158,7 +158,6 @@ public class BookController implements Initializable {
         totalBookField.setText(k.getTotalBook().getValue());
     }
 //    ===============================SEARCHBOOOK===========================================
-    // Hàm tìm tím quyển sách
     @FXML
     private void searchBook() {
         String find="";
@@ -187,12 +186,12 @@ public class BookController implements Initializable {
         }
         clear();
     }
-
+// ================================ CHECK INPUT =================================
     private boolean checkInput() {
         return !categoryBookField.getText().isEmpty() && !nameBookField.getText().isEmpty() && !authorBookField.getText().isEmpty()
                 && !totalBookField.getText().isEmpty() && !codeBookField.getText().isEmpty();
     }
-
+//========================== ALERT ================================================
     private Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
         Alert alert = this.createAlert(type, content, header, title);
         alert.getButtonTypes().addAll(buttonTypes);
@@ -209,13 +208,38 @@ public class BookController implements Initializable {
     ObservableList<BookModel> getFunctionSetTableViewBook() {
         return setDataTableViewBook(stmtQuery);
     }
-
+// =======================FUNCTION CLEAR ===========================
     public void clear() {
        codeBookField.setText("");
         nameBookField.setText("");
         authorBookField.setText("");
         categoryBookField.setText("");
         totalBookField.setText("");
+    }
+//    ============================DELETE BOOK =============================================
+
+    public void bookDelete(ActionEvent actionEvent) {
+        BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn xóa loai sách này  ? ", "", "Delete ", ButtonType.CLOSE);
+            Optional<ButtonType> option = warn.showAndWait();
+            try {
+                if (ButtonType.OK == option.get()) {
+                    String query = "DELETE FROM book WHERE code ='" + selected.getCode().getValue() + "'";
+                    try {
+                        Connection conn = new ConnectionUtils().connectDB();
+                        PreparedStatement pstm = conn.prepareStatement(query);
+                        pstm.executeUpdate();
+                        System.out.println("Delete done a record: " + selected);
+                    } catch (SQLException err) {
+                        System.err.println("Delete : " + err.getMessage());
+                    }
+                    tableViewBook.setItems(setDataTableViewBook(stmtQuery));
+                }
+            } catch (Exception e) {
+                System.out.println("error " + e.getMessage());
+            }
+        }
     }
 }
 

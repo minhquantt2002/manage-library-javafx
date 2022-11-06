@@ -17,7 +17,7 @@
                   <children>
                      <Button mnemonicParsing="false" onAction="#huongdan" prefHeight="40.0" prefWidth="200.0" text="Hướng dẫn ">
                         <VBox.margin>
-                           <Insets bottom="30.0" left="20.0" right="20.0" />
+                           <Insets bottom="30.0" left="20.0" right="20.0" top="30.0" />
                         </VBox.margin>
                      </Button>
                      <Button mnemonicParsing="false" onAction="#changePassword" prefHeight="40.0" prefWidth="200.0" text="Đổi mật khẩu ">
@@ -37,7 +37,7 @@
       <center>
          <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-               <StackPane fx:id="contentArea" prefHeight="162.0" prefWidth="478.0" style="-fx-background-color: pink;" AnchorPane.bottomAnchor="195.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <StackPane fx:id="contentArea" prefHeight="357.0" prefWidth="478.0" style="-fx-background-color: pink;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <children>
                      <ImageView fitHeight="150.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -47,7 +47,10 @@
                   </children></StackPane>
             </children>
          </AnchorPane>
-      </center></BorderPane>
+      </center>
+      <bottom>
+         <Pane prefHeight="13.0" prefWidth="678.0" BorderPane.alignment="CENTER" />
+      </bottom></BorderPane>
     <!--            fx:id="btnChangePassword" -->
 
     <!--            onAction="#ChangePassword"-->
