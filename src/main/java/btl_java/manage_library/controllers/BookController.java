@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
+
 import btl_java.manage_library.utils.chuanhoa;
 
 
@@ -46,7 +47,8 @@ public class BookController implements Initializable {
     private TableColumn<BookModel, String> totalBook;
     @FXML
     private TableColumn<BookModel, String> remainBook;
-    private final String stmtQuery="SELECT * FROM book";
+    private final String stmtQuery = "SELECT * FROM book";
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
@@ -88,7 +90,7 @@ public class BookController implements Initializable {
         }
         return list;
     }
-
+//==========================================INSERTBOOK======================================
     // Hàm tạo một bản ghi mới trong database (thêm 1 sách mới)
     @FXML
     private void insertBook() {
@@ -103,13 +105,13 @@ public class BookController implements Initializable {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(stmt);
             preparedStatement.setString(1, new chuanhoa().chuanhoaAll(codeBookField.getText()));
-            preparedStatement.setString(2, new  chuanhoa().chuanhoa1(categoryBookField.getText()));
-            preparedStatement.setString(3, new  chuanhoa().chuanhoa1(nameBookField.getText()));
+            preparedStatement.setString(2, new chuanhoa().chuanhoa1(categoryBookField.getText()));
+            preparedStatement.setString(3, new chuanhoa().chuanhoa1(nameBookField.getText()));
             preparedStatement.setString(4, new chuanhoa().chuanhoaFirst(authorBookField.getText()));
             preparedStatement.setString(5, String.valueOf(Integer.parseInt(totalBookField.getText())));
             preparedStatement.setString(6, String.valueOf(Integer.parseInt(totalBookField.getText())));
             preparedStatement.executeUpdate();
-            System.out.println("Create done a record: " + new BookModel("",codeBookField.getText(), categoryBookField.getText(),
+            System.out.println("Create done a record: " + new BookModel("", codeBookField.getText(), categoryBookField.getText(),
                     nameBookField.getText(), authorBookField.getText(), totalBookField.getText()));
             ObservableList<BookModel> list = setDataTableViewBook(stmtQuery);
             tableViewBook.setItems(list);
@@ -119,7 +121,8 @@ public class BookController implements Initializable {
         }
         clear();
     }
-//======================================EDITBOOK==========================================
+
+    //======================================EDITBOOK==========================================
     // Hàm sửa thông tin một quyền sách
     @FXML
     private void editBook() {
@@ -127,10 +130,10 @@ public class BookController implements Initializable {
 //        tableViewBook.setItems(list);
 //        new BookBorrowerController().refreshTableViewBook(list);
         BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
-        if(selected != null){
+        if (selected != null) {
             Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn chỉnh sửa thông tin về quyển sách này ? ", "", "sửa thông tin sách ", ButtonType.CLOSE);
             Optional<ButtonType> option = warn.showAndWait();
-            try{
+            try {
                 if (ButtonType.OK == option.get()) {
                     setTextField(selected);
                     String pop = "DELETE FROM book WHERE code ='" + selected.getCode().getValue() + "'";
@@ -144,45 +147,43 @@ public class BookController implements Initializable {
                     }
                     setDataTableViewBook(stmtQuery);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("error " + e.getMessage());
             }
         }
 
     }
-    private void setTextField(BookModel k ){
+
+    private void setTextField(BookModel k) {
         codeBookField.setText(k.getCode().getValue());
         categoryBookField.setText(k.getCategoryBook().getValue());
         nameBookField.setText(k.getNameBook().getValue());
         authorBookField.setText(k.getAuthorBook().getValue());
         totalBookField.setText(k.getTotalBook().getValue());
     }
-//    ===============================SEARCHBOOOK===========================================
+
+    //    ===============================SEARCHBOOOK===========================================
     @FXML
     private void searchBook() {
-        String find="";
-        String temp="";
-        if(!codeBookField.getText().equals("")&&nameBookField.getText().equals("")&&categoryBookField.getText().equals("")&&authorBookField.getText().equals("")){
-            find=new chuanhoa().chuanhoaAll(codeBookField.getText());
-            temp = "SELECT * FROM book WHERE code ='"+find+"'";
-        }
-        else  if(codeBookField.getText().equals("")&&!nameBookField.getText().equals("")&&categoryBookField.getText().equals("")&&authorBookField.getText().equals("")){
+        String find = "";
+        String temp = "";
+        if (!codeBookField.getText().equals("") && nameBookField.getText().equals("") && categoryBookField.getText().equals("") && authorBookField.getText().equals("")) {
+            find = new chuanhoa().chuanhoaAll(codeBookField.getText());
+            temp = "SELECT * FROM book WHERE code ='" + find + "'";
+        } else if (codeBookField.getText().equals("") && !nameBookField.getText().equals("") && categoryBookField.getText().equals("") && authorBookField.getText().equals("")) {
             find = new chuanhoa().chuanhoa1(nameBookField.getText());
-            temp = "SELECT * FROM book WHERE name ='"+find+"'";
-        }
-        else  if(codeBookField.getText().equals("")&&nameBookField.getText().equals("")&&!categoryBookField.getText().equals("")&&authorBookField.getText().equals("")){
+            temp = "SELECT * FROM book WHERE name ='" + find + "'";
+        } else if (codeBookField.getText().equals("") && nameBookField.getText().equals("") && !categoryBookField.getText().equals("") && authorBookField.getText().equals("")) {
             find = new chuanhoa().chuanhoa1(categoryBookField.getText());
-            temp = "SELECT * FROM book WHERE category ='"+find+"'";
-        }else if(codeBookField.getText().equals("")&&nameBookField.getText().equals("")&&categoryBookField.getText().equals("")&&!authorBookField.getText().equals(""))
-        {
+            temp = "SELECT * FROM book WHERE category ='" + find + "'";
+        } else if (codeBookField.getText().equals("") && nameBookField.getText().equals("") && categoryBookField.getText().equals("") && !authorBookField.getText().equals("")) {
             find = new chuanhoa().chuanhoaFirst(authorBookField.getText());
-            temp = "SELECT * FROM book WHERE author ='"+find+"'";
+            temp = "SELECT * FROM book WHERE author ='" + find + "'";
         }
-        if(find.equals("")){
+        if (find.equals("")) {
             tableViewBook.setItems(setDataTableViewBook(stmtQuery));
-        }
-        else{
-            tableViewBook.setItems( setDataTableViewBook(temp));
+        } else {
+            tableViewBook.setItems(setDataTableViewBook(temp));
         }
         clear();
     }
@@ -210,7 +211,7 @@ public class BookController implements Initializable {
     }
 // =======================FUNCTION CLEAR ===========================
     public void clear() {
-       codeBookField.setText("");
+        codeBookField.setText("");
         nameBookField.setText("");
         authorBookField.setText("");
         categoryBookField.setText("");

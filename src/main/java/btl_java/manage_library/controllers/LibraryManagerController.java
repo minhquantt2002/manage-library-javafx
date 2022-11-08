@@ -181,7 +181,6 @@ public class  LibraryManagerController implements Initializable {
         } else if (!idStudentField.getText().equals("") && nameStudentField.getText().equals("") && classStudentField.getText().equals("")) {
             find = new chuanhoa().chuanhoaAll(idStudentField.getText());
             temp = "SELECT * FROM library_manager WHERE student_code LIKE '%" + find + "%'";
-
         }
         if (find.equals("")) {
             setDataTableView(stmtQueryAll);
