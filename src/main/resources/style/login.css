@@ -1,3 +1,9 @@
 VBox{
     -fx-background-color: lightblue;
 }
+.button{
+    -fx-background-color:  #c9aa0a;
+}
+AnchorPane{
+    -fx-background-color: lightblue;
+}
