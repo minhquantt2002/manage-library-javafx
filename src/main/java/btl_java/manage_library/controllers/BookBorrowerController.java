@@ -2,13 +2,18 @@ package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.models.BookBorrowerModel;
 import btl_java.manage_library.models.BookModel;
+import btl_java.manage_library.models.LibraryModel;
 import btl_java.manage_library.utils.ConnectionUtils;
+import btl_java.manage_library.utils.ValidatorInputFieldUtils;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import javafx.collections.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class BookBorrowerController implements Initializable {
@@ -51,12 +56,24 @@ public class BookBorrowerController implements Initializable {
     @FXML
     private TableColumn<BookBorrowerModel, String> dateReturnBook;
     @FXML
+    private TableColumn<BookBorrowerModel, String> sttBorrow;
+    @FXML
+    private TableColumn<BookBorrowerModel, String> codeBookBorrow;
+    @FXML
+    private TableColumn<BookBorrowerModel, String> nameBookBorrow;
+    @FXML
+    private TableColumn<BookBorrowerModel, String> totalBorrow;
+    @FXML
     private TableView<BookModel> tableViewBook;
     @FXML
     private TableView<BookBorrowerModel> tableViewBorrower;
-
+    @FXML
+    private TableView<BookModel> tableViewBookBorrow;
+    Connection connection = new ConnectionUtils().connectDB();
+    String stmtQueryAll = "SELECT * FROM book_borrower";
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         ToggleGroup toggleGroup = new ToggleGroup();
         borrowBook.setToggleGroup(toggleGroup);
         returnBook.setToggleGroup(toggleGroup);
@@ -78,12 +95,22 @@ public class BookBorrowerController implements Initializable {
         remainBook.setCellValueFactory(cellData -> cellData.getValue().getRemainingBook());
 
         tableViewBook.setItems(new BookController().getFunctionSetTableViewBook());
-        setDataTableViewBorrower();
+        setDataTableViewBorrower(stmtQueryAll);
+
+        tableViewBook.setRowFactory(action -> {
+            TableRow<BookModel> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    BookModel doubleBook = row.getItem();
+
+                    System.out.println(doubleBook);
+                }
+            });
+            return row;
+        });
     }
 
-    private void setDataTableViewBorrower() {
-        Connection connection = new ConnectionUtils().connectDB();
-        String stmt = "SELECT * FROM book_borrower";
+    private void setDataTableViewBorrower(String stmt) {
         ObservableList<BookBorrowerModel> list = FXCollections.observableArrayList();
         ResultSet resultSet;
         try {
@@ -110,7 +137,24 @@ public class BookBorrowerController implements Initializable {
 
     @FXML
     private void insertRecord() {
-
+        String type = borrowBook.isSelected() ? "Borrow" : "Return";
+        BookModel positionBook = tableViewBook.getSelectionModel().getSelectedItem();
+        try {
+            String stmt = "INSERT INTO book_borrower (student_code, full_name, class_name, phone_number, borrowed, returned) VALUES (?, ?, ?, ?, ?, ?)";
+            String borrowedTime = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
+            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
+            preparedStatement.setString(1, new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeStudentField.getText()));
+            preparedStatement.setString(2, new ValidatorInputFieldUtils().ValidateFirstUpperCase(nameStudentField.getText()));
+            preparedStatement.setString(3, new ValidatorInputFieldUtils().ValidateAllToUpperCase(classStudentField.getText()));
+            preparedStatement.setString(4, phoneNumberStudentField.getText());
+            preparedStatement.setString(5, borrowedTime);
+            preparedStatement.setString(6, "");
+            preparedStatement.executeUpdate();
+            System.out.println("Create done a record: " + new BookBorrowerModel(codeStudentField.getText(), nameStudentField.getText(),
+                    classStudentField.getText(), phoneNumberStudentField.getText(), borrowedTime, ""));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -123,7 +167,7 @@ public class BookBorrowerController implements Initializable {
     }
 
     void refreshTableViewBook(ObservableList<BookModel> list) {
-//        tableViewBook = new TableView<>(list);
+        tableViewBook = new TableView<>(list);
         System.out.println(list);
     }
 }

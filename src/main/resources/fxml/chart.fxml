@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
+<?import javafx.scene.*?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -16,83 +16,72 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl_java.manage_library.controllers.ChartController">
-    <children>
-        <GridPane alignment="TOP_CENTER" prefHeight="400.0" prefWidth="601.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints maxHeight="100.0" minHeight="1.0" prefHeight="10.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="100.0" minHeight="0.0" prefHeight="10.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <children>
-                <VBox prefHeight="200.0" prefWidth="294.0" GridPane.rowIndex="1">
-                    <children>
-                        <LineChart fx:id="chart_Sv" legendVisible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="428.0" prefWidth="262.0" titleSide="BOTTOM" VBox.vgrow="ALWAYS">
-                            <xAxis>
-                                <CategoryAxis side="BOTTOM" />
-                            </xAxis>
-                            <yAxis>
-                                <NumberAxis side="LEFT" />
-                            </yAxis>
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
-                        </LineChart>
-                        <HBox prefHeight="60.0" prefWidth="278.0">
-                            <children>
-                                <Label alignment="TOP_RIGHT" prefHeight="29.0" prefWidth="216.0" text="Lượng sinh viên vào theo: " textAlignment="RIGHT">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <ChoiceBox fx:id="choice_Sv" prefHeight="27.0" prefWidth="62.0">
-                                    <opaqueInsets>
-                                        <Insets />
-                                    </opaqueInsets>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </ChoiceBox>
-                            </children>
-                        </HBox>
-                    </children>
+    <GridPane alignment="TOP_CENTER" prefHeight="400.0" prefWidth="601.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="100.0" minHeight="1.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="100.0" minHeight="0.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <VBox prefHeight="200.0" prefWidth="294.0" GridPane.rowIndex="1">
+            <cursor>
+                <Cursor fx:constant="TEXT"/>
+            </cursor>
+            <LineChart fx:id="chart_Sv" legendVisible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="428.0" prefWidth="262.0" titleSide="BOTTOM"
+                       VBox.vgrow="ALWAYS">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT"/>
+                </yAxis>
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+            </LineChart>
+            <HBox prefHeight="60.0" prefWidth="278.0">
+                <Label alignment="TOP_RIGHT" prefHeight="29.0" prefWidth="216.0" text="Lượng sinh viên vào theo: " textAlignment="RIGHT">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <ChoiceBox fx:id="choice_Sv" prefHeight="27.0" prefWidth="62.0">
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
                     <cursor>
-                        <Cursor fx:constant="TEXT" />
+                        <Cursor fx:constant="HAND"/>
                     </cursor>
-                </VBox>
-                <VBox prefHeight="200.0" prefWidth="293.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <children>
-                        <LineChart fx:id="chart_S" legendVisible="false" prefWidth="262.0" titleSide="BOTTOM" VBox.vgrow="ALWAYS">
-                            <xAxis>
-                                <CategoryAxis side="BOTTOM" />
-                            </xAxis>
-                            <yAxis>
-                                <NumberAxis side="LEFT" />
-                            </yAxis>
-                        </LineChart>
-                        <HBox prefHeight="60.0" prefWidth="278.0">
-                            <children>
-                                <Label prefHeight="27.0" prefWidth="237.0" text="           Lượng sách mượn theo: " textAlignment="JUSTIFY">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                    <HBox.margin>
-                                        <Insets left="-6.0" />
-                                    </HBox.margin>
-                                </Label>
-                                <ChoiceBox fx:id="choice_S" prefHeight="27.0" prefWidth="76.0">
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </ChoiceBox>
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
-            </children>
-        </GridPane>
-    </children>
+                </ChoiceBox>
+            </HBox>
+        </VBox>
+        <VBox prefHeight="200.0" prefWidth="293.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <LineChart fx:id="chart_S" legendVisible="false" prefWidth="262.0" titleSide="BOTTOM" VBox.vgrow="ALWAYS">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT"/>
+                </yAxis>
+            </LineChart>
+            <HBox prefHeight="60.0" prefWidth="278.0">
+                <Label prefHeight="27.0" prefWidth="237.0" text="Lượng sách mượn theo: " textAlignment="JUSTIFY">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                    <HBox.margin>
+                        <Insets left="-6.0"/>
+                    </HBox.margin>
+                </Label>
+                <ChoiceBox fx:id="choice_S" prefHeight="27.0" prefWidth="76.0">
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </ChoiceBox>
+            </HBox>
+        </VBox>
+    </GridPane>
 </AnchorPane>

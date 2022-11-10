@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
-import btl_java.manage_library.utils.chuanhoa;
+import btl_java.manage_library.utils.ValidatorInputFieldUtils;
 
 
 public class BookController implements Initializable {
@@ -90,7 +90,8 @@ public class BookController implements Initializable {
         }
         return list;
     }
-//==========================================INSERTBOOK======================================
+
+    //==========================================INSERTBOOK======================================
     // Hàm tạo một bản ghi mới trong database (thêm 1 sách mới)
     @FXML
     private void insertBook() {
@@ -104,10 +105,10 @@ public class BookController implements Initializable {
         Connection connection = new ConnectionUtils().connectDB();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-            preparedStatement.setString(1, new chuanhoa().chuanhoaAll(codeBookField.getText()));
-            preparedStatement.setString(2, new chuanhoa().chuanhoa1(categoryBookField.getText()));
-            preparedStatement.setString(3, new chuanhoa().chuanhoa1(nameBookField.getText()));
-            preparedStatement.setString(4, new chuanhoa().chuanhoaFirst(authorBookField.getText()));
+            preparedStatement.setString(1, new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeBookField.getText()));
+            preparedStatement.setString(2, new ValidatorInputFieldUtils().chuanhoa1(categoryBookField.getText()));
+            preparedStatement.setString(3, new ValidatorInputFieldUtils().chuanhoa1(nameBookField.getText()));
+            preparedStatement.setString(4, new ValidatorInputFieldUtils().ValidateFirstUpperCase(authorBookField.getText()));
             preparedStatement.setString(5, String.valueOf(Integer.parseInt(totalBookField.getText())));
             preparedStatement.setString(6, String.valueOf(Integer.parseInt(totalBookField.getText())));
             preparedStatement.executeUpdate();
@@ -168,16 +169,16 @@ public class BookController implements Initializable {
         String find = "";
         String temp = "";
         if (!codeBookField.getText().equals("") && nameBookField.getText().equals("") && categoryBookField.getText().equals("") && authorBookField.getText().equals("")) {
-            find = new chuanhoa().chuanhoaAll(codeBookField.getText());
+            find = new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeBookField.getText());
             temp = "SELECT * FROM book WHERE code ='" + find + "'";
         } else if (codeBookField.getText().equals("") && !nameBookField.getText().equals("") && categoryBookField.getText().equals("") && authorBookField.getText().equals("")) {
-            find = new chuanhoa().chuanhoa1(nameBookField.getText());
+            find = new ValidatorInputFieldUtils().chuanhoa1(nameBookField.getText());
             temp = "SELECT * FROM book WHERE name ='" + find + "'";
         } else if (codeBookField.getText().equals("") && nameBookField.getText().equals("") && !categoryBookField.getText().equals("") && authorBookField.getText().equals("")) {
-            find = new chuanhoa().chuanhoa1(categoryBookField.getText());
+            find = new ValidatorInputFieldUtils().chuanhoa1(categoryBookField.getText());
             temp = "SELECT * FROM book WHERE category ='" + find + "'";
         } else if (codeBookField.getText().equals("") && nameBookField.getText().equals("") && categoryBookField.getText().equals("") && !authorBookField.getText().equals("")) {
-            find = new chuanhoa().chuanhoaFirst(authorBookField.getText());
+            find = new ValidatorInputFieldUtils().ValidateFirstUpperCase(authorBookField.getText());
             temp = "SELECT * FROM book WHERE author ='" + find + "'";
         }
         if (find.equals("")) {
@@ -187,12 +188,14 @@ public class BookController implements Initializable {
         }
         clear();
     }
-// ================================ CHECK INPUT =================================
+
+    // ================================ CHECK INPUT =================================
     private boolean checkInput() {
         return !categoryBookField.getText().isEmpty() && !nameBookField.getText().isEmpty() && !authorBookField.getText().isEmpty()
                 && !totalBookField.getText().isEmpty() && !codeBookField.getText().isEmpty();
     }
-//========================== ALERT ================================================
+
+    //========================== ALERT ================================================
     private Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
         Alert alert = this.createAlert(type, content, header, title);
         alert.getButtonTypes().addAll(buttonTypes);
@@ -209,7 +212,8 @@ public class BookController implements Initializable {
     ObservableList<BookModel> getFunctionSetTableViewBook() {
         return setDataTableViewBook(stmtQuery);
     }
-// =======================FUNCTION CLEAR ===========================
+
+    // =======================FUNCTION CLEAR ===========================
     public void clear() {
         codeBookField.setText("");
         nameBookField.setText("");

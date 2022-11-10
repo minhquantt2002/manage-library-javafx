@@ -4,8 +4,7 @@ import btl_java.manage_library.utils.ConnectionUtils;
 import btl_java.manage_library.models.LibraryModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.*;
 import javafx.scene.control.*;
 
 import java.net.URL;
@@ -18,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import btl_java.manage_library.utils.chuanhoa;
+import btl_java.manage_library.utils.ValidatorInputFieldUtils;
 
 public class  LibraryManagerController implements Initializable {
     @FXML
@@ -97,9 +96,9 @@ public class  LibraryManagerController implements Initializable {
             try {
                 String timeInToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
                 PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-                preparedStatement.setString(1, new chuanhoa().chuanhoaAll(idStudentField.getText()));
-                preparedStatement.setString(2, new chuanhoa().chuanhoaFirst(nameStudentField.getText()));
-                preparedStatement.setString(3, new chuanhoa().chuanhoaAll(classStudentField.getText()));
+                preparedStatement.setString(1, new ValidatorInputFieldUtils().ValidateAllToUpperCase(idStudentField.getText()));
+                preparedStatement.setString(2, new ValidatorInputFieldUtils().ValidateFirstUpperCase(nameStudentField.getText()));
+                preparedStatement.setString(3, new ValidatorInputFieldUtils().ValidateAllToUpperCase(classStudentField.getText()));
                 preparedStatement.setString(4, phoneNumberStudentField.getText());
                 preparedStatement.setString(5, timeInToString);
                 preparedStatement.setString(6, "");
@@ -173,13 +172,13 @@ public class  LibraryManagerController implements Initializable {
         String find = "";
         String temp = "";
         if (idStudentField.getText().equals("") && nameStudentField.getText().equals("") && !classStudentField.getText().equals("")) {
-            find = new chuanhoa().chuanhoaAll(classStudentField.getText());
+            find = new ValidatorInputFieldUtils().ValidateAllToUpperCase(classStudentField.getText());
             temp = "SELECT * FROM library_manager WHERE class_name LIKE '%" + find + "%'";
         } else if (idStudentField.getText().equals("") && !nameStudentField.getText().equals("") && classStudentField.getText().equals("")) {
-            find = new chuanhoa().chuanhoaFirst(nameStudentField.getText());
+            find = new ValidatorInputFieldUtils().ValidateFirstUpperCase(nameStudentField.getText());
             temp = "SELECT * FROM library_manager WHERE full_name LIKE '%" + find + "%'";
         } else if (!idStudentField.getText().equals("") && nameStudentField.getText().equals("") && classStudentField.getText().equals("")) {
-            find = new chuanhoa().chuanhoaAll(idStudentField.getText());
+            find = new ValidatorInputFieldUtils().ValidateAllToUpperCase(idStudentField.getText());
             temp = "SELECT * FROM library_manager WHERE student_code LIKE '%" + find + "%'";
         }
         if (find.equals("")) {
@@ -192,7 +191,7 @@ public class  LibraryManagerController implements Initializable {
 
     //===============================================UPDATESTUDENT=========================================================
     public void updateStudent() {
-        String findID = new chuanhoa().chuanhoaAll(idStudentField.getText());
+        String findID = new ValidatorInputFieldUtils().ValidateAllToUpperCase(idStudentField.getText());
         if (nameStudentField.getText().equals("") && classStudentField.getText().equals("") && phoneNumberStudentField.getText().equals("") && !findID.equals("")) {
             Alert warn = this.createAlert(Alert.AlertType.WARNING, "Thêm thông tin cho sinh viên này ? ", "", "Thêm thông tin sinh viên ", ButtonType.CLOSE);
             Optional<ButtonType> option = warn.showAndWait();
