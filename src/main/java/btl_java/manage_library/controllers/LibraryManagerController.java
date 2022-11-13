@@ -114,7 +114,6 @@ public class  LibraryManagerController implements Initializable {
 
     }
 
-    //==========================================DELETESTUDENT======================================
     @FXML
     private void deleteStudent() {
         LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
@@ -166,7 +165,6 @@ public class  LibraryManagerController implements Initializable {
         phoneNumberStudentField.setText("");
     }
 
-    //========================================SEARCHSTUDENT===========================================
     @FXML
     private void searchStudent() {
         String find = "";
@@ -189,7 +187,6 @@ public class  LibraryManagerController implements Initializable {
         clear();
     }
 
-    //===============================================UPDATESTUDENT=========================================================
     public void updateStudent() {
         String findID = new ValidatorInputFieldUtils().ValidateAllToUpperCase(idStudentField.getText());
         if (nameStudentField.getText().equals("") && classStudentField.getText().equals("") && phoneNumberStudentField.getText().equals("") && !findID.equals("")) {

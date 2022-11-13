@@ -8,16 +8,13 @@ public class BorrowerModel {
     private final SimpleStringProperty nameStudent = new SimpleStringProperty();
     private final SimpleStringProperty classStudent = new SimpleStringProperty();
     private final SimpleStringProperty phoneNumber = new SimpleStringProperty();
-    private final SimpleStringProperty borrowDate = new SimpleStringProperty();
-    private final SimpleStringProperty returnDate = new SimpleStringProperty();
 
-    public BorrowerModel(String codeStudent, String nameStudent, String classStudent, String phoneNumber, String borrowDate, String returnDate) {
+
+    public BorrowerModel(String codeStudent, String nameStudent, String classStudent, String phoneNumber) {
         this.codeStudent.set(codeStudent);
         this.nameStudent.set(nameStudent);
         this.classStudent.set(classStudent);
         this.phoneNumber.set(phoneNumber);
-        this.borrowDate.set(borrowDate);
-        this.returnDate.set(returnDate);
     }
 
     public SimpleStringProperty getStt() {
@@ -40,18 +37,6 @@ public class BorrowerModel {
         return phoneNumber;
     }
 
-    public SimpleStringProperty getBorrowDate() {
-        return borrowDate;
-    }
-
-    public SimpleStringProperty getReturnDate() {
-        return returnDate;
-    }
-
-
-    public void setReturnDate(String returnDate) {
-        this.returnDate.set(returnDate);
-    }
 
     public void setStt(String stt) {
         this.stt.set(stt);
@@ -59,8 +44,12 @@ public class BorrowerModel {
 
     @Override
     public String toString() {
-        return "BorrowerModel{" + "stt=" + stt + ", codeStudent=" + codeStudent +
-                ", nameStudent=" + nameStudent + ", classStudent=" + classStudent + ", phoneNumber=" + phoneNumber +
-                ", borrowDate=" + borrowDate + ", returnDate=" + returnDate + '}';
+        return "BorrowerModel{" +
+                "stt=" + stt +
+                ", codeStudent=" + codeStudent +
+                ", nameStudent=" + nameStudent +
+                ", classStudent=" + classStudent +
+                ", phoneNumber=" + phoneNumber +
+                '}';
     }
 }

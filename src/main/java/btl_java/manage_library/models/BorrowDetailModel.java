@@ -7,12 +7,16 @@ public class BorrowDetailModel {
     private final SimpleStringProperty codeBook = new SimpleStringProperty();
     private final SimpleStringProperty nameBook = new SimpleStringProperty();
     private final SimpleStringProperty totalBook = new SimpleStringProperty();
+    private final SimpleStringProperty borrowDate = new SimpleStringProperty();
+    private final SimpleStringProperty returnDate = new SimpleStringProperty();
 
-    public BorrowDetailModel(String stt, String codeBook, String nameBook, String totalBook) {
+    public BorrowDetailModel(String stt, String codeBook, String nameBook, String totalBook, String borrowDate, String returnDate) {
         this.stt.set(stt);
         this.codeBook.set(codeBook);
         this.nameBook.set(nameBook);
         this.totalBook.set(totalBook);
+        this.borrowDate.set(borrowDate);
+        this.returnDate.set(returnDate);
     }
 
     public SimpleStringProperty getStt() {
@@ -27,9 +31,24 @@ public class BorrowDetailModel {
         return nameBook;
     }
 
-
     public SimpleStringProperty getTotalBook() {
         return totalBook;
+    }
+
+    public SimpleStringProperty getBorrowDate() {
+        return borrowDate;
+    }
+
+    public SimpleStringProperty getReturnDate() {
+        return returnDate;
+    }
+
+    public void setBorrowDate(String borrowDate) {
+        this.borrowDate.set(borrowDate);
+    }
+
+    public void setReturnDate(String returnDate) {
+        this.returnDate.set(returnDate);
     }
 
     @Override
@@ -39,6 +58,8 @@ public class BorrowDetailModel {
                 ", codeBook=" + codeBook +
                 ", nameBook=" + nameBook +
                 ", totalBook=" + totalBook +
+                ", borrowDate=" + borrowDate +
+                ", returnDate=" + returnDate +
                 '}';
     }
 }

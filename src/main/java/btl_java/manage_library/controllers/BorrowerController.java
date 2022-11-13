@@ -56,9 +56,9 @@ public class BorrowerController implements Initializable {
     @FXML
     private TableColumn<BorrowerModel, String> phoneNumberStudentBorrowed;
     @FXML
-    private TableColumn<BorrowerModel, String> dateBorrowBook;
+    private TableColumn<BorrowDetailModel, String> dateBorrowBook;
     @FXML
-    private TableColumn<BorrowerModel, String> dateReturnBook;
+    private TableColumn<BorrowDetailModel, String> dateReturnBook;
     @FXML
     private TableColumn<BorrowDetailModel, String> sttDetail;
     @FXML
@@ -111,6 +111,7 @@ public class BorrowerController implements Initializable {
         nameStudentBorrowed.setCellValueFactory(cellData -> cellData.getValue().getNameStudent());
         classStudentBorrowed.setCellValueFactory(cellData -> cellData.getValue().getClassStudent());
         phoneNumberStudentBorrowed.setCellValueFactory(cellData -> cellData.getValue().getPhoneNumber());
+
         dateBorrowBook.setCellValueFactory(cellData -> cellData.getValue().getBorrowDate());
         dateReturnBook.setCellValueFactory(cellData -> cellData.getValue().getReturnDate());
 
@@ -152,7 +153,14 @@ public class BorrowerController implements Initializable {
     }
 
     private void addToTableBorrowDetails(BookModel book, String quantity) {
-        BorrowDetailModel newRecord = new BorrowDetailModel(Integer.toString(borrowDetailList.size() + 1), book.getCodeBook().getValue(), book.getNameBook().getValue(), quantity);
+        BorrowDetailModel newRecord = new BorrowDetailModel(
+                Integer.toString(borrowDetailList.size() + 1),
+                book.getCodeBook().getValue(),
+                book.getNameBook().getValue(),
+                quantity,
+                "",
+                ""
+        );
         System.out.println(newRecord);
         borrowDetailList.add(newRecord);
         tableViewBorrowDetail.setItems(borrowDetailList);
@@ -165,7 +173,14 @@ public class BorrowerController implements Initializable {
             int i = 1;
             resultSet = connection.createStatement().executeQuery("SELECT * FROM  borrowed_book_detail");
             while (resultSet.next()) {
-                BorrowDetailModel row = new BorrowDetailModel(Integer.toString(i), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
+                BorrowDetailModel row = new BorrowDetailModel(
+                        Integer.toString(i),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6)
+                );
                 i++;
                 list.add(row);
             }
@@ -183,7 +198,14 @@ public class BorrowerController implements Initializable {
             int i = 1;
             resultSet = connection.createStatement().executeQuery("SELECT * FROM  book");
             while (resultSet.next()) {
-                BookModel row = new BookModel(Integer.toString(i), resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+                BookModel row = new BookModel(
+                        Integer.toString(i),
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5)
+                );
                 row.setRemainBook(resultSet.getString(6));
                 i++;
                 list.add(row);
@@ -200,9 +222,14 @@ public class BorrowerController implements Initializable {
         ResultSet resultSet;
         try {
             int i = 1;
-            resultSet = connection.createStatement().executeQuery("SELECT * FROM book_borrower");
+            resultSet = connection.createStatement().executeQuery("SELECT * FROM borrower");
             while (resultSet.next()) {
-                BorrowerModel row = new BorrowerModel(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7));
+                BorrowerModel row = new BorrowerModel(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4)
+                );
                 row.setStt(Integer.toString(i));
                 i++;
                 list.add(row);
@@ -215,23 +242,40 @@ public class BorrowerController implements Initializable {
 
     @FXML
     private void insertBorrower() {
-        String type = borrowBook.isSelected() ? "Borrow" : "Return";
-        BookModel positionBook = tableViewBook.getSelectionModel().getSelectedItem();
+        boolean type = borrowBook.isSelected();
+        if (!type) {
+            return;
+        }
         try {
-            String stmt = "INSERT INTO book_borrower (student_code, full_name, class_name, phone_number, borrowed, returned) VALUES (?, ?, ?, ?, ?, ?)";
+            String stmtInsertBorrower = "INSERT INTO borrower (student_code, full_name, class_name, phone_number) VALUES (?, ?, ?, ?)";
+            PreparedStatement ppsBorrower = connection.prepareStatement(stmtInsertBorrower);
+            ppsBorrower.setString(1, new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeStudentField.getText()));
+            ppsBorrower.setString(2, new ValidatorInputFieldUtils().ValidateFirstUpperCase(nameStudentField.getText()));
+            ppsBorrower.setString(3, new ValidatorInputFieldUtils().ValidateAllToUpperCase(classStudentField.getText()));
+            ppsBorrower.setString(4, phoneNumberStudentField.getText());
+            ppsBorrower.executeUpdate();
+            System.out.println("Create done a record: " + new BorrowerModel(codeStudentField.getText(), nameStudentField.getText(), classStudentField.getText(), phoneNumberStudentField.getText()));
+
+//            String codeStudent = connection.createStatement().executeQuery("SELECT code_student from borrower WHERE ")
             String borrowedTime = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
-            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-            preparedStatement.setString(1, new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeStudentField.getText()));
-            preparedStatement.setString(2, new ValidatorInputFieldUtils().ValidateFirstUpperCase(nameStudentField.getText()));
-            preparedStatement.setString(3, new ValidatorInputFieldUtils().ValidateAllToUpperCase(classStudentField.getText()));
-            preparedStatement.setString(4, phoneNumberStudentField.getText());
-            preparedStatement.setString(5, borrowedTime);
-            preparedStatement.setString(6, "");
-            preparedStatement.executeUpdate();
-            System.out.println("Create done a record: " + new BorrowerModel(codeStudentField.getText(), nameStudentField.getText(), classStudentField.getText(), phoneNumberStudentField.getText(), borrowedTime, ""));
+            String stmtDetail = "INSERT INTO borrowed_book_detail (book_code, borrower_id, quantity, borrowed, returned) VALUES (?, ?, ?, ?, ?)";
+            for (BorrowDetailModel newRecord : borrowDetailList) {
+                PreparedStatement ppsDetail = connection.prepareStatement(stmtDetail);
+                ppsDetail.setString(1, newRecord.getCodeBook().getValue());
+                ppsDetail.setString(2, codeStudentField.getText());
+                ppsDetail.setString(3, newRecord.getTotalBook().getValue());
+                ppsDetail.setString(4, borrowedTime);
+                ppsDetail.setString(5, "");
+                ppsDetail.executeUpdate();
+            }
+            borrowDetailList.clear();
+            tableViewBorrowDetail.setItems(borrowDetailList);
+            setDataTableViewBorrower();
+            clearField();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     @FXML
@@ -239,7 +283,11 @@ public class BorrowerController implements Initializable {
 
     }
 
-    public void clear() {
-
+    @FXML
+    private void clearField() {
+        codeStudentField.setText("");
+        nameStudentField.setText("");
+        classStudentField.setText("");
+        phoneNumberStudentField.setText("");
     }
 }
