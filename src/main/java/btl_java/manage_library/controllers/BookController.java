@@ -1,10 +1,7 @@
 package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.models.BookModel;
-import btl_java.manage_library.models.LibraryModel;
 import btl_java.manage_library.utils.ConnectionUtils;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
-import javafx.beans.Observable;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
@@ -12,10 +9,7 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.sql.*;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
+import java.util.*;
 
 import btl_java.manage_library.utils.ValidatorInputFieldUtils;
 
@@ -47,29 +41,29 @@ public class BookController implements Initializable {
     private TableColumn<BookModel, String> totalBook;
     @FXML
     private TableColumn<BookModel, String> remainBook;
-    private final String stmtQuery = "SELECT * FROM book";
+    private final String stmtGetAll = "SELECT * FROM book";
+    private final Connection connection = new ConnectionUtils().connectDB();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
-        code.setCellValueFactory(cellData -> cellData.getValue().getCode());
+        code.setCellValueFactory(cellData -> cellData.getValue().getCodeBook());
         categoryBook.setCellValueFactory(cellData -> cellData.getValue().getCategoryBook());
         nameBook.setCellValueFactory(cellData -> cellData.getValue().getNameBook());
         authorBook.setCellValueFactory(cellData -> cellData.getValue().getAuthorBook());
         totalBook.setCellValueFactory(cellData -> cellData.getValue().getTotalBook());
         remainBook.setCellValueFactory(cellData -> cellData.getValue().getRemainingBook());
-        tableViewBook.setItems(setDataTableViewBook(stmtQuery));
+
+        setDataTableViewBook(stmtGetAll);
     }
 
-    // Hàm set dữ liệu cho bảng (Sách)
-    private ObservableList<BookModel> setDataTableViewBook(String stmtQuery) {
-        Connection connection = new ConnectionUtils().connectDB();
-//        String stmt = "SELECT * FROM book";
+
+    private void setDataTableViewBook(String stmt) {
         ObservableList<BookModel> list = FXCollections.observableArrayList();
         ResultSet resultSet;
         try {
             int i = 1;
-            resultSet = connection.createStatement().executeQuery(stmtQuery);
+            resultSet = connection.createStatement().executeQuery(stmt);
             while (resultSet.next()) {
                 BookModel row = new BookModel(
                         Integer.toString(i),
@@ -79,7 +73,6 @@ public class BookController implements Initializable {
                         resultSet.getString(4),
                         resultSet.getString(5)
                 );
-//                row.setStt(Integer.toString(i));
                 row.setRemainBook(resultSet.getString(6));
                 i++;
                 list.add(row);
@@ -88,11 +81,9 @@ public class BookController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        tableViewBook.setItems(list);
     }
 
-    //==========================================INSERTBOOK======================================
-    // Hàm tạo một bản ghi mới trong database (thêm 1 sách mới)
     @FXML
     private void insertBook() {
         boolean valid = checkInput();
@@ -114,22 +105,15 @@ public class BookController implements Initializable {
             preparedStatement.executeUpdate();
             System.out.println("Create done a record: " + new BookModel("", codeBookField.getText(), categoryBookField.getText(),
                     nameBookField.getText(), authorBookField.getText(), totalBookField.getText()));
-            ObservableList<BookModel> list = setDataTableViewBook(stmtQuery);
-            tableViewBook.setItems(list);
-//            new BookBorrowerController().refreshTableViewBook(list);
+            setDataTableViewBook(stmtGetAll);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         clear();
     }
 
-    //======================================EDITBOOK==========================================
-    // Hàm sửa thông tin một quyền sách
     @FXML
     private void editBook() {
-//        ObservableList<BookModel> list = setDataTableViewBook();
-//        tableViewBook.setItems(list);
-//        new BookBorrowerController().refreshTableViewBook(list);
         BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
         if (selected != null) {
             Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn chỉnh sửa thông tin về quyển sách này ? ", "", "sửa thông tin sách ", ButtonType.CLOSE);
@@ -137,7 +121,7 @@ public class BookController implements Initializable {
             try {
                 if (ButtonType.OK == option.get()) {
                     setTextField(selected);
-                    String pop = "DELETE FROM book WHERE code ='" + selected.getCode().getValue() + "'";
+                    String pop = "DELETE FROM book WHERE code ='" + selected.getCodeBook().getValue() + "'";
                     try {
                         Connection connection = new ConnectionUtils().connectDB();
                         PreparedStatement preparedStatement = connection.prepareStatement(pop);
@@ -146,7 +130,7 @@ public class BookController implements Initializable {
                     } catch (SQLException err) {
                         System.err.println("Delete : " + err.getMessage());
                     }
-                    setDataTableViewBook(stmtQuery);
+                    setDataTableViewBook(stmtGetAll);
                 }
             } catch (Exception e) {
                 System.out.println("error " + e.getMessage());
@@ -156,14 +140,13 @@ public class BookController implements Initializable {
     }
 
     private void setTextField(BookModel k) {
-        codeBookField.setText(k.getCode().getValue());
+        codeBookField.setText(k.getCodeBook().getValue());
         categoryBookField.setText(k.getCategoryBook().getValue());
         nameBookField.setText(k.getNameBook().getValue());
         authorBookField.setText(k.getAuthorBook().getValue());
         totalBookField.setText(k.getTotalBook().getValue());
     }
 
-    //    ===============================SEARCHBOOOK===========================================
     @FXML
     private void searchBook() {
         String find = "";
@@ -182,20 +165,18 @@ public class BookController implements Initializable {
             temp = "SELECT * FROM book WHERE author ='" + find + "'";
         }
         if (find.equals("")) {
-            tableViewBook.setItems(setDataTableViewBook(stmtQuery));
+            setDataTableViewBook(stmtGetAll);
         } else {
-            tableViewBook.setItems(setDataTableViewBook(temp));
+            setDataTableViewBook(temp);
         }
         clear();
     }
 
-    // ================================ CHECK INPUT =================================
     private boolean checkInput() {
         return !categoryBookField.getText().isEmpty() && !nameBookField.getText().isEmpty() && !authorBookField.getText().isEmpty()
                 && !totalBookField.getText().isEmpty() && !codeBookField.getText().isEmpty();
     }
 
-    //========================== ALERT ================================================
     private Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
         Alert alert = this.createAlert(type, content, header, title);
         alert.getButtonTypes().addAll(buttonTypes);
@@ -209,11 +190,7 @@ public class BookController implements Initializable {
         return alert;
     }
 
-    ObservableList<BookModel> getFunctionSetTableViewBook() {
-        return setDataTableViewBook(stmtQuery);
-    }
 
-    // =======================FUNCTION CLEAR ===========================
     public void clear() {
         codeBookField.setText("");
         nameBookField.setText("");
@@ -221,7 +198,6 @@ public class BookController implements Initializable {
         categoryBookField.setText("");
         totalBookField.setText("");
     }
-//    ============================DELETE BOOK =============================================
 
     public void bookDelete(ActionEvent actionEvent) {
         BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
@@ -230,7 +206,7 @@ public class BookController implements Initializable {
             Optional<ButtonType> option = warn.showAndWait();
             try {
                 if (ButtonType.OK == option.get()) {
-                    String query = "DELETE FROM book WHERE code ='" + selected.getCode().getValue() + "'";
+                    String query = "DELETE FROM book WHERE code ='" + selected.getCodeBook().getValue() + "'";
                     try {
                         Connection conn = new ConnectionUtils().connectDB();
                         PreparedStatement pstm = conn.prepareStatement(query);
@@ -239,7 +215,7 @@ public class BookController implements Initializable {
                     } catch (SQLException err) {
                         System.err.println("Delete : " + err.getMessage());
                     }
-                    tableViewBook.setItems(setDataTableViewBook(stmtQuery));
+                    setDataTableViewBook(stmtGetAll);
                 }
             } catch (Exception e) {
                 System.out.println("error " + e.getMessage());

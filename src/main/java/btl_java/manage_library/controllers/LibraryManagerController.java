@@ -44,7 +44,7 @@ public class  LibraryManagerController implements Initializable {
     private TableColumn<LibraryModel, String> phoneNumber;
     @FXML
     private TableColumn<LibraryModel, String> stt;
-    private String stmtQueryAll = "SELECT * FROM library_manager";
+    private final String stmtQueryAll = "SELECT * FROM library_manager";
 
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
@@ -54,6 +54,7 @@ public class  LibraryManagerController implements Initializable {
         phoneNumber.setCellValueFactory(cellData -> cellData.getValue().getPhoneNumber());
         timeIn.setCellValueFactory(cellData -> cellData.getValue().getTimeIn());
         timeOut.setCellValueFactory(cellData -> cellData.getValue().getTimeOut());
+
         setDataTableView(stmtQueryAll);
     }
 
@@ -83,7 +84,6 @@ public class  LibraryManagerController implements Initializable {
         tableViewLbm.setItems(list);
     }
 
-    //==========================================INSERTSTUDENT=============================================
     @FXML
     private void insertStudent() {
         boolean valid = checkInput();

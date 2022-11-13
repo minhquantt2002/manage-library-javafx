@@ -2,7 +2,7 @@ package btl_java.manage_library.models;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class BookBorrowerModel {
+public class BorrowerModel {
     private final SimpleStringProperty stt = new SimpleStringProperty();
     private final SimpleStringProperty codeStudent = new SimpleStringProperty();
     private final SimpleStringProperty nameStudent = new SimpleStringProperty();
@@ -11,7 +11,7 @@ public class BookBorrowerModel {
     private final SimpleStringProperty borrowDate = new SimpleStringProperty();
     private final SimpleStringProperty returnDate = new SimpleStringProperty();
 
-    public BookBorrowerModel(String codeStudent, String nameStudent, String classStudent, String phoneNumber, String borrowDate, String returnDate) {
+    public BorrowerModel(String codeStudent, String nameStudent, String classStudent, String phoneNumber, String borrowDate, String returnDate) {
         this.codeStudent.set(codeStudent);
         this.nameStudent.set(nameStudent);
         this.classStudent.set(classStudent);
@@ -59,7 +59,7 @@ public class BookBorrowerModel {
 
     @Override
     public String toString() {
-        return "BookBorrowerModel{" + "stt=" + stt + ", codeStudent=" + codeStudent +
+        return "BorrowerModel{" + "stt=" + stt + ", codeStudent=" + codeStudent +
                 ", nameStudent=" + nameStudent + ", classStudent=" + classStudent + ", phoneNumber=" + phoneNumber +
                 ", borrowDate=" + borrowDate + ", returnDate=" + returnDate + '}';
     }
