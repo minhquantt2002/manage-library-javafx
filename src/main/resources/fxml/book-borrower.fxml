@@ -14,10 +14,10 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl_java.manage_library.controllers.BorrowerController">
-    <GridPane hgap="10.0" layoutX="10.0" layoutY="52.0" prefHeight="200.0" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="52.0">
+    <GridPane hgap="10.0" layoutX="10.0" layoutY="41.0" prefHeight="246.0" prefWidth="1190.0" AnchorPane.bottomAnchor="420.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="25.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="907.0" minWidth="10.0" prefWidth="625.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="902.0" minWidth="10.0" prefWidth="625.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="907.0" minWidth="10.0" prefWidth="577.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="902.0" minWidth="10.0" prefWidth="603.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -33,7 +33,7 @@
                 <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -76,67 +76,59 @@
                     <Insets />
                 </GridPane.margin>
             </TextField>
-            <RadioButton fx:id="borrowBook" mnemonicParsing="false" text="Mượn sách" GridPane.columnIndex="1" />
-            <RadioButton fx:id="returnBook" mnemonicParsing="false" prefHeight="30.0" prefWidth="96.0" text="Trả sách" GridPane.columnIndex="3" />
-           <Button mnemonicParsing="false" onAction="#clearField" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Clear" GridPane.rowIndex="3">
-               <font>
-                   <Font size="14.0" />
-               </font>
-           </Button>
-           <Button mnemonicParsing="false" onAction="#insertBorrower" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Insert" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <font>
-                   <Font size="14.0" />
-               </font>
-           </Button>
-           <Button mnemonicParsing="false" onAction="#deleteStudent" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Delete" GridPane.columnIndex="2" GridPane.rowIndex="3">
-               <font>
-                   <Font size="14.0" />
-               </font>
-           </Button>
-           <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Search" GridPane.columnIndex="3" GridPane.rowIndex="3">
-               <font>
-                   <Font size="14.0" />
-               </font>
-           </Button>
+            <RadioButton fx:id="buttonBorrowBook" mnemonicParsing="false" text="Mượn sách" GridPane.columnIndex="1" />
+            <RadioButton fx:id="buttonReturnBook" mnemonicParsing="false" prefHeight="30.0" prefWidth="96.0" text="Trả sách" GridPane.columnIndex="3" />
+            <Button mnemonicParsing="false" onAction="#clearField" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Clear" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#insertBorrower" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Insert" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
         </GridPane>
-        <TableView fx:id="tableViewBook" GridPane.columnIndex="1">
+        <TableView fx:id="tableViewBook" prefHeight="255.0" prefWidth="597.0" GridPane.columnIndex="1">
             <columns>
                 <TableColumn fx:id="sttBook" prefWidth="37.0" text="STT" />
                 <TableColumn fx:id="codeBook" prefWidth="100.0" text="Mã sách" />
                 <TableColumn fx:id="nameBook" prefWidth="138.40000915527344" text="Tên sách" />
                 <TableColumn fx:id="categoryBook" maxWidth="101.19993591308594" minWidth="0.0" prefWidth="95.0" text="Thể loại" />
-                <TableColumn fx:id="authorBook" prefWidth="131.4000244140625" text="Tác giả" />
-                <TableColumn fx:id="remainBook" prefWidth="78.0" text="Trạng thái" />
+                <TableColumn fx:id="authorBook" prefWidth="57.0" text="Tác giả" />
+                <TableColumn fx:id="remainBook" prefWidth="68.0" text="Trạng thái" />
             </columns>
         </TableView>
     </GridPane>
-   <GridPane hgap="10.0" layoutX="6.0" layoutY="311.0" prefHeight="310.0" prefWidth="800.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="311.0">
-      <columnConstraints>
-         <ColumnConstraints hgrow="SOMETIMES" maxWidth="907.0" minWidth="10.0" prefWidth="590.0" />
-         <ColumnConstraints hgrow="SOMETIMES" maxWidth="902.0" minWidth="10.0" prefWidth="590.0" />
-      </columnConstraints>
-      <rowConstraints>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      </rowConstraints>
-      <children>
-          <TableView fx:id="tableViewBorrower">
-              <columns>
-                  <TableColumn fx:id="sttStudentBorrowed" prefWidth="59.0" text="STT" />
-                  <TableColumn fx:id="codeStudentBorrowed" prefWidth="58.0" text="MSV" />
-                  <TableColumn fx:id="classStudentBorrowed" prefWidth="111.0" text="Lớp" />
-                  <TableColumn fx:id="nameStudentBorrowed" prefWidth="168.0" text="Họ Tên" />
-                  <TableColumn fx:id="phoneNumberStudentBorrowed" prefWidth="216.0" text="SĐT" />
-              </columns>
-          </TableView>
-          <TableView fx:id="tableViewBorrowDetail" GridPane.columnIndex="1">
-              <columns>
-                  <TableColumn fx:id="sttDetail" prefWidth="37.0" text="STT" />
-                  <TableColumn fx:id="codeDetail" prefWidth="108.0" text="Mã sách" />
-                  <TableColumn fx:id="nameDetail" prefWidth="176.0" text="Tên sách" />
-               <TableColumn fx:id="dateBorrowBook" prefWidth="87.0" text="Ngày mượn" />
-               <TableColumn fx:id="dateReturnBook" prefWidth="126.0" text="Ngày trả" />
-              </columns>
-          </TableView>
-      </children>
-   </GridPane>
+    <GridPane hgap="10.0" layoutX="6.0" layoutY="311.0" prefHeight="310.0" prefWidth="800.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="300.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="907.0" minWidth="10.0" prefWidth="533.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="902.0" minWidth="10.0" prefWidth="647.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+        <TableView fx:id="tableViewBorrower">
+            <columns>
+                <TableColumn fx:id="sttStudentBorrowed" prefWidth="39.0" text="STT" />
+                <TableColumn fx:id="codeStudentBorrowed" prefWidth="121.0" text="MSV" />
+                <TableColumn fx:id="classStudentBorrowed" prefWidth="112.0" text="Lớp" />
+                <TableColumn fx:id="nameStudentBorrowed" prefWidth="112.0" text="Họ Tên" />
+                <TableColumn fx:id="phoneNumberStudentBorrowed" prefWidth="81.0" text="SĐT" />
+            </columns>
+        </TableView>
+        <TableView fx:id="tableViewBorrowDetail" GridPane.columnIndex="1">
+            <columns>
+                <TableColumn fx:id="sttDetail" prefWidth="32.0" text="STT" />
+                <TableColumn fx:id="codeDetail" prefWidth="113.0" text="Mã sách" />
+                <TableColumn fx:id="nameDetail" prefWidth="120.0" text="Tên sách" />
+                <TableColumn fx:id="dateBorrowBook" prefWidth="107.0" text="Ngày mượn" />
+                <TableColumn fx:id="dateReturnBook" prefWidth="143.0" text="Ngày trả" />
+            </columns>
+        </TableView>
+    </GridPane>
+   <Label fx:id="titleBorrowDetail" alignment="CENTER" layoutX="606.0" layoutY="280.0" prefHeight="20.0" prefWidth="590.0" text="Sách mượn" textFill="#d31818">
+      <font>
+         <Font size="15.0" />
+      </font></Label>
 </AnchorPane>

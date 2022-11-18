@@ -8,6 +8,9 @@ public class BorrowDetailModel {
     private final SimpleStringProperty nameBook = new SimpleStringProperty();
     private final SimpleStringProperty borrowDate = new SimpleStringProperty();
     private final SimpleStringProperty returnDate = new SimpleStringProperty();
+    private final SimpleStringProperty id = new SimpleStringProperty();
+
+    private final SimpleStringProperty student_code = new SimpleStringProperty();
 
     public BorrowDetailModel(String stt, String codeBook, String nameBook, String borrowDate, String returnDate) {
         this.stt.set(stt);
@@ -37,17 +40,18 @@ public class BorrowDetailModel {
         return returnDate;
     }
 
-    public void setBorrowDate(String borrowDate) {
-        this.borrowDate.set(borrowDate);
-    }
+    public SimpleStringProperty getId() {return id;}
 
-    public void setReturnDate(String returnDate) {
-        this.returnDate.set(returnDate);
-    }
+    public SimpleStringProperty getStudent_code() {return student_code;}
+
+    public void setId(String id) {this.id.set(id);}
+    public void setStudent_code(String student_code) {this.student_code.set(student_code);}
+
 
     @Override
     public String toString() {
         return "BorrowDetailModel{" +
+                "id=" + id +
                 "stt=" + stt +
                 ", codeBook=" + codeBook +
                 ", nameBook=" + nameBook +
