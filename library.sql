@@ -25,7 +25,6 @@ CREATE TABLE `borrowed_book_detail`
     `id`               int(11) AUTO_INCREMENT,
     `book_code`        varchar(128),
     `borrower_id` varchar(128),
-    `quantity`         int(11) NOT NULL,
     `borrowed`     varchar(128) DEFAULT NULL,
     `returned`     varchar(128) DEFAULT NULL,
     FOREIGN KEY (`book_code`) REFERENCES `book` (`code`),

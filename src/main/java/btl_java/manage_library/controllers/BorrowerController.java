@@ -66,8 +66,6 @@ public class BorrowerController implements Initializable {
     @FXML
     private TableColumn<BorrowDetailModel, String> nameDetail;
     @FXML
-    private TableColumn<BorrowDetailModel, String> totalDetail;
-    @FXML
     private TableView<BookModel> tableViewBook;
     @FXML
     private TableView<BorrowerModel> tableViewBorrower;
@@ -76,30 +74,43 @@ public class BorrowerController implements Initializable {
     private final Connection connection = new ConnectionUtils().connectDB();
     private final ObservableList<BorrowDetailModel> borrowDetailList = FXCollections.observableArrayList();
 
-    private final Callback<TableView<BookModel>, TableRow<BookModel>> doubleClick = bookModelTableView -> {
+    private final Callback<TableView<BookModel>, TableRow<BookModel>> doubleClickTableBook = bookModelTableView -> {
         TableRow<BookModel> row = new TableRow<>();
         row.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2 && (!row.isEmpty())) {
                 BookModel clickBook = row.getItem();
                 System.out.println(clickBook);
-                while (true) {
-                    TextInputDialog inputQuantityBook = new TextInputDialog();
-                    inputQuantityBook.setHeaderText(null);
-                    inputQuantityBook.setGraphic(null);
-                    Stage stage = (Stage) inputQuantityBook.getDialogPane().getScene().getWindow();
-                    stage.getIcons().add(new Image("images/library_icon.jpg"));
-                    inputQuantityBook.setContentText("Số lượng: ");
-                    Optional<String> result = inputQuantityBook.showAndWait();
-                    try {
-                        result.ifPresent(input -> {
-                            System.out.println(Integer.parseInt(input));
-                            addToTableBorrowDetails(clickBook, input);
-                        });
-                        break;
-                    } catch (Exception e) {
-                        System.out.println("Input is invalid integer");
+                Alert confirmAddBook = new Alert(Alert.AlertType.CONFIRMATION);
+                Stage stage = (Stage) confirmAddBook.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image("images/library_icon.jpg"));
+                confirmAddBook.setTitle("Xác nhận");
+                confirmAddBook.setHeaderText("Xác nhận cho mượn sách");
+                confirmAddBook.setContentText(
+                        "Mã sách : " + clickBook.getCodeBook().getValue() + "\n" +
+                        "Tên sách: " + clickBook.getNameBook().getValue() + "\n" +
+                        "Thể loại sách: " + clickBook.getCategoryBook().getValue() + "\n" +
+                        "Tên tác giả: " + clickBook.getAuthorBook().getValue()
+
+                );
+                Optional<ButtonType> option = confirmAddBook.showAndWait();
+                option.ifPresent(result -> {
+                    if (result == ButtonType.OK) {
+                        addToTableBorrowDetails(clickBook);
                     }
-                }
+                });
+            }
+        });
+        return row;
+    };
+    // TODO
+    private final Callback<TableView<BorrowerModel>, TableRow<BorrowerModel>> doubleClickTableBorrower = borrowerModelTableView -> {
+        TableRow<BorrowerModel> row = new TableRow<>();
+        row.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                BorrowerModel clickBook = row.getItem();
+                System.out.println(clickBook);
+                borrowDetailList.clear();
+                setDataTableViewBorrowDetail(clickBook.getCodeStudent().getValue());
             }
         });
         return row;
@@ -125,39 +136,29 @@ public class BorrowerController implements Initializable {
         sttDetail.setCellValueFactory(cellData -> cellData.getValue().getStt());
         codeDetail.setCellValueFactory(cellData -> cellData.getValue().getCodeBook());
         nameDetail.setCellValueFactory(cellData -> cellData.getValue().getCodeBook());
-        totalDetail.setCellValueFactory(cellData -> cellData.getValue().getTotalBook());
 
         setDataTableViewBook();
         setDataTableViewBorrower();
 
-        tableViewBook.setRowFactory(doubleClick);
+        tableViewBorrower.setRowFactory(doubleClickTableBorrower);
+        tableViewBook.setRowFactory(doubleClickTableBook);
 
         ToggleGroup toggle = new ToggleGroup();
         borrowBook.setToggleGroup(toggle);
         returnBook.setToggleGroup(toggle);
         borrowBook.setSelected(true);
-//        borrowBook.setOnAction(actionEvent -> {
-//            if (borrowBook.isSelected() && returnBook.isSelected()) {
-//                returnBook.setSelected(false);
-//                System.out.println(tableViewBook.getRowFactory());
-//                tableViewBook.setRowFactory(doubleClick);
-//            }
-//        });
-//        returnBook.setOnAction(actionEvent -> {
-//            if (borrowBook.isSelected() && returnBook.isSelected()) {
-//                borrowBook.setSelected(false);
-//                tableViewBook.setRowFactory(null);
-//                System.out.println(tableViewBook.getRowFactory());
-//            }
-//        });
     }
 
-    private void addToTableBorrowDetails(BookModel book, String quantity) {
+    private void addToTableBorrowDetails(BookModel book) {
+        for (BorrowDetailModel bd: borrowDetailList) {
+            if (bd.getCodeBook().getValue().equals(book.getCodeBook().getValue())) {
+                return;
+            }
+        }
         BorrowDetailModel newRecord = new BorrowDetailModel(
                 Integer.toString(borrowDetailList.size() + 1),
                 book.getCodeBook().getValue(),
                 book.getNameBook().getValue(),
-                quantity,
                 "",
                 ""
         );
@@ -166,27 +167,25 @@ public class BorrowerController implements Initializable {
         tableViewBorrowDetail.setItems(borrowDetailList);
     }
 
-    private void setDataTableViewBorrowDetail() {
+    private void setDataTableViewBorrowDetail(String student_code) {
         ObservableList<BorrowDetailModel> list = FXCollections.observableArrayList();
         ResultSet resultSet;
         try {
             int i = 1;
-            resultSet = connection.createStatement().executeQuery("SELECT * FROM  borrowed_book_detail");
+            resultSet = connection.createStatement().executeQuery("SELECT * FROM  borrowed_book_detail WHERE borrower_id = '" + student_code + "'");
             while (resultSet.next()) {
                 BorrowDetailModel row = new BorrowDetailModel(
                         Integer.toString(i),
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getString(4),
-                        resultSet.getString(5),
-                        resultSet.getString(6)
+                        resultSet.getString(5)
                 );
                 i++;
                 list.add(row);
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         tableViewBorrowDetail.setItems(list);
     }
@@ -212,7 +211,7 @@ public class BorrowerController implements Initializable {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         tableViewBook.setItems(list);
     }
@@ -235,7 +234,7 @@ public class BorrowerController implements Initializable {
                 list.add(row);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         tableViewBorrower.setItems(list);
     }
@@ -258,14 +257,13 @@ public class BorrowerController implements Initializable {
 
 //            String codeStudent = connection.createStatement().executeQuery("SELECT code_student from borrower WHERE ")
             String borrowedTime = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
-            String stmtDetail = "INSERT INTO borrowed_book_detail (book_code, borrower_id, quantity, borrowed, returned) VALUES (?, ?, ?, ?, ?)";
+            String stmtDetail = "INSERT INTO borrowed_book_detail (book_code, borrower_id, borrowed, returned) VALUES (?, ?, ?, ?)";
             for (BorrowDetailModel newRecord : borrowDetailList) {
                 PreparedStatement ppsDetail = connection.prepareStatement(stmtDetail);
                 ppsDetail.setString(1, newRecord.getCodeBook().getValue());
                 ppsDetail.setString(2, codeStudentField.getText());
-                ppsDetail.setString(3, newRecord.getTotalBook().getValue());
-                ppsDetail.setString(4, borrowedTime);
-                ppsDetail.setString(5, "");
+                ppsDetail.setString(3, borrowedTime);
+                ppsDetail.setString(4, "");
                 ppsDetail.executeUpdate();
             }
             borrowDetailList.clear();
@@ -275,7 +273,6 @@ public class BorrowerController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML

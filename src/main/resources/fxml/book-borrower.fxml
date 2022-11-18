@@ -106,7 +106,7 @@
                 <TableColumn fx:id="nameBook" prefWidth="138.40000915527344" text="Tên sách" />
                 <TableColumn fx:id="categoryBook" maxWidth="101.19993591308594" minWidth="0.0" prefWidth="95.0" text="Thể loại" />
                 <TableColumn fx:id="authorBook" prefWidth="131.4000244140625" text="Tác giả" />
-                <TableColumn fx:id="remainBook" prefWidth="60.0" text="Còn lại" />
+                <TableColumn fx:id="remainBook" prefWidth="78.0" text="Trạng thái" />
             </columns>
         </TableView>
     </GridPane>
@@ -133,7 +133,6 @@
                   <TableColumn fx:id="sttDetail" prefWidth="37.0" text="STT" />
                   <TableColumn fx:id="codeDetail" prefWidth="108.0" text="Mã sách" />
                   <TableColumn fx:id="nameDetail" prefWidth="176.0" text="Tên sách" />
-                  <TableColumn fx:id="totalDetail" prefWidth="79.0" text="Số lượng" />
                <TableColumn fx:id="dateBorrowBook" prefWidth="87.0" text="Ngày mượn" />
                <TableColumn fx:id="dateReturnBook" prefWidth="126.0" text="Ngày trả" />
               </columns>
