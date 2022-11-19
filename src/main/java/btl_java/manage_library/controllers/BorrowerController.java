@@ -86,11 +86,7 @@ public class BorrowerController implements Initializable {
                 stage.getIcons().add(new Image("images/library_icon.jpg"));
                 confirmAddBook.setTitle("Xác nhận");
                 confirmAddBook.setHeaderText("Xác nhận cho mượn sách");
-                confirmAddBook.setContentText(
-                        "Mã sách : " + clickBook.getCodeBook().getValue() + "\n" +
-                                "Tên sách: " + clickBook.getNameBook().getValue() + "\n" +
-                                "Thể loại sách: " + clickBook.getCategoryBook().getValue() + "\n" +
-                                "Tên tác giả: " + clickBook.getAuthorBook().getValue()
+                confirmAddBook.setContentText("Mã sách : " + clickBook.getCodeBook().getValue() + "\n" + "Tên sách: " + clickBook.getNameBook().getValue() + "\n" + "Thể loại sách: " + clickBook.getCategoryBook().getValue() + "\n" + "Tên tác giả: " + clickBook.getAuthorBook().getValue()
 
                 );
                 Optional<ButtonType> option = confirmAddBook.showAndWait();
@@ -112,6 +108,10 @@ public class BorrowerController implements Initializable {
                 System.out.println(clickBook);
                 borrowDetailList.clear();
                 setDataTableViewBorrowDetail(clickBook.getCodeStudent().getValue());
+                codeStudentField.setText(clickBook.getCodeStudent().getValue());
+                nameStudentField.setText(clickBook.getNameStudent().getValue());
+                classStudentField.setText(clickBook.getClassStudent().getValue());
+                phoneNumberStudentField.setText(clickBook.getPhoneNumber().getValue());
             }
         });
         return row;
@@ -158,13 +158,7 @@ public class BorrowerController implements Initializable {
                 return;
             }
         }
-        BorrowDetailModel newRecord = new BorrowDetailModel(
-                Integer.toString(borrowDetailList.size() + 1),
-                book.getCodeBook().getValue(),
-                book.getNameBook().getValue(),
-                "",
-                ""
-        );
+        BorrowDetailModel newRecord = new BorrowDetailModel(Integer.toString(borrowDetailList.size() + 1), book.getCodeBook().getValue(), book.getNameBook().getValue(), "", "");
         System.out.println(newRecord);
         borrowDetailList.add(newRecord);
         tableViewBorrowDetail.setItems(borrowDetailList);
@@ -175,17 +169,9 @@ public class BorrowerController implements Initializable {
         ResultSet resultSet;
         try {
             int i = 1;
-            resultSet = connection.createStatement().executeQuery(
-                    "SELECT borrowed_book_detail.id, borrowed_book_detail.book_code, book.name, borrowed_book_detail.borrower_id, borrowed_book_detail.borrowed, borrowed_book_detail. returned " +
-                            "FROM  borrowed_book_detail  INNER JOIN book ON borrowed_book_detail.book_code = book.code WHERE borrower_id = '" + student_code + "'");
+            resultSet = connection.createStatement().executeQuery("SELECT borrowed_book_detail.id, borrowed_book_detail.book_code, book.name, borrowed_book_detail.borrower_id, borrowed_book_detail.borrowed, borrowed_book_detail. returned " + "FROM  borrowed_book_detail  INNER JOIN book ON borrowed_book_detail.book_code = book.code WHERE borrower_id = '" + student_code + "'");
             while (resultSet.next()) {
-                BorrowDetailModel row = new BorrowDetailModel(
-                        Integer.toString(i),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(5),
-                        resultSet.getString(6)
-                );
+                BorrowDetailModel row = new BorrowDetailModel(Integer.toString(i), resultSet.getString(2), resultSet.getString(3), resultSet.getString(5), resultSet.getString(6));
                 row.setId(resultSet.getString(1));
                 row.setStudent_code(resultSet.getString(4));
                 i++;
@@ -204,14 +190,7 @@ public class BorrowerController implements Initializable {
             int i = 1;
             resultSet = connection.createStatement().executeQuery("SELECT * FROM  book");
             while (resultSet.next()) {
-                BookModel row = new BookModel(
-                        Integer.toString(i),
-                        resultSet.getString(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4),
-                        resultSet.getString(5)
-                );
+                BookModel row = new BookModel(Integer.toString(i), resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
                 row.setRemainBook(resultSet.getString(6));
                 i++;
                 list.add(row);
@@ -230,12 +209,7 @@ public class BorrowerController implements Initializable {
             int i = 1;
             resultSet = connection.createStatement().executeQuery("SELECT * FROM borrower");
             while (resultSet.next()) {
-                BorrowerModel row = new BorrowerModel(
-                        resultSet.getString(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4)
-                );
+                BorrowerModel row = new BorrowerModel(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
                 row.setStt(Integer.toString(i));
                 i++;
                 list.add(row);
@@ -253,14 +227,38 @@ public class BorrowerController implements Initializable {
             returnBook();
             return;
         }
-        if (borrowDetailList.size() == 0) return;
+        StringBuilder logError = new StringBuilder();
+        int i = 1;
+        if (codeStudentField.getText().equals("")) {
+            logError.append(i).append(". Thiếu dữ liệu trường mã sinh viên! \n");
+            i++;
+        }
+        if (nameStudentField.getText().equals("")) {
+            logError.append(i).append(". Thiếu dữ liệu trường tên sinh viên! \n");
+            i++;
+        }
+        if (classStudentField.getText().equals("")) {
+            logError.append(i).append(". Thiếu dữ liệu trường lớp sinh viên! \n");
+            i++;
+        }
+        if (phoneNumberStudentField.getText().equals("")) {
+            logError.append(i).append(". Thiếu dữ liệu trường số điện thoại sinh viên! \n");
+        }
+        if (!logError.toString().equals("")) {
+            showAlertWarning(logError.toString());
+            return;
+        }
+        if (borrowDetailList.size() == 0) {
+            showAlertWarning("Thiếu trường sách mượn của sinh viên này!");
+            return;
+        }
         borrowBook();
     }
 
     private void borrowBook() {
         try {
             ResultSet isPresent = connection.createStatement().executeQuery("SELECT student_code FROM borrower WHERE student_code ='" + codeStudentField.getText() + "'");
-            System.out.println(isPresent.next());
+//            System.out.println(isPresent.next());
             if (!isPresent.next()) {
                 String stmtInsertBorrower = "INSERT INTO borrower (student_code, full_name, class_name, phone_number) VALUES (?, ?, ?, ?)";
                 PreparedStatement ppsBorrower = connection.prepareStatement(stmtInsertBorrower);
@@ -309,11 +307,22 @@ public class BorrowerController implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void clearField() {
         codeStudentField.setText("");
         nameStudentField.setText("");
         classStudentField.setText("");
         phoneNumberStudentField.setText("");
+    }
+
+    private void showAlertWarning(String header) {
+        Alert dialogAlert = new Alert(Alert.AlertType.WARNING);
+        dialogAlert.setTitle("Warning");
+        dialogAlert.setHeaderText(header);
+        Stage stage = (Stage) dialogAlert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("images/library_icon.jpg"));
+//        dialogAlert.setContentText("");
+        dialogAlert.showAndWait();
     }
 }
