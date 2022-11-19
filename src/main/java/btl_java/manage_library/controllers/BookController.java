@@ -1,6 +1,7 @@
 package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.models.BookModel;
+import btl_java.manage_library.controllers.BorrowerController;
 import btl_java.manage_library.utils.ConnectionUtils;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
@@ -12,6 +13,9 @@ import java.sql.*;
 import java.util.*;
 
 import btl_java.manage_library.utils.ValidatorInputFieldUtils;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 
 public class BookController implements Initializable {
@@ -55,6 +59,7 @@ public class BookController implements Initializable {
         remainBook.setCellValueFactory(cellData -> cellData.getValue().getRemainingBook());
 
         setDataTableViewBook(stmtGetAll);
+        tableViewBook.setRowFactory(actionClick);
     }
 
 
@@ -112,25 +117,49 @@ public class BookController implements Initializable {
         clear();
     }
 
+    //===========================================EDITBOOK================================================
+    //-------doubleclick để fill textfield ---------
+    private final Callback<TableView<BookModel>, TableRow<BookModel>> actionClick = settextfield -> {
+        TableRow<BookModel> row = new TableRow<>();
+        row.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getClickCount() == 2 && (!row.isEmpty())) {
+                BookModel selected = row.getItem();
+                setTextField(selected);
+            }
+        });
+        return row;
+    };
+    //---------------------------------------------
+
     @FXML
     private void editBook() {
         BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn chỉnh sửa thông tin về quyển sách này ? ", "", "sửa thông tin sách ", ButtonType.CLOSE);
+            //------hộp thông báo-----
+            Alert warn = new Alert(Alert.AlertType.CONFIRMATION);
+            Stage stage = (Stage) warn.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image("images/library_icon.jpg"));
+            warn.setTitle("Xác nhận");
+            warn.setHeaderText("Xác nhận chỉnh sửa thông tin");
+            //------------------------
             Optional<ButtonType> option = warn.showAndWait();
             try {
                 if (ButtonType.OK == option.get()) {
-                    setTextField(selected);
-                    String pop = "DELETE FROM book WHERE code ='" + selected.getCodeBook().getValue() + "'";
+                    String Up = "UPDATE book set category = '" + categoryBookField.getText() +
+                            "', name = '" + nameBookField.getText() + "', author = '" + authorBookField.getText() +
+                            "', total='" + totalBookField.getText() + "', " +
+                            "remain = '" + (Integer.parseInt(selected.getRemainingBook().getValue()) + Integer.parseInt(totalBookField.getText()) - Integer.parseInt(selected.getTotalBook().getValue())) + "'  where code='" + selected.getCodeBook().getValue() + "'";
                     try {
                         Connection connection = new ConnectionUtils().connectDB();
-                        PreparedStatement preparedStatement = connection.prepareStatement(pop);
+                        PreparedStatement preparedStatement = connection.prepareStatement(Up);
                         preparedStatement.executeUpdate();
-                        System.out.println("Delete done a record: " + selected);
+                        System.out.println("Update done a record: ");
                     } catch (SQLException err) {
-                        System.err.println("Delete : " + err.getMessage());
+                        System.err.println("Update : " + err.getMessage());
                     }
                     setDataTableViewBook(stmtGetAll);
+//                    BorrowerController k = new BorrowerController();
+//                    k.refresh();
                 }
             } catch (Exception e) {
                 System.out.println("error " + e.getMessage());
@@ -147,6 +176,7 @@ public class BookController implements Initializable {
         totalBookField.setText(k.getTotalBook().getValue());
     }
 
+    //=========================================SEARCHBOOK=======================================
     @FXML
     private void searchBook() {
         String find = "";
@@ -199,6 +229,7 @@ public class BookController implements Initializable {
         totalBookField.setText("");
     }
 
+    //=====================================DELETEBOOK==============
     public void bookDelete(ActionEvent actionEvent) {
         BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
         if (selected != null) {
@@ -216,6 +247,7 @@ public class BookController implements Initializable {
                         System.err.println("Delete : " + err.getMessage());
                     }
                     setDataTableViewBook(stmtGetAll);
+
                 }
             } catch (Exception e) {
                 System.out.println("error " + e.getMessage());

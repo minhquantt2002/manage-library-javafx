@@ -86,9 +86,7 @@ public class BorrowerController implements Initializable {
                 stage.getIcons().add(new Image("images/library_icon.jpg"));
                 confirmAddBook.setTitle("Xác nhận");
                 confirmAddBook.setHeaderText("Xác nhận cho mượn sách");
-                confirmAddBook.setContentText("Mã sách : " + clickBook.getCodeBook().getValue() + "\n" + "Tên sách: " + clickBook.getNameBook().getValue() + "\n" + "Thể loại sách: " + clickBook.getCategoryBook().getValue() + "\n" + "Tên tác giả: " + clickBook.getAuthorBook().getValue()
-
-                );
+                confirmAddBook.setContentText("Mã sách : " + clickBook.getCodeBook().getValue() + "\n" + "Tên sách: " + clickBook.getNameBook().getValue() + "\n" + "Thể loại sách: " + clickBook.getCategoryBook().getValue() + "\n" + "Tên tác giả: " + clickBook.getAuthorBook().getValue());
                 Optional<ButtonType> option = confirmAddBook.showAndWait();
                 option.ifPresent(result -> {
                     if (result == ButtonType.OK) {
@@ -325,4 +323,8 @@ public class BorrowerController implements Initializable {
 //        dialogAlert.setContentText("");
         dialogAlert.showAndWait();
     }
+//    public void refresh(){
+//        setDataTableViewBook();
+//        setDataTableViewBorrower();
+//    }
 }

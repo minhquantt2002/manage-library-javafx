@@ -19,7 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginController {
-    private Stage primaryStage;
     @FXML
     private PasswordField passWord;
     @FXML
@@ -30,13 +29,12 @@ public class LoginController {
 
 
     public void launchLogin(Stage stage) throws IOException {
-        this.primaryStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/login-app.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
-        primaryStage.setTitle("Login");
-        primaryStage.getIcons().add(new Image("images/library_icon.jpg"));
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.setTitle("Login");
+        stage.getIcons().add(new Image("images/library_icon.jpg"));
+        stage.setScene(scene);
+        stage.show();
     }
 //===========================LOGIN============================
     public void btnLogin() throws IOException {
