@@ -167,9 +167,17 @@ public class BorrowerController implements Initializable {
         ResultSet resultSet;
         try {
             int i = 1;
-            resultSet = connection.createStatement().executeQuery("SELECT borrowed_book_detail.id, borrowed_book_detail.book_code, book.name, borrowed_book_detail.borrower_id, borrowed_book_detail.borrowed, borrowed_book_detail. returned " + "FROM  borrowed_book_detail  INNER JOIN book ON borrowed_book_detail.book_code = book.code WHERE borrower_id = '" + student_code + "'");
+            resultSet = connection.createStatement().executeQuery(
+                    "SELECT borrowed_book_detail.id, borrowed_book_detail.book_code, book.name, borrowed_book_detail.borrower_id, borrowed_book_detail.borrowed, borrowed_book_detail. returned "
+                            + "FROM  borrowed_book_detail  INNER JOIN book ON borrowed_book_detail.book_code = book.code WHERE borrower_id = '" + student_code + "'");
             while (resultSet.next()) {
-                BorrowDetailModel row = new BorrowDetailModel(Integer.toString(i), resultSet.getString(2), resultSet.getString(3), resultSet.getString(5), resultSet.getString(6));
+                BorrowDetailModel row = new BorrowDetailModel(
+                        Integer.toString(i),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(5),
+                        resultSet.getString(6)
+                );
                 row.setId(resultSet.getString(1));
                 row.setStudent_code(resultSet.getString(4));
                 i++;
@@ -186,9 +194,16 @@ public class BorrowerController implements Initializable {
         ResultSet resultSet;
         try {
             int i = 1;
-            resultSet = connection.createStatement().executeQuery("SELECT * FROM  book");
+            resultSet = connection.createStatement().executeQuery("SELECT * FROM  book WHERE remain > 0");
             while (resultSet.next()) {
-                BookModel row = new BookModel(Integer.toString(i), resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+                BookModel row = new BookModel(
+                        Integer.toString(i),
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5)
+                );
                 row.setRemainBook(resultSet.getString(6));
                 i++;
                 list.add(row);
@@ -205,7 +220,10 @@ public class BorrowerController implements Initializable {
         ResultSet resultSet;
         try {
             int i = 1;
-            resultSet = connection.createStatement().executeQuery("SELECT * FROM borrower");
+            resultSet = connection.createStatement().executeQuery(
+                    "select student_code, full_name, class_name, phone_number from borrower inner join borrowed_book_detail on borrower_id = student_code "
+                            + "group by student_code, full_name, class_name, phone_number order by returned"
+            );
             while (resultSet.next()) {
                 BorrowerModel row = new BorrowerModel(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
                 row.setStt(Integer.toString(i));
@@ -221,12 +239,8 @@ public class BorrowerController implements Initializable {
     @FXML
     private void insertBorrower() {
         boolean type = buttonBorrowBook.isSelected();
-        if (!type) {
-            returnBook();
-            return;
-        }
-        StringBuilder logError = new StringBuilder();
         int i = 1;
+        StringBuilder logError = new StringBuilder();
         if (codeStudentField.getText().equals("")) {
             logError.append(i).append(". Thiếu dữ liệu trường mã sinh viên! \n");
             i++;
@@ -246,17 +260,24 @@ public class BorrowerController implements Initializable {
             showAlertWarning(logError.toString());
             return;
         }
-        if (borrowDetailList.size() == 0) {
-            showAlertWarning("Thiếu trường sách mượn của sinh viên này!");
+        if (!type) {
+            if (borrowDetailList.size() == 0) {
+                returnBook();
+            } else {
+                showAlertWarning("Với tác vụ trả sách, bảng thông tin sách mượn của sinh viên này cần được hiện thị!");
+            }
             return;
         }
-        borrowBook();
+        if (borrowDetailList.size() != 0) {
+            borrowBook();
+            return;
+        }
+        showAlertWarning("Thiếu trường sách mượn của sinh viên này!");
     }
 
     private void borrowBook() {
         try {
             ResultSet isPresent = connection.createStatement().executeQuery("SELECT student_code FROM borrower WHERE student_code ='" + codeStudentField.getText() + "'");
-//            System.out.println(isPresent.next());
             if (!isPresent.next()) {
                 String stmtInsertBorrower = "INSERT INTO borrower (student_code, full_name, class_name, phone_number) VALUES (?, ?, ?, ?)";
                 PreparedStatement ppsBorrower = connection.prepareStatement(stmtInsertBorrower);
@@ -269,14 +290,22 @@ public class BorrowerController implements Initializable {
             }
 
             String borrowedTime = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
-            String stmtDetail = "INSERT INTO borrowed_book_detail (book_code, borrower_id, borrowed, returned) VALUES (?, ?, ?, ?)";
             for (BorrowDetailModel newRecord : borrowDetailList) {
+                String stmtDetail = "INSERT INTO borrowed_book_detail (book_code, borrower_id, borrowed, returned) VALUES (?, ?, ?, ?)";
+                ResultSet getRemainBook = connection.createStatement().executeQuery("SELECT remain FROM book WHERE code ='" + newRecord.getCodeBook().getValue() + "'");
+                int remain = 0;
+                if (getRemainBook.next()) {
+                    remain = Integer.parseInt(getRemainBook.getString(1)) - 1;
+                }
+                String stmtUpdateBook = "UPDATE book SET remain = " + remain + " WHERE code = '" + newRecord.getCodeBook().getValue() + "'";
                 PreparedStatement ppsDetail = connection.prepareStatement(stmtDetail);
+                PreparedStatement ppsBook = connection.prepareStatement(stmtUpdateBook);
                 ppsDetail.setString(1, newRecord.getCodeBook().getValue());
                 ppsDetail.setString(2, codeStudentField.getText());
                 ppsDetail.setString(3, borrowedTime);
                 ppsDetail.setString(4, "");
                 ppsDetail.executeUpdate();
+                ppsBook.executeUpdate();
             }
             borrowDetailList.clear();
             tableViewBorrowDetail.setItems(borrowDetailList);
@@ -290,17 +319,27 @@ public class BorrowerController implements Initializable {
     private void returnBook() {
         try {
             String returnedTime = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
-            String stmtDetail = "UPDATE borrowed_book_detail SET returned = ? WHERE id = ?";
             ObservableList<BorrowDetailModel> list = tableViewBorrowDetail.getSelectionModel().getSelectedItems();
             for (BorrowDetailModel aRecord : list) {
+                ResultSet getRemainBook = connection.createStatement().executeQuery("SELECT remain FROM book WHERE code ='" + aRecord.getCodeBook().getValue() + "'");
+                int remain = 0;
+                if (getRemainBook.next()) {
+                    remain = Integer.parseInt(getRemainBook.getString(1)) + 1;
+                }
+                String stmtDetail = "UPDATE borrowed_book_detail SET returned = ? WHERE id = ?";
+                String stmtUpdateBook = "UPDATE book SET remain = " + remain + " WHERE code = '" + aRecord.getCodeBook().getValue() + "'";
+                PreparedStatement ppsBook = connection.prepareStatement(stmtUpdateBook);
                 PreparedStatement ppsDetail = connection.prepareStatement(stmtDetail);
                 ppsDetail.setString(1, returnedTime);
                 ppsDetail.setString(2, aRecord.getId().getValue());
                 ppsDetail.executeUpdate();
+                ppsBook.executeUpdate();
             }
             String studentCode = list.get(0).getStudent_code().getValue();
+            setDataTableViewBorrower();
             tableViewBorrowDetail.setItems(null);
             setDataTableViewBorrowDetail(studentCode);
+            setDataTableViewBook();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -322,11 +361,6 @@ public class BorrowerController implements Initializable {
         dialogAlert.setHeaderText(header);
         Stage stage = (Stage) dialogAlert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("images/library_icon.jpg"));
-//        dialogAlert.setContentText("");
         dialogAlert.showAndWait();
     }
-//    public void refresh(){
-//        setDataTableViewBook();
-//        setDataTableViewBorrower();
-//    }
 }
