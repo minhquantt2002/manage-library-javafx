@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1200.0" stylesheets="@../style/login.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl_java.manage_library.controllers.BorrowerController">
-    <GridPane hgap="10.0" layoutX="10.0" layoutY="41.0" prefHeight="246.0" prefWidth="1190.0" AnchorPane.bottomAnchor="420.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="25.0">
+<AnchorPane prefHeight="700.0" prefWidth="1200.0" stylesheets="@../style/login.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl_java.manage_library.controllers.BorrowerController">
+    <GridPane hgap="10.0" layoutX="-1.0" layoutY="2.0" prefHeight="700.0" prefWidth="1200.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="2.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="907.0" minWidth="10.0" prefWidth="577.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="902.0" minWidth="10.0" prefWidth="603.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="907.0" minWidth="10.0" prefWidth="594.3999877929688" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="902.0" minWidth="10.0" prefWidth="594.4000122070313" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="340.8000030517578" minHeight="10.0" prefHeight="315.9999938964844" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="236.79998779296875" minHeight="10.0" prefHeight="22.400006103515636" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="367.4" minHeight="10.0" prefHeight="362.6000122070312" vgrow="SOMETIMES" />
         </rowConstraints>
         <GridPane hgap="10.0" vgap="10.0">
             <columnConstraints>
@@ -91,16 +101,7 @@
                 <TableColumn fx:id="remainBook" prefWidth="68.0" text="Trạng thái" />
             </columns>
         </TableView>
-    </GridPane>
-    <GridPane hgap="10.0" layoutX="6.0" layoutY="311.0" prefHeight="310.0" prefWidth="800.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="300.0">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="907.0" minWidth="10.0" prefWidth="533.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="902.0" minWidth="10.0" prefWidth="647.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-        <TableView fx:id="tableViewBorrower">
+        <TableView fx:id="tableViewBorrower" GridPane.rowIndex="2">
             <columns>
                 <TableColumn fx:id="sttStudentBorrowed" prefWidth="39.0" text="STT" />
                 <TableColumn fx:id="codeStudentBorrowed" prefWidth="121.0" text="MSV" />
@@ -109,7 +110,7 @@
                 <TableColumn fx:id="phoneNumberStudentBorrowed" prefWidth="81.0" text="SĐT" />
             </columns>
         </TableView>
-        <TableView fx:id="tableViewBorrowDetail" GridPane.columnIndex="1">
+        <TableView fx:id="tableViewBorrowDetail" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <columns>
                 <TableColumn fx:id="sttDetail" prefWidth="32.0" text="STT" />
                 <TableColumn fx:id="codeDetail" prefWidth="113.0" text="Mã sách" />
@@ -118,9 +119,10 @@
                 <TableColumn fx:id="dateReturnBook" prefWidth="143.0" text="Ngày trả" />
             </columns>
         </TableView>
+      <Label fx:id="titleBorrowDetail" alignment="CENTER" prefHeight="92.0" prefWidth="590.0" text="Sách mượn" textFill="#d31818" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
     </GridPane>
-   <Label fx:id="titleBorrowDetail" alignment="CENTER" layoutX="606.0" layoutY="280.0" prefHeight="20.0" prefWidth="590.0" text="Sách mượn" textFill="#d31818">
-      <font>
-         <Font size="15.0" />
-      </font></Label>
 </AnchorPane>
