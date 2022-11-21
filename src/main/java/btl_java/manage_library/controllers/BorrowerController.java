@@ -312,6 +312,8 @@ public class BorrowerController implements Initializable {
         nameStudentField.setText("");
         classStudentField.setText("");
         phoneNumberStudentField.setText("");
+        setDataTableViewBook();
+        setDataTableViewBorrower();
     }
 
     private void showAlertWarning(String header) {

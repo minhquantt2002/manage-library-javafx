@@ -158,8 +158,6 @@ public class BookController implements Initializable {
                         System.err.println("Update : " + err.getMessage());
                     }
                     setDataTableViewBook(stmtGetAll);
-//                    BorrowerController k = new BorrowerController();
-//                    k.refresh();
                 }
             } catch (Exception e) {
                 System.out.println("error " + e.getMessage());
