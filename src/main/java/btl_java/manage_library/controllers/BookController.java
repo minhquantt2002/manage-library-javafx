@@ -196,7 +196,11 @@ public class BookController implements Initializable {
     private void deleteBook(ActionEvent actionEvent) {
         BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            Alert warn = new Alert(Alert.AlertType.WARNING, "Bạn có chắc muốn xóa loai sách này  ? ");
+            if(!selected.getTotalBook().getValue().equals(selected.getRemainingBook().getValue())){
+                new AlertWarningUtils().showAlertWarning("Sách này chưa được trả hết!");
+                return;
+            }
+            Alert warn = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có chắc muốn xóa loai sách này? ");
             Optional<ButtonType> option = warn.showAndWait();
             try {
                 if (ButtonType.OK == option.get()) {
@@ -207,10 +211,6 @@ public class BookController implements Initializable {
                         pstm.executeUpdate();
                         System.out.println("Delete done a record: " + selected);
                     } catch (SQLException err) {
-                        if (err.getMessage().contains("a foreign key")) {
-                            new AlertWarningUtils().showAlertWarning("Sách này chưa được trả hết!");
-                            return;
-                        }
                         err.printStackTrace();
                     }
                     setDataTableViewBook(stmtGetAll);
