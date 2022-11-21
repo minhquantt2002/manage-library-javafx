@@ -3,6 +3,7 @@ package btl_java.manage_library.controllers;
 import btl_java.manage_library.models.BorrowDetailModel;
 import btl_java.manage_library.models.BorrowerModel;
 import btl_java.manage_library.models.BookModel;
+import btl_java.manage_library.utils.AlertWarningUtils;
 import btl_java.manage_library.utils.ConnectionUtils;
 import btl_java.manage_library.utils.ValidatorInputFieldUtils;
 import javafx.collections.*;
@@ -239,32 +240,16 @@ public class BorrowerController implements Initializable {
     @FXML
     private void insertBorrower() {
         boolean type = buttonBorrowBook.isSelected();
-        int i = 1;
-        StringBuilder logError = new StringBuilder();
-        if (codeStudentField.getText().equals("")) {
-            logError.append(i).append(". Thiếu dữ liệu trường mã sinh viên! \n");
-            i++;
-        }
-        if (nameStudentField.getText().equals("")) {
-            logError.append(i).append(". Thiếu dữ liệu trường tên sinh viên! \n");
-            i++;
-        }
-        if (classStudentField.getText().equals("")) {
-            logError.append(i).append(". Thiếu dữ liệu trường lớp sinh viên! \n");
-            i++;
-        }
-        if (phoneNumberStudentField.getText().equals("")) {
-            logError.append(i).append(". Thiếu dữ liệu trường số điện thoại sinh viên! \n");
-        }
-        if (!logError.toString().equals("")) {
-            showAlertWarning(logError.toString());
+        boolean isValid = new AlertWarningUtils(codeStudentField.getText(), nameStudentField.getText(), classStudentField.getText(), phoneNumberStudentField.getText()).checkValid();
+        if (!isValid) {
             return;
         }
         if (!type) {
             if (borrowDetailList.size() == 0) {
                 returnBook();
             } else {
-                showAlertWarning("Với tác vụ trả sách, bảng thông tin sách mượn của sinh viên này cần được hiện thị!");
+                new AlertWarningUtils("", "", "", "").
+                        showAlertWarning("Với tác vụ trả sách, bảng thông tin sách mượn của sinh viên này cần được hiện thị!");
             }
             return;
         }
@@ -272,7 +257,7 @@ public class BorrowerController implements Initializable {
             borrowBook();
             return;
         }
-        showAlertWarning("Thiếu trường sách mượn của sinh viên này!");
+        new AlertWarningUtils("", "", "", "").showAlertWarning("Thiếu trường sách mượn của sinh viên này!");
     }
 
     private void borrowBook() {
@@ -317,9 +302,12 @@ public class BorrowerController implements Initializable {
     }
 
     private void returnBook() {
+        ObservableList<BorrowDetailModel> list = tableViewBorrowDetail.getSelectionModel().getSelectedItems();
+        if (list.size() == 0) {
+            new AlertWarningUtils("", "", "", "").showAlertWarning("Vui lonmfg");
+        }
         try {
             String returnedTime = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
-            ObservableList<BorrowDetailModel> list = tableViewBorrowDetail.getSelectionModel().getSelectedItems();
             for (BorrowDetailModel aRecord : list) {
                 ResultSet getRemainBook = connection.createStatement().executeQuery("SELECT remain FROM book WHERE code ='" + aRecord.getCodeBook().getValue() + "'");
                 int remain = 0;
@@ -353,14 +341,5 @@ public class BorrowerController implements Initializable {
         phoneNumberStudentField.setText("");
         setDataTableViewBook();
         setDataTableViewBorrower();
-    }
-
-    private void showAlertWarning(String header) {
-        Alert dialogAlert = new Alert(Alert.AlertType.WARNING);
-        dialogAlert.setTitle("Warning");
-        dialogAlert.setHeaderText(header);
-        Stage stage = (Stage) dialogAlert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("images/library_icon.jpg"));
-        dialogAlert.showAndWait();
     }
 }
