@@ -27,7 +27,7 @@ CREATE TABLE `borrowed_book_detail`
     `borrower_id` varchar(128),
     `borrowed`     varchar(128) DEFAULT NULL,
     `returned`     varchar(128) DEFAULT NULL,
-    FOREIGN KEY (`book_code`) REFERENCES `book` (`code`),
+    FOREIGN KEY (`book_code`) REFERENCES `book` (`code`) on delete cascade ,
     FOREIGN KEY (`borrower_id`) REFERENCES `borrower` (`student_code`),
     PRIMARY KEY (`id`)
 );

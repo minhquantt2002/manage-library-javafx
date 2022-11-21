@@ -158,7 +158,17 @@ public class LibraryManagerController implements Initializable {
     private void checkoutStudent() {
         LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
         if (selected != null) {
-
+            String findID = new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeStudentField.getText());
+            String timeOutToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
+            String stmt = "UPDATE library_manager SET time_out='" + timeOutToString + "' WHERE student_code='" + findID + "'AND time_out =''";
+            Connection conn = new ConnectionUtils().connectDB();
+            try {
+                PreparedStatement preparedStatement = conn.prepareStatement(stmt);
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            setDataTableView(stmtQueryAll);
         }
     }
 

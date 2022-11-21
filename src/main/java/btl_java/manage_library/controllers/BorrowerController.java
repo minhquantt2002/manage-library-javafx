@@ -305,16 +305,18 @@ public class BorrowerController implements Initializable {
         ObservableList<BorrowDetailModel> list = tableViewBorrowDetail.getSelectionModel().getSelectedItems();
         if (list.size() == 0) {
             new AlertWarningUtils("", "", "", "").showAlertWarning("Vui lonmfg");
+            return;
         }
         try {
             String returnedTime = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
             for (BorrowDetailModel aRecord : list) {
+                if(!aRecord.getReturnDate().getValue().equals("")) continue;
                 ResultSet getRemainBook = connection.createStatement().executeQuery("SELECT remain FROM book WHERE code ='" + aRecord.getCodeBook().getValue() + "'");
                 int remain = 0;
                 if (getRemainBook.next()) {
                     remain = Integer.parseInt(getRemainBook.getString(1)) + 1;
                 }
-                String stmtDetail = "UPDATE borrowed_book_detail SET returned = ? WHERE id = ?";
+                String stmtDetail = "UPDATE borrowed_book_detail SET returned = ? WHERE id = ? and returned = ''";
                 String stmtUpdateBook = "UPDATE book SET remain = " + remain + " WHERE code = '" + aRecord.getCodeBook().getValue() + "'";
                 PreparedStatement ppsBook = connection.prepareStatement(stmtUpdateBook);
                 PreparedStatement ppsDetail = connection.prepareStatement(stmtDetail);
