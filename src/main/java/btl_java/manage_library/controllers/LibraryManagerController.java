@@ -1,5 +1,7 @@
 package btl_java.manage_library.controllers;
 
+import btl_java.manage_library.models.BookModel;
+import btl_java.manage_library.utils.AlertWarningUtils;
 import btl_java.manage_library.utils.ConnectionUtils;
 import btl_java.manage_library.models.LibraryModel;
 import javafx.collections.FXCollections;
@@ -18,10 +20,13 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import btl_java.manage_library.utils.ValidatorInputFieldUtils;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
-public class  LibraryManagerController implements Initializable {
+public class LibraryManagerController implements Initializable {
     @FXML
-    private TextField idStudentField;
+    private TextField codeStudentField;
     @FXML
     private TextField nameStudentField;
     @FXML
@@ -44,7 +49,21 @@ public class  LibraryManagerController implements Initializable {
     private TableColumn<LibraryModel, String> phoneNumber;
     @FXML
     private TableColumn<LibraryModel, String> stt;
-    private final String stmtQueryAll = "SELECT * FROM library_manager";
+    private final String stmtQueryAll = "SELECT * FROM library_manager ORDER BY time_out";
+
+    private final Callback<TableView<LibraryModel>, TableRow<LibraryModel>> doubleClickTable = bookModelTableView -> {
+        TableRow<LibraryModel> row = new TableRow<>();
+        row.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                LibraryModel clickStudent = row.getItem();
+                codeStudentField.setText(clickStudent.getCodeStudent().getValue());
+                nameStudentField.setText(clickStudent.getNameStudent().getValue());
+                classStudentField.setText(clickStudent.getClassStudent().getValue());
+                phoneNumberStudentField.setText(clickStudent.getPhoneNumber().getValue());
+            }
+        });
+        return row;
+    };
 
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
@@ -56,6 +75,8 @@ public class  LibraryManagerController implements Initializable {
         timeOut.setCellValueFactory(cellData -> cellData.getValue().getTimeOut());
 
         setDataTableView(stmtQueryAll);
+        tableViewLbm.setRowFactory(doubleClickTable);
+        tableViewLbm.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public void setDataTableView(String stmt) {
@@ -86,97 +107,43 @@ public class  LibraryManagerController implements Initializable {
 
     @FXML
     private void insertStudent() {
-        boolean valid = checkInput();
-        if (!valid) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
-            warn.show();
-        } else {
-            String stmt = "INSERT INTO library_manager (student_code, full_name, class_name, phone_number, time_in, time_out) VALUES (?, ?, ?, ?, ?, ?)";
-            Connection connection = new ConnectionUtils().connectDB();
-            try {
-                String timeInToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
-                PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-                preparedStatement.setString(1, new ValidatorInputFieldUtils().ValidateAllToUpperCase(idStudentField.getText()));
-                preparedStatement.setString(2, new ValidatorInputFieldUtils().ValidateFirstUpperCase(nameStudentField.getText()));
-                preparedStatement.setString(3, new ValidatorInputFieldUtils().ValidateAllToUpperCase(classStudentField.getText()));
-                preparedStatement.setString(4, phoneNumberStudentField.getText());
-                preparedStatement.setString(5, timeInToString);
-                preparedStatement.setString(6, "");
-                preparedStatement.executeUpdate();
-                System.out.println("Create done a record: " + new LibraryModel(idStudentField.getText(), nameStudentField.getText(),
-                        classStudentField.getText(), phoneNumberStudentField.getText(), timeInToString, timeInToString, ""));
-                this.clear();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            setDataTableView(stmtQueryAll);
+        boolean isValid = new AlertWarningUtils(codeStudentField.getText(), nameStudentField.getText(), classStudentField.getText(), phoneNumberStudentField.getText()).checkValid();
+        if (!isValid) {
+            return;
         }
-
-    }
-
-    @FXML
-    private void deleteStudent() {
-        LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn xóa thông tin về sinh viên này ? ", "", "Xoá thông tin sinh viên ", ButtonType.CLOSE);
-            Optional<ButtonType> option = warn.showAndWait();
-            try {
-                if (ButtonType.OK == option.get()) {
-                    String query = "DELETE FROM library_manager WHERE time_in ='" + selected.getTimeIn().getValue() + "'";
-                    try {
-                        Connection conn = new ConnectionUtils().connectDB();
-                        PreparedStatement pstm = conn.prepareStatement(query);
-                        pstm.executeUpdate();
-                        System.out.println("Delete done a record: " + selected);
-                    } catch (SQLException err) {
-                        System.err.println("Delete : " + err.getMessage());
-                    }
-                    setDataTableView(stmtQueryAll);
-                }
-            } catch (Exception e) {
-                System.out.println("error " + e.getMessage());
-            }
+        String stmt = "INSERT INTO library_manager (student_code, full_name, class_name, phone_number, time_in, time_out) VALUES (?, ?, ?, ?, ?, ?)";
+        Connection connection = new ConnectionUtils().connectDB();
+        try {
+            String timeInToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
+            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
+            preparedStatement.setString(1, new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeStudentField.getText()));
+            preparedStatement.setString(2, new ValidatorInputFieldUtils().ValidateFirstUpperCase(nameStudentField.getText()));
+            preparedStatement.setString(3, new ValidatorInputFieldUtils().ValidateAllToUpperCase(classStudentField.getText()));
+            preparedStatement.setString(4, phoneNumberStudentField.getText());
+            preparedStatement.setString(5, timeInToString);
+            preparedStatement.setString(6, "");
+            preparedStatement.executeUpdate();
+            System.out.println("Create done a record: " + new LibraryModel(codeStudentField.getText(), nameStudentField.getText(),
+                    classStudentField.getText(), phoneNumberStudentField.getText(), timeInToString, timeInToString, ""));
+            this.clear();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    }
-
-    public boolean checkInput() {
-        return !idStudentField.getText().isEmpty() && !nameStudentField.getText().isEmpty() && !classStudentField.getText().isEmpty() && !phoneNumberStudentField.getText().isEmpty();
-    }
-
-    public Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
-        Alert alert = this.createAlert(type, content, header, title);
-        alert.getButtonTypes().addAll(buttonTypes);
-        return alert;
-    }
-
-    private Alert createAlert(Alert.AlertType type, String content, String header, String title) {
-        Alert alert = new Alert(type, content);
-        alert.setHeaderText(header);
-        alert.setTitle(title);
-        return alert;
-    }
-
-
-
-    public void clear() {
-        idStudentField.setText("");
-        nameStudentField.setText("");
-        classStudentField.setText("");
-        phoneNumberStudentField.setText("");
+        setDataTableView(stmtQueryAll);
     }
 
     @FXML
     private void searchStudent() {
         String find = "";
         String temp = "";
-        if (idStudentField.getText().equals("") && nameStudentField.getText().equals("") && !classStudentField.getText().equals("")) {
+        if (codeStudentField.getText().equals("") && nameStudentField.getText().equals("") && !classStudentField.getText().equals("")) {
             find = new ValidatorInputFieldUtils().ValidateAllToUpperCase(classStudentField.getText());
             temp = "SELECT * FROM library_manager WHERE class_name LIKE '%" + find + "%'";
-        } else if (idStudentField.getText().equals("") && !nameStudentField.getText().equals("") && classStudentField.getText().equals("")) {
+        } else if (codeStudentField.getText().equals("") && !nameStudentField.getText().equals("") && classStudentField.getText().equals("")) {
             find = new ValidatorInputFieldUtils().ValidateFirstUpperCase(nameStudentField.getText());
             temp = "SELECT * FROM library_manager WHERE full_name LIKE '%" + find + "%'";
-        } else if (!idStudentField.getText().equals("") && nameStudentField.getText().equals("") && classStudentField.getText().equals("")) {
-            find = new ValidatorInputFieldUtils().ValidateAllToUpperCase(idStudentField.getText());
+        } else if (!codeStudentField.getText().equals("") && nameStudentField.getText().equals("") && classStudentField.getText().equals("")) {
+            find = new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeStudentField.getText());
             temp = "SELECT * FROM library_manager WHERE student_code LIKE '%" + find + "%'";
         }
         if (find.equals("")) {
@@ -187,28 +154,19 @@ public class  LibraryManagerController implements Initializable {
         clear();
     }
 
-    public void updateStudent() {
-        String findID = new ValidatorInputFieldUtils().ValidateAllToUpperCase(idStudentField.getText());
-        if (nameStudentField.getText().equals("") && classStudentField.getText().equals("") && phoneNumberStudentField.getText().equals("") && !findID.equals("")) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Thêm thông tin cho sinh viên này ? ", "", "Thêm thông tin sinh viên ", ButtonType.CLOSE);
-            Optional<ButtonType> option = warn.showAndWait();
-            try {
-                if (ButtonType.OK == option.get()) {
-                    String timeOutToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
-                    String stmt = "UPDATE library_manager SET time_out='" + timeOutToString + "' WHERE student_code='" + findID + "'AND time_out =''";
-                    Connection conn = new ConnectionUtils().connectDB();
-                    try {
-                        PreparedStatement preparedStatement = conn.prepareStatement(stmt);
-                        preparedStatement.executeUpdate();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                    setDataTableView(stmtQueryAll);
-                }
-            } catch (Exception e) {
-                System.out.println("error " + e.getMessage());
-            }
+    @FXML
+    private void checkoutStudent() {
+        LibraryModel selected = tableViewLbm.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+
         }
-        clear();
+    }
+
+
+    public void clear() {
+        codeStudentField.setText("");
+        nameStudentField.setText("");
+        classStudentField.setText("");
+        phoneNumberStudentField.setText("");
     }
 }

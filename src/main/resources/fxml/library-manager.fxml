@@ -14,113 +14,109 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" stylesheets="@../style/login.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl_java.manage_library.controllers.LibraryManagerController">
-      <GridPane hgap="10.0" prefHeight="215.0" prefWidth="778.0" vgap="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-          <columnConstraints>
-              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="118.0" />
-              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="256.8" />
-              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="83.0" />
-              <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" prefWidth="303.4" />
-          </columnConstraints>
-          <rowConstraints>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          </rowConstraints>
-          <Text fill="#c9aa0a" strokeType="OUTSIDE" strokeWidth="0.0" text="STUDENT INFORMATION" wrappingWidth="307.1367130279541" GridPane.rowIndex="1">
-              <font>
-                  <Font size="24.0" />
-              </font>
-              <GridPane.margin>
-                  <Insets left="20.0" />
-              </GridPane.margin>
-          </Text>
-          <Label prefHeight="30.0" prefWidth="99.0" text="Student ID" GridPane.rowIndex="2">
-              <GridPane.margin>
-                  <Insets left="20.0" />
-              </GridPane.margin>
-              <font>
-                  <Font size="14.0" />
-              </font>
-          </Label>
-          <TextField fx:id="idStudentField" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                </TextField>
-          <Label prefHeight="30.0" prefWidth="99.0" text="Student Name" GridPane.rowIndex="3">
-              <GridPane.margin>
-                  <Insets left="20.0" />
-              </GridPane.margin>
-              <font>
-                  <Font size="14.0" />
-              </font>
-          </Label>
-          <TextField fx:id="nameStudentField" GridPane.columnIndex="1" GridPane.rowIndex="3">
-              <GridPane.margin>
-                  <Insets />
-              </GridPane.margin>
-          </TextField>
-          <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="89.0" text="Class" GridPane.columnIndex="2" GridPane.rowIndex="2">
-              <font>
-                  <Font size="14.0" />
-              </font>
-          </Label>
-          <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="91.0" text="SĐT" GridPane.columnIndex="2" GridPane.rowIndex="3">
-              <font>
-                  <Font size="14.0" />
-              </font>
-          </Label>
-          <TextField fx:id="classStudentField" GridPane.columnIndex="3" GridPane.rowIndex="2">
-              <GridPane.margin>
-                  <Insets right="20.0" />
-              </GridPane.margin>
-          </TextField>
-          <TextField fx:id="phoneNumberStudentField" GridPane.columnIndex="3" GridPane.rowIndex="3">
-              <GridPane.margin>
-                  <Insets right="20.0" />
-              </GridPane.margin>
-          </TextField>
-      </GridPane>
-      <TableView fx:id="tableViewLbm" layoutX="3.0" layoutY="291.0" prefHeight="302.0" prefWidth="773.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="298.0">
-          <columns>
-              <TableColumn fx:id="stt" prefWidth="37.0" text="STT" />
-              <TableColumn fx:id="codeStudent" prefWidth="95.39999771118164" text="MSV" />
-              <TableColumn fx:id="nameStudent" prefWidth="163.7999725341797" text="Họ và tên" />
-              <TableColumn fx:id="classStudent" prefWidth="100.19998168945312" text="Lớp" />
-              <TableColumn fx:id="phoneNumber" prefWidth="137.0" text="Số điện thoại" />
-              <TableColumn fx:id="timeIn" prefWidth="127.20001220703125" text="Thời gian vào" />
-              <TableColumn fx:id="timeOut" prefWidth="135.4000244140625" text="Thời gian ra" />
-          </columns>
-      </TableView>
-      <HBox alignment="CENTER" layoutX="1.0" layoutY="222.0" prefHeight="50.0" prefWidth="766.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="222.0">
-          <Button mnemonicParsing="false" onAction="#insertStudent" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Insert">
-              <font>
-                  <Font size="14.0" />
-              </font>
-              <HBox.margin>
-                  <Insets left="20.0" right="20.0" />
-              </HBox.margin>
-          </Button>
-          <Button mnemonicParsing="false" onAction="#deleteStudent" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Delete">
-              <font>
-                  <Font size="14.0" />
-              </font>
-              <HBox.margin>
-                  <Insets left="20.0" right="20.0" />
-              </HBox.margin>
-          </Button>
-          <Button mnemonicParsing="false" onAction="#searchStudent" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Search">
-              <font>
-                  <Font size="14.0" />
-              </font>
-              <HBox.margin>
-                  <Insets left="20.0" right="40.0" />
-              </HBox.margin>
-          </Button>
-      <Button mnemonicParsing="false" onAction="#updateStudent" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Update">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      </HBox>
-
+<AnchorPane prefHeight="600.0" prefWidth="800.0" stylesheets="@../style/login.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="btl_java.manage_library.controllers.LibraryManagerController">
+    <GridPane hgap="10.0" prefHeight="215.0" prefWidth="778.0" vgap="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="118.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="256.8"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="83.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" prefWidth="303.4"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <Text fill="#c9aa0a" strokeType="OUTSIDE" strokeWidth="0.0" text="STUDENT INFORMATION" wrappingWidth="307.1367130279541" GridPane.rowIndex="1">
+            <font>
+                <Font size="24.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets left="20.0"/>
+            </GridPane.margin>
+        </Text>
+        <Label prefHeight="30.0" prefWidth="99.0" text="Student ID" GridPane.rowIndex="2">
+            <GridPane.margin>
+                <Insets left="20.0"/>
+            </GridPane.margin>
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="codeStudentField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        </TextField>
+        <Label prefHeight="30.0" prefWidth="99.0" text="Student Name" GridPane.rowIndex="3">
+            <GridPane.margin>
+                <Insets left="20.0"/>
+            </GridPane.margin>
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="nameStudentField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <GridPane.margin>
+                <Insets/>
+            </GridPane.margin>
+        </TextField>
+        <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="89.0" text="Class" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="91.0" text="SĐT" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="classStudentField" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <GridPane.margin>
+                <Insets right="20.0"/>
+            </GridPane.margin>
+        </TextField>
+        <TextField fx:id="phoneNumberStudentField" GridPane.columnIndex="3" GridPane.rowIndex="3">
+            <GridPane.margin>
+                <Insets right="20.0"/>
+            </GridPane.margin>
+        </TextField>
+    </GridPane>
+    <TableView fx:id="tableViewLbm" layoutX="3.0" layoutY="291.0" prefHeight="302.0" prefWidth="773.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+               AnchorPane.topAnchor="298.0">
+        <columns>
+            <TableColumn fx:id="stt" prefWidth="37.0" text="STT"/>
+            <TableColumn fx:id="codeStudent" prefWidth="95.39999771118164" text="MSV"/>
+            <TableColumn fx:id="nameStudent" prefWidth="163.7999725341797" text="Họ và tên"/>
+            <TableColumn fx:id="classStudent" prefWidth="100.19998168945312" text="Lớp"/>
+            <TableColumn fx:id="phoneNumber" prefWidth="137.0" text="Số điện thoại"/>
+            <TableColumn fx:id="timeIn" prefWidth="127.20001220703125" text="Thời gian vào"/>
+            <TableColumn fx:id="timeOut" prefWidth="135.4000244140625" text="Thời gian ra"/>
+        </columns>
+    </TableView>
+    <HBox alignment="CENTER" layoutX="1.0" layoutY="222.0" prefHeight="50.0" prefWidth="766.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="222.0">
+        <Button mnemonicParsing="false" onAction="#insertStudent" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Insert">
+            <font>
+                <Font size="14.0"/>
+            </font>
+            <HBox.margin>
+                <Insets left="20.0" right="20.0"/>
+            </HBox.margin>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#searchStudent" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Search">
+            <font>
+                <Font size="14.0"/>
+            </font>
+            <HBox.margin>
+                <Insets left="20.0" right="20.0"/>
+            </HBox.margin>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#checkoutStudent" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Checkout">
+            <font>
+                <Font size="14.0"/>
+            </font>
+            <HBox.margin>
+                <Insets left="20.0" right="40.0"/>
+            </HBox.margin>
+        </Button>
+    </HBox>
 </AnchorPane>
