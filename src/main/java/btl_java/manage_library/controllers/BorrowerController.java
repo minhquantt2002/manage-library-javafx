@@ -7,6 +7,7 @@ import btl_java.manage_library.utils.AlertWarningUtils;
 import btl_java.manage_library.utils.ConnectionUtils;
 import btl_java.manage_library.utils.ValidatorInputFieldUtils;
 import javafx.collections.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -343,5 +344,30 @@ public class BorrowerController implements Initializable {
         phoneNumberStudentField.setText("");
         setDataTableViewBook();
         setDataTableViewBorrower();
+        setDataTableViewBorrowDetail(null);
+    }
+
+    public void btnSearchStudent(ActionEvent actionEvent) {
+        if(!codeStudentField.getText().equals("")){
+            ObservableList<BorrowerModel> list = FXCollections.observableArrayList();
+            ResultSet resultSet;
+            try {
+                int i = 1;
+                resultSet = connection.createStatement().executeQuery(
+                        "select student_code, full_name, class_name, phone_number from borrower inner join borrowed_book_detail on borrower_id = student_code where student_code ='"+codeStudentField.getText()+"' "
+                                + "group by student_code, full_name, class_name, phone_number order by returned"
+                );
+                while (resultSet.next()) {
+                    BorrowerModel row = new BorrowerModel(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
+                    row.setStt(Integer.toString(i));
+                    i++;
+                    list.add(row);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            tableViewBorrower.setItems(list);
+        }
+
     }
 }
