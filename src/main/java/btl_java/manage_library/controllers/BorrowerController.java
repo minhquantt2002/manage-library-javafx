@@ -240,7 +240,7 @@ public class BorrowerController implements Initializable {
     @FXML
     private void insertBorrower() {
         boolean type = buttonBorrowBook.isSelected();
-        boolean isValid = new AlertWarningUtils(codeStudentField.getText(), nameStudentField.getText(), classStudentField.getText(), phoneNumberStudentField.getText()).checkValid();
+        boolean isValid = new AlertWarningUtils().checkValidStudent(codeStudentField.getText(), nameStudentField.getText(), classStudentField.getText(), phoneNumberStudentField.getText());
         if (!isValid) {
             return;
         }
@@ -248,7 +248,7 @@ public class BorrowerController implements Initializable {
             if (borrowDetailList.size() == 0) {
                 returnBook();
             } else {
-                new AlertWarningUtils("", "", "", "").
+                new AlertWarningUtils().
                         showAlertWarning("Với tác vụ trả sách, bảng thông tin sách mượn của sinh viên này cần được hiện thị!");
             }
             return;
@@ -257,7 +257,7 @@ public class BorrowerController implements Initializable {
             borrowBook();
             return;
         }
-        new AlertWarningUtils("", "", "", "").showAlertWarning("Thiếu trường sách mượn của sinh viên này!");
+        new AlertWarningUtils().showAlertWarning("Thiếu trường sách mượn của sinh viên này!");
     }
 
     private void borrowBook() {
@@ -304,7 +304,7 @@ public class BorrowerController implements Initializable {
     private void returnBook() {
         ObservableList<BorrowDetailModel> list = tableViewBorrowDetail.getSelectionModel().getSelectedItems();
         if (list.size() == 0) {
-            new AlertWarningUtils("", "", "", "").showAlertWarning("Vui lonmfg");
+            new AlertWarningUtils().showAlertWarning("Vui lonmfg");
             return;
         }
         try {

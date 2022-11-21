@@ -49,6 +49,8 @@ public class LibraryManagerController implements Initializable {
     private TableColumn<LibraryModel, String> phoneNumber;
     @FXML
     private TableColumn<LibraryModel, String> stt;
+    Connection connection = new ConnectionUtils().connectDB();
+
     private final String stmtQueryAll = "SELECT * FROM library_manager ORDER BY time_out";
 
     private final Callback<TableView<LibraryModel>, TableRow<LibraryModel>> doubleClickTable = bookModelTableView -> {
@@ -107,13 +109,18 @@ public class LibraryManagerController implements Initializable {
 
     @FXML
     private void insertStudent() {
-        boolean isValid = new AlertWarningUtils(codeStudentField.getText(), nameStudentField.getText(), classStudentField.getText(), phoneNumberStudentField.getText()).checkValid();
+        boolean isValid = new AlertWarningUtils().checkValidStudent(codeStudentField.getText(), nameStudentField.getText(), classStudentField.getText(), phoneNumberStudentField.getText());
         if (!isValid) {
             return;
         }
-        String stmt = "INSERT INTO library_manager (student_code, full_name, class_name, phone_number, time_in, time_out) VALUES (?, ?, ?, ?, ?, ?)";
-        Connection connection = new ConnectionUtils().connectDB();
         try {
+            ResultSet isPresent = connection.createStatement().executeQuery("SELECT id FROM library_manager WHERE student_code = '" +  codeStudentField.getText()
+                    + "' and time_out = ''");
+            if (isPresent.next()) {
+                new AlertWarningUtils().showAlertWarning("Sinh viên này chưa ra khỏi thư viện!");
+                return;
+            }
+            String stmt = "INSERT INTO library_manager (student_code, full_name, class_name, phone_number, time_in, time_out) VALUES (?, ?, ?, ?, ?, ?)";
             String timeInToString = DateTimeFormatter.ofPattern("HH:mm:ss-dd/MM/yyyy").format(LocalDateTime.now());
             PreparedStatement preparedStatement = connection.prepareStatement(stmt);
             preparedStatement.setString(1, new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeStudentField.getText()));

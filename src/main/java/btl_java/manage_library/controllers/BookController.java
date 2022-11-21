@@ -2,6 +2,7 @@ package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.models.BookModel;
 import btl_java.manage_library.controllers.BorrowerController;
+import btl_java.manage_library.utils.AlertWarningUtils;
 import btl_java.manage_library.utils.ConnectionUtils;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
@@ -48,6 +49,21 @@ public class BookController implements Initializable {
     private final String stmtGetAll = "SELECT * FROM book";
     private final Connection connection = new ConnectionUtils().connectDB();
 
+    private final Callback<TableView<BookModel>, TableRow<BookModel>> actionClick = setTextField -> {
+        TableRow<BookModel> row = new TableRow<>();
+        row.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getClickCount() == 2 && (!row.isEmpty())) {
+                BookModel selected = row.getItem();
+                codeBookField.setText(selected.getCodeBook().getValue());
+                categoryBookField.setText(selected.getCategoryBook().getValue());
+                nameBookField.setText(selected.getNameBook().getValue());
+                authorBookField.setText(selected.getAuthorBook().getValue());
+                totalBookField.setText(selected.getTotalBook().getValue());
+            }
+        });
+        return row;
+    };
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         stt.setCellValueFactory(cellData -> cellData.getValue().getStt());
@@ -62,7 +78,7 @@ public class BookController implements Initializable {
         tableViewBook.setRowFactory(actionClick);
     }
 
-
+    // Hàm set data cho bảng Book
     private void setDataTableViewBook(String stmt) {
         ObservableList<BookModel> list = FXCollections.observableArrayList();
         ResultSet resultSet;
@@ -89,17 +105,15 @@ public class BookController implements Initializable {
         tableViewBook.setItems(list);
     }
 
+    // Hàm thêm 1 book mới
     @FXML
     private void insertBook() {
-        boolean valid = checkInput();
-        if (!valid) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin!", "", "Điền thông tin", ButtonType.CLOSE);
-            warn.show();
+        boolean isValid = new AlertWarningUtils().checkValidBook(codeBookField.getText(), categoryBookField.getText(), nameBookField.getText(), authorBookField.getText(), totalBookField.getText());
+        if (!isValid) {
             return;
         }
-        String stmt = "INSERT INTO book (code, category, name, author, total, remain) VALUES (?, ?, ?, ?, ?, ?)";
-        Connection connection = new ConnectionUtils().connectDB();
         try {
+            String stmt = "INSERT INTO book (code, category, name, author, total, remain) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(stmt);
             preparedStatement.setString(1, new ValidatorInputFieldUtils().ValidateAllToUpperCase(codeBookField.getText()));
             preparedStatement.setString(2, new ValidatorInputFieldUtils().chuanhoa1(categoryBookField.getText()));
@@ -117,31 +131,16 @@ public class BookController implements Initializable {
         clear();
     }
 
-    //===========================================EDITBOOK================================================
-    //-------doubleclick để fill textfield ---------
-    private final Callback<TableView<BookModel>, TableRow<BookModel>> actionClick = settextfield -> {
-        TableRow<BookModel> row = new TableRow<>();
-        row.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getClickCount() == 2 && (!row.isEmpty())) {
-                BookModel selected = row.getItem();
-                setTextField(selected);
-            }
-        });
-        return row;
-    };
-    //---------------------------------------------
-
+    // Hàm sửa một quyển sách
     @FXML
     private void editBook() {
         BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            //------hộp thông báo-----
             Alert warn = new Alert(Alert.AlertType.CONFIRMATION);
             Stage stage = (Stage) warn.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image("images/library_icon.jpg"));
             warn.setTitle("Xác nhận");
             warn.setHeaderText("Xác nhận chỉnh sửa thông tin");
-            //------------------------
             Optional<ButtonType> option = warn.showAndWait();
             try {
                 if (ButtonType.OK == option.get()) {
@@ -166,15 +165,7 @@ public class BookController implements Initializable {
 
     }
 
-    private void setTextField(BookModel k) {
-        codeBookField.setText(k.getCodeBook().getValue());
-        categoryBookField.setText(k.getCategoryBook().getValue());
-        nameBookField.setText(k.getNameBook().getValue());
-        authorBookField.setText(k.getAuthorBook().getValue());
-        totalBookField.setText(k.getTotalBook().getValue());
-    }
-
-    //=========================================SEARCHBOOK=======================================
+    // Hàm filter sách
     @FXML
     private void searchBook() {
         String find = "";
@@ -200,38 +191,12 @@ public class BookController implements Initializable {
         clear();
     }
 
-    private boolean checkInput() {
-        return !categoryBookField.getText().isEmpty() && !nameBookField.getText().isEmpty() && !authorBookField.getText().isEmpty()
-                && !totalBookField.getText().isEmpty() && !codeBookField.getText().isEmpty();
-    }
-
-    private Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
-        Alert alert = this.createAlert(type, content, header, title);
-        alert.getButtonTypes().addAll(buttonTypes);
-        return alert;
-    }
-
-    private Alert createAlert(Alert.AlertType type, String content, String header, String title) {
-        Alert alert = new Alert(type, content);
-        alert.setHeaderText(header);
-        alert.setTitle(title);
-        return alert;
-    }
-
-
-    public void clear() {
-        codeBookField.setText("");
-        nameBookField.setText("");
-        authorBookField.setText("");
-        categoryBookField.setText("");
-        totalBookField.setText("");
-    }
-
-    //=====================================DELETEBOOK==============
-    public void bookDelete(ActionEvent actionEvent) {
+    // hàm xóa sách
+    @FXML
+    private void deleteBook(ActionEvent actionEvent) {
         BookModel selected = tableViewBook.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Bạn có chắc muốn xóa loai sách này  ? ", "", "Delete ", ButtonType.CLOSE);
+            Alert warn = new Alert(Alert.AlertType.WARNING, "Bạn có chắc muốn xóa loai sách này  ? ");
             Optional<ButtonType> option = warn.showAndWait();
             try {
                 if (ButtonType.OK == option.get()) {
@@ -242,15 +207,28 @@ public class BookController implements Initializable {
                         pstm.executeUpdate();
                         System.out.println("Delete done a record: " + selected);
                     } catch (SQLException err) {
-                        System.err.println("Delete : " + err.getMessage());
+                        if (err.getMessage().contains("a foreign key")) {
+                            new AlertWarningUtils().showAlertWarning("Sách này chưa được trả hết!");
+                            return;
+                        }
+                        err.printStackTrace();
                     }
                     setDataTableViewBook(stmtGetAll);
-
                 }
             } catch (Exception e) {
                 System.out.println("error " + e.getMessage());
             }
         }
     }
+
+    // Hàm clear field nhập sách
+    private void clear() {
+        codeBookField.setText("");
+        nameBookField.setText("");
+        authorBookField.setText("");
+        categoryBookField.setText("");
+        totalBookField.setText("");
+    }
+
 }
 
