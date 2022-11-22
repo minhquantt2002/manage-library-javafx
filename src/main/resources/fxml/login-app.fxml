@@ -32,12 +32,12 @@
          <font>
             <Font size="14.0" />
          </font></Label>
-        <TextField fx:id="userName" prefHeight="26.0" prefWidth="420.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField fx:id="usernameField" prefHeight="26.0" prefWidth="420.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <GridPane.margin>
                 <Insets />
             </GridPane.margin>
         </TextField>
-        <PasswordField fx:id="passWord" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets />
             </GridPane.margin>

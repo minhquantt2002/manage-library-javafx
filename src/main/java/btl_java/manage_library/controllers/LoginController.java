@@ -2,6 +2,7 @@ package btl_java.manage_library.controllers;
 
 
 import btl_java.manage_library.MainApplication;
+import btl_java.manage_library.utils.AlertWarningUtils;
 import btl_java.manage_library.utils.ConnectionUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,12 +21,9 @@ import java.sql.SQLException;
 
 public class LoginController {
     @FXML
-    private PasswordField passWord;
+    private PasswordField passwordField;
     @FXML
-    private Label lblResult;
-    @FXML
-    private TextField userName;
-
+    private TextField usernameField;
 
 
     public void launchLogin(Stage stage) throws IOException {
@@ -36,85 +34,31 @@ public class LoginController {
         stage.setScene(scene);
         stage.show();
     }
-//===========================LOGIN============================
-    public void btnLogin() throws IOException {
-        new HomeController().displayHome(MainApplication.primaryStage);
 
-//        String Username = userName.getText();
-//        String Password = passWord.getText();
-//        System.out.println(Password);
-//        if (Username.equals("") || Password.equals("")) {
-//            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
-//            warn.show();
-//            clear();
-//            return;
-//        }
-//        try {
-//            Connection connection = new ConnectionUtils().connectDB();
-//            String stmt = "SELECT * FROM accounts WHERE username=? AND password=?";
-//            PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-//            preparedStatement.setString(1, Username);
-//            preparedStatement.setString(2, Password);
-//
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//            if (resultSet.next()) {
-//                new HomeController().displayHome(MainApplication.primaryStage);
-//            } else {
-//                lblResult.setTextFill(Color.RED);
-//                lblResult.setText("Wrong username or password");
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-
-
-    }
-
-    public Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
-        Alert alert = this.createAlert(type, content, header, title);
-        alert.getButtonTypes().addAll(buttonTypes);
-        return alert;
-    }
-
-    private Alert createAlert(Alert.AlertType type, String content, String header, String title) {
-        Alert alert = new Alert(type, content);
-        alert.setHeaderText(header);
-        alert.setTitle(title);
-        return alert;
-    }
-
-    public void clear() {
-        userName.setText("");
-        passWord.setText("");
-    }
-
-    public void btnReset() throws IOException {
-        userName.setText("");
-        passWord.setText("");
-        lblResult.setTextFill(Color.BLUEVIOLET);
-        lblResult.setText("Try again");
-    }
-    //===========================REGISTER============================
-    public void btnRegister() {
-        boolean valid = checkInput();
-        if (!valid) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
-            warn.show();
-            clear();
+    @FXML
+    private void btnLogin() throws IOException {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        ;
+        if (username.equals("") || password.equals("")) {
+            new AlertWarningUtils().showAlertWarning("Chưa điền đủ thông tin!");
             return;
         }
         try {
-            String stmt = "INSERT INTO accounts (username,password) VALUES (?, ?)";
             Connection connection = new ConnectionUtils().connectDB();
+            String stmt = "SELECT * FROM accounts WHERE username=? AND password=?";
             PreparedStatement preparedStatement = connection.prepareStatement(stmt);
-            preparedStatement.setString(1,userName.getText());
-            preparedStatement.setString(2,passWord.getText());
-            preparedStatement.executeUpdate();
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                new HomeController().displayHome(MainApplication.primaryStage);
+            } else {
+                new AlertWarningUtils().showAlertWarning("Tài khoản hoặc mật khẩu nhập sai.\nVui lòng nhập lại!");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-    public boolean checkInput() {
-        return !userName.getText().isEmpty() && !passWord.getText().isEmpty();
     }
 }

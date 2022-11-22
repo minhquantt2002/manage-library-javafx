@@ -44,6 +44,7 @@ CREATE TABLE `library_manager`
     PRIMARY KEY (`id`)
 );
 
+
 CREATE TABLE `accounts`
 (
     `username` varchar(128),
