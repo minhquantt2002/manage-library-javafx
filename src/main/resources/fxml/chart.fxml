@@ -64,6 +64,7 @@
             </Label>
             <ChoiceBox fx:id="thang" prefHeight="37.0" prefWidth="106.0" />
             <ChoiceBox fx:id="nam" prefHeight="37.0" prefWidth="106.0" />
+            <Button fx:id="All" mnemonicParsing="false" prefHeight="36.0" prefWidth="61.0" text="All" />
          </children>
       </HBox>
       <Text fill="#c9aa0a" strokeType="OUTSIDE" strokeWidth="0.0" text="Thống Kê" wrappingWidth="307.1367130279541" GridPane.rowIndex="1">

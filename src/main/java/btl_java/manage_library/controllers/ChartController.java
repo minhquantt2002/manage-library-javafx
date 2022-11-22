@@ -23,6 +23,8 @@ import btl_java.manage_library.models.LibraryModel;
 
 public class ChartController implements Initializable {
     @FXML
+    private Button All;
+    @FXML
     private ChoiceBox<String> nam;
 
     @FXML
@@ -133,6 +135,7 @@ public class ChartController implements Initializable {
         chart_Sv();
         chartB();
         b_refresh.setOnAction(this::refresh);
+        All.setOnAction(this::All);
     }
 
 //    data chart Lượng sinh viên vào ra thư viện :_______________________________________________________
@@ -196,6 +199,7 @@ public class ChartController implements Initializable {
 
 
 
+
 //    refresh
     private void refresh(ActionEvent e){
         chart_S.setData(FXCollections.observableArrayList());
@@ -205,19 +209,33 @@ public class ChartController implements Initializable {
         S_chart_getData("SELECT * FROM library_manager");
         B_chart_getData("SELECT * FROM borrower");
 
-        if(thang.getValue().equals(null)&&nam.getValue().equals(null)){
+        String n=nam.getValue();
+        String t=thang.getValue();
+        String kt=t+n;
+
+        if(kt.equals("nullnull")){
             chartB();
             chart_Sv();
-        }
-        else {
-            String n=nam.getValue().substring(4);
-            String t=thang.getValue().substring(6);
-            String loc=t+"/"+n;
+        }  else {
+            String loc=t.substring(6)+"/"+n.substring(4);
             chart_Sv2(loc);
             chartB2(loc);
         }
 
     }
 
+    private void All(ActionEvent e){
+        chart_S.setData(FXCollections.observableArrayList());
+        chart_Sv.setData(FXCollections.observableArrayList());
+        S_data.clear();
+        B_data.clear();
+        S_chart_getData("SELECT * FROM library_manager");
+        B_chart_getData("SELECT * FROM borrower");
+        chartB();
+        chart_Sv();
+        thang.setValue(null);
+        nam.setValue(null);
+
+    }
 
 }
