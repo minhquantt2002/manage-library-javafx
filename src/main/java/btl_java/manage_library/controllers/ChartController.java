@@ -176,4 +176,8 @@ public class ChartController implements Initializable {
     }
 
 
+
+    //lấy dữ liệu
+
+
 }

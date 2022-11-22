@@ -227,7 +227,11 @@ public class BorrowerController implements Initializable {
                             + "group by student_code, full_name, class_name, phone_number order by returned"
             );
             while (resultSet.next()) {
-                BorrowerModel row = new BorrowerModel(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
+                BorrowerModel row = new BorrowerModel(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4));
                 row.setStt(Integer.toString(i));
                 i++;
                 list.add(row);
