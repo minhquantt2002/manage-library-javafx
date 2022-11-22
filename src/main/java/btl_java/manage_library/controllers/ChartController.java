@@ -4,20 +4,18 @@ import btl_java.manage_library.models.BorrowDetailModel;
 import btl_java.manage_library.models.BorrowerModel;
 import btl_java.manage_library.utils.ConnectionUtils;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ChoiceBox;
-
+import javafx.scene.control.Button;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.*;
 
 import btl_java.manage_library.models.LibraryModel;
@@ -25,16 +23,18 @@ import btl_java.manage_library.models.LibraryModel;
 
 public class ChartController implements Initializable {
     @FXML
+    private ChoiceBox<String> nam;
+
+    @FXML
+    private ChoiceBox<String> thang;
+    @FXML
+    private Button b_refresh;
+    @FXML
     private LineChart<String, Number> chart_S;
 
     @FXML
     private LineChart<String, Number> chart_Sv;
 
-    @FXML
-    private ChoiceBox<String> choice_S;
-
-    @FXML
-    private ChoiceBox<String> choice_Sv;
     Connection connection = new ConnectionUtils().connectDB();
     LinkedHashMap<String, Integer> S_data = new LinkedHashMap<>();
    LinkedHashMap<String, Integer> B_data = new LinkedHashMap<>();
@@ -121,63 +121,103 @@ public class ChartController implements Initializable {
         }
 
     }
-
+    String[] C_thang={"Tháng 01","Tháng 02","Tháng 03","Tháng 04","Tháng 05","Tháng 06","Tháng 07","Tháng 08","Tháng 09","Tháng 10","Tháng 11","Tháng 12"};
+    String[] C_nam={"năm 2020","năm 2021","năm 2022"};
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        thang.getItems().addAll(C_thang);
+        nam.getItems().addAll(C_nam);
         S_chart_getData("SELECT * FROM library_manager");
         B_chart_getData("SELECT * FROM borrower");
-
-        W_chartS();
-        W_chart_Sv();
-//        choice_Sv.setOnAction(this::get_choiceSv);
-//        choice_S.setOnAction(this::get_choiceS);
+        chart_Sv();
+        chartB();
+        b_refresh.setOnAction(this::refresh);
     }
 
 //    data chart Lượng sinh viên vào ra thư viện :_______________________________________________________
 
 
     //    Luong sv vao ra:
-    private void W_chart_Sv() {
-        XYChart.Series W_series = new XYChart.Series();
+    private void chart_Sv() {
+        XYChart.Series series = new XYChart.Series();
 
         for (Map.Entry<String, Integer> x : S_data.entrySet()) {
             String s = x.getKey();
             int n = x.getValue();
-            W_series.getData().add(new XYChart.Data(s, n));
+            series.getData().add(new XYChart.Data(s, n));
 //            System.out.println(s + " " + n);
 
         }
-
-        chart_Sv.getData().add(W_series);
+        chart_Sv.getData().add(series);
 
     }
-
-
-
+    private void chart_Sv2(String s){
+        XYChart.Series series=new XYChart.Series();
+        for(Map.Entry<String,Integer> x:S_data.entrySet()){
+            String l=x.getKey().substring(3);
+            int n=x.getValue();
+            if(l.equals(s)){
+                series.getData().add(new XYChart.Data(x.getKey(),n));
+            }
+        }
+        chart_Sv.getData().add(series);
+    }
 
 
 //    Lượng sách mượn :__________________________________________________________________________-
 
-    private void W_chartS() {
-        XYChart.Series W_series = new XYChart.Series();
+    private void chartB() {
+        XYChart.Series series = new XYChart.Series();
 
         for (Map.Entry<String, Integer> x : B_data.entrySet()) {
             String s = x.getKey();
             int n = x.getValue();
-            W_series.getData().add(new XYChart.Data(s, n));
+            series.getData().add(new XYChart.Data(s, n));
 //            System.out.println(s + " " + n);
 
         }
 
-        chart_S.getData().add(W_series);
+        chart_S.getData().add(series);
 
+    }
 
+    private void chartB2(String s){
+        XYChart.Series series=new XYChart.Series();
+        for(Map.Entry<String,Integer> x:B_data.entrySet()){
+            String l=x.getKey().substring(3);
+            int n=x.getValue();
+            if(l.equals(s)){
+                series.getData().add(new XYChart.Data(x.getKey(),n));
+            }
+        }
+        chart_S.getData().add(series);
     }
 
 
 
-    //lấy dữ liệu
+//    refresh
+    private void refresh(ActionEvent e){
+        chart_S.setData(FXCollections.observableArrayList());
+        chart_Sv.setData(FXCollections.observableArrayList());
+        S_data.clear();
+        B_data.clear();
+        S_chart_getData("SELECT * FROM library_manager");
+        B_chart_getData("SELECT * FROM borrower");
+
+        if(thang.getValue().equals(null)&&nam.getValue().equals(null)){
+            chartB();
+            chart_Sv();
+        }
+        else {
+            String n=nam.getValue().substring(4);
+            String t=thang.getValue().substring(6);
+            String loc=t+"/"+n;
+            chart_Sv2(loc);
+            chartB2(loc);
+        }
+
+    }
 
 
 }
