@@ -49,20 +49,17 @@
          <Pane prefHeight="13.0" prefWidth="678.0" BorderPane.alignment="CENTER" />
       </bottom>
       <center>
-         <StackPane fx:id="contentArea" prefHeight="343.0" prefWidth="464.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-            <children>
-               <ImageView fitHeight="150.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../images/library_icon.jpg" />
-                  </image>
-                  <StackPane.margin>
-                     <Insets />
-                  </StackPane.margin>
-               </ImageView>
-            </children>
+         <StackPane fx:id="contentArea" prefHeight="343.0" prefWidth="464.0" style="-fx-background-color: white;"
+                    BorderPane.alignment="CENTER">
             <BorderPane.margin>
-               <Insets right="13.0" />
+               <Insets right="13.0"/>
             </BorderPane.margin>
+            <ImageView fitHeight="150.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
+               <StackPane.margin>
+                  <Insets/>
+               </StackPane.margin>
+               <Image url="@../images/library_icon.jpg"/>
+            </ImageView>
          </StackPane>
       </center></BorderPane>
 </AnchorPane>

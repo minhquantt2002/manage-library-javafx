@@ -21,9 +21,9 @@
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="902.0" minWidth="10.0" prefWidth="594.4000122070313" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints maxHeight="340.8000030517578" minHeight="10.0" prefHeight="315.9999938964844" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="236.79998779296875" minHeight="10.0" prefHeight="22.400006103515636" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="367.4" minHeight="10.0" prefHeight="362.6000122070312" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="315.9999938964844" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="22.400006103515636" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="362.6000122070312" vgrow="SOMETIMES" />
         </rowConstraints>
         <GridPane hgap="10.0" prefHeight="311.0" prefWidth="594.0" vgap="10.0">
             <columnConstraints>
@@ -34,11 +34,11 @@
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints maxHeight="60.8" minHeight="10.0" prefHeight="60.8" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="47.59999389648438" minHeight="0.0" prefHeight="47.59999389648438" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="53.599999999999994" minHeight="10.0" prefHeight="52.399987792968744" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="75.20001220703128" minHeight="8.0" prefHeight="40.40001220703127" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="37.99998779296874" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="0.0" prefHeight="42.00001220703126" vgrow="SOMETIMES" />
             </rowConstraints>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -83,12 +83,12 @@
             </TextField>
             <RadioButton fx:id="buttonBorrowBook" mnemonicParsing="false" text="Mượn sách" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <RadioButton fx:id="buttonReturnBook" mnemonicParsing="false" prefHeight="30.0" prefWidth="96.0" text="Trả sách" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" onAction="#clearField" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Clear" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <Button mnemonicParsing="false" onAction="#clearField" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Clear" GridPane.columnIndex="1" GridPane.rowIndex="5">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#insertBorrower" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Insert" GridPane.columnIndex="3" GridPane.rowIndex="4">
+            <Button mnemonicParsing="false" onAction="#insertBorrower" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Insert" GridPane.columnIndex="3" GridPane.rowIndex="5">
                 <font>
                     <Font size="14.0" />
                 </font>
@@ -103,7 +103,7 @@
                <Font size="14.0" />
             </font>
          </Label>
-         <Button mnemonicParsing="false" onAction="#btnSearchStudent" prefHeight="30.0" prefWidth="80.0" text="Search" GridPane.columnIndex="2" GridPane.rowIndex="4">
+         <Button mnemonicParsing="false" onAction="#btnSearchStudent" prefHeight="30.0" prefWidth="80.0" text="Search" GridPane.columnIndex="2" GridPane.rowIndex="5">
             <font>
                <Font size="14.0" />
             </font>

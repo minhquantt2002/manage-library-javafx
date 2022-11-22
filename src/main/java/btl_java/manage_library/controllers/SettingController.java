@@ -1,6 +1,7 @@
 package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.MainApplication;
+import btl_java.manage_library.utils.AlertWarningUtils;
 import btl_java.manage_library.utils.ConnectionUtils;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -51,8 +52,9 @@ public class SettingController {
         String confirmPassword =confirmPasswordfield.getText();
         System.out.println(Password);
         if (Username.equals("") || Password.equals("")|| newPassword.equals("")|| confirmPassword.equals("")) {
-            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
-            warn.show();
+//            Alert warn = this.createAlert(Alert.AlertType.WARNING, "Chưa điền đủ thông tin", "", "Điền thông tin", ButtonType.CLOSE);
+//            warn.show();
+            new AlertWarningUtils().showAlertWarning("Chưa điền đủ thông tin!");
         }
         else {
             try {
@@ -69,16 +71,19 @@ public class SettingController {
                         PreparedStatement preparedStatement1 = connection.prepareStatement(stmt1);
                         preparedStatement1.executeUpdate();
 //                    System.out.println(newPassword);
-                        Alert warn = this.createAlert(Alert.AlertType.INFORMATION, "Thay đổi mật khẩu thành công  ! ", "", "Đổi mật khẩu ");
-                        warn.show();
+//                        Alert warn = this.createAlert(Alert.AlertType.INFORMATION, "Thay đổi mật khẩu thành công  ! ", "", "Đổi mật khẩu ");
+//                        warn.show();
+                        new AlertWarningUtils().showAlertWarning("Thay đổi mật khẩu thành công! ");
                     }else {
-                        Alert warn = this.createAlert(Alert.AlertType.WARNING, "Sai mật khẩu , nhập lại !  ", "", "Error", ButtonType.CLOSE);
-                        warn.show();
+//                        Alert warn = this.createAlert(Alert.AlertType.WARNING, "Sai mật khẩu , nhập lại !  ", "", "Error", ButtonType.CLOSE);
+//                        warn.show();
+                        new AlertWarningUtils().showAlertWarning("Sai mật khẩu, nhập lại !");
                         clear1();
                     }
                 } else {
-                    Alert warn = this.createAlert(Alert.AlertType.WARNING, "Tài khoản không tồn tại , nhập lại ! ", "", "Error", ButtonType.CLOSE);
-                    warn.show();
+//                    Alert warn = this.createAlert(Alert.AlertType.WARNING, , "", "Error", ButtonType.CLOSE);
+//                    warn.show();
+                    new AlertWarningUtils().showAlertWarning("Tài khoản không tồn tại, nhập lại ! ");
                     clear();
                 }
             } catch (SQLException e) {
@@ -86,18 +91,6 @@ public class SettingController {
             }
         }
 
-    }
-    public Alert createAlert(Alert.AlertType type, String content, String header, String title, ButtonType... buttonTypes) {
-        Alert alert = this.createAlert(type, content, header, title);
-        alert.getButtonTypes().addAll(buttonTypes);
-        return alert;
-    }
-
-    private Alert createAlert(Alert.AlertType type, String content, String header, String title) {
-        Alert alert = new Alert(type, content);
-        alert.setHeaderText(header);
-        alert.setTitle(title);
-        return alert;
     }
     public void clear() {
         userfield.setText("");
