@@ -38,7 +38,7 @@
                   <Font size="21.0" />
               </font>
           </Label>
-         <LineChart fx:id="chart_Sv" legendVisible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="510.0" prefWidth="399.0" titleSide="BOTTOM" GridPane.rowIndex="3">
+         <LineChart fx:id="chartStudentline" legendVisible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="510.0" prefWidth="399.0" titleSide="BOTTOM" GridPane.rowIndex="3">
              <xAxis>
                  <CategoryAxis side="BOTTOM" />
              </xAxis>
@@ -46,7 +46,7 @@
                  <NumberAxis side="LEFT" />
              </yAxis>
          </LineChart>
-         <LineChart fx:id="chart_S" legendVisible="false" prefHeight="556.0" prefWidth="400.0" titleSide="BOTTOM" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <LineChart fx:id="chartBookLine" legendVisible="false" prefHeight="556.0" prefWidth="400.0" titleSide="BOTTOM" GridPane.columnIndex="1" GridPane.rowIndex="3">
              <xAxis>
                  <CategoryAxis side="BOTTOM" />
              </xAxis>
@@ -79,10 +79,10 @@
                   <Font size="21.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="thang" prefHeight="37.0" prefWidth="106.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-            <ChoiceBox fx:id="nam" prefHeight="37.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-            <Button fx:id="All" mnemonicParsing="false" prefHeight="36.0" prefWidth="61.0" text="Filter All" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
-            <Button fx:id="b_refresh" mnemonicParsing="false" prefHeight="36.0" prefWidth="61.0" text="Filter" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
+            <ChoiceBox fx:id="month" prefHeight="37.0" prefWidth="106.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <ChoiceBox fx:id="year" prefHeight="37.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+            <Button fx:id="filterall" mnemonicParsing="false" prefHeight="36.0" prefWidth="61.0" text="Filter All" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+            <Button fx:id="filter" mnemonicParsing="false" prefHeight="36.0" prefWidth="61.0" text="Filter" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
          </children>
       </GridPane>
     </GridPane>
