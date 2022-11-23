@@ -1,7 +1,6 @@
 package btl_java.manage_library.controllers;
 
 import btl_java.manage_library.models.BorrowDetailModel;
-import btl_java.manage_library.models.BorrowerModel;
 import btl_java.manage_library.utils.AlertWarningUtils;
 import btl_java.manage_library.utils.ConnectionUtils;
 import javafx.collections.FXCollections;
@@ -79,42 +78,23 @@ public class ChartController implements Initializable {
 
     private void BookgetData(String stmt) {
         ArrayList<String> list = new ArrayList<>();
-        ArrayList<String> list2 = new ArrayList<>();
-        ResultSet resultSet, resultSet2;
+        ResultSet resultSet;
         try {
             resultSet = connection.createStatement().executeQuery(stmt);
             while (resultSet.next()) {
-                BorrowerModel row = new BorrowerModel(
+                BorrowDetailModel row = new BorrowDetailModel(
                         resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
-                        resultSet.getString(4));
-                list.add(row.getCodeStudent().getValue());
+                        resultSet.getString(4),
+                        resultSet.getString(5)
+                );
+                list.add(row.getBorrowDate().getValue().substring(9));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        for (String l : list) {
-            try {
-                resultSet2 = connection.createStatement().executeQuery("SELECT * FROM borrowed_book_detail where borrower_id='" + l + "'");
-                while (resultSet2.next()) {
-                    BorrowDetailModel row = new BorrowDetailModel(
-                            resultSet2.getString(1),
-                            resultSet2.getString(2),
-                            resultSet2.getString(3),
-                            resultSet2.getString(4),
-                            resultSet2.getString(5));
-                    String o = row.getBorrowDate().getValue().substring(9);
-
-//                    System.out.println(o);
-                    list2.add(o);
-                }
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-
-        }
-        for (String q : list2) {
+        for (String q : list) {
             if (!BookData.containsKey(q)) {
                 BookData.put(q, 1);
             } else {
@@ -134,7 +114,7 @@ public class ChartController implements Initializable {
         month.getItems().addAll(ChooseMonth);
         year.getItems().addAll(ChooseYear);
         StudentgetData("SELECT * FROM library_manager");
-        BookgetData("SELECT * FROM borrower");
+        BookgetData("SELECT * FROM borrowed_book_detail");
         ChartStudent();
         ChartBook();
         filter.setOnAction(this::Refinement);
@@ -180,7 +160,7 @@ public class ChartController implements Initializable {
             String s = x.getKey();
             int n = x.getValue();
             series.getData().add(new XYChart.Data(s, n));
-//            System.out.println(s + " " + n);
+            System.out.println(s + " " + n);
 
         }
 

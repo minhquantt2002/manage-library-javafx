@@ -309,7 +309,7 @@ public class BorrowerController implements Initializable {
     private void returnBook() {
         ObservableList<BorrowDetailModel> list = tableViewBorrowDetail.getSelectionModel().getSelectedItems();
         if (list.size() == 0) {
-            new AlertWarningUtils().showAlertWarning("Vui lonmfg");
+            new AlertWarningUtils().showAlertWarning("Vui lòng chọn sách trả ! ");
             return;
         }
         try {

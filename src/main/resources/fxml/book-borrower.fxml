@@ -83,12 +83,12 @@
             </TextField>
             <RadioButton fx:id="buttonBorrowBook" mnemonicParsing="false" text="Mượn sách" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <RadioButton fx:id="buttonReturnBook" mnemonicParsing="false" prefHeight="30.0" prefWidth="96.0" text="Trả sách" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" onAction="#clearField" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Clear" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <Button mnemonicParsing="false" onAction="#clearField" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="CLEAR" GridPane.columnIndex="1" GridPane.rowIndex="5">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#insertBorrower" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="Insert" GridPane.columnIndex="3" GridPane.rowIndex="5">
+            <Button mnemonicParsing="false" onAction="#insertBorrower" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #c9aa0a;" text="INSERT " GridPane.columnIndex="3" GridPane.rowIndex="5">
                 <font>
                     <Font size="14.0" />
                 </font>
@@ -103,7 +103,7 @@
                <Font size="14.0" />
             </font>
          </Label>
-         <Button mnemonicParsing="false" onAction="#btnSearchStudent" prefHeight="30.0" prefWidth="80.0" text="Search" GridPane.columnIndex="2" GridPane.rowIndex="5">
+         <Button mnemonicParsing="false" onAction="#btnSearchStudent" prefHeight="30.0" prefWidth="80.0" text="SEARCH" GridPane.columnIndex="2" GridPane.rowIndex="5">
             <font>
                <Font size="14.0" />
             </font>
@@ -113,9 +113,9 @@
             <columns>
                 <TableColumn fx:id="sttBook" prefWidth="37.0" resizable="false" text="STT" />
                 <TableColumn fx:id="codeBook" prefWidth="100.0" resizable="false" text="Mã sách" />
-                <TableColumn fx:id="nameBook" prefWidth="138.40000915527344" resizable="false" text="Tên sách" />
-                <TableColumn fx:id="categoryBook" maxWidth="101.19993591308594" minWidth="0.0" prefWidth="95.0" resizable="false" text="Thể loại" />
-                <TableColumn fx:id="authorBook" prefWidth="143.2000732421875" resizable="false" text="Tác giả" />
+                <TableColumn fx:id="nameBook" prefWidth="138.40000915527344" text="Tên sách" />
+                <TableColumn fx:id="categoryBook" maxWidth="101.19993591308594" minWidth="0.0" prefWidth="95.0" text="Thể loại" />
+                <TableColumn fx:id="authorBook" prefWidth="143.2000732421875" text="Tác giả" />
                 <TableColumn fx:id="remainBook" prefWidth="72.0" resizable="false" text="Trạng thái" />
             </columns>
             <GridPane.margin>
